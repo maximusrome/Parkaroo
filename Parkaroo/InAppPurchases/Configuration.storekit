@@ -1,0 +1,68 @@
+{
+  "products" : [
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "080F8395",
+      "localizations" : [
+        {
+          "description" : "1 Credit",
+          "displayName" : "1 Credit",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "parkaroo.1credit",
+      "referenceName" : "1 Credit",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "49.99",
+      "familyShareable" : false,
+      "internalID" : "3CF25BE3",
+      "localizations" : [
+        {
+          "description" : "5 Credits",
+          "displayName" : "5 Credits",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "parkaroo.5credits",
+      "referenceName" : "5 Credits",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "99.99",
+      "familyShareable" : false,
+      "internalID" : "40E4757C",
+      "localizations" : [
+        {
+          "description" : "10 Credits",
+          "displayName" : "10 Credits",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "parkaroo.10credits",
+      "referenceName" : "10 Credits",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "73CB98CF",
+      "localizations" : [
+
+      ],
+      "name" : "",
+      "subscriptions" : [
+
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 1,
+    "minor" : 0
+  }
+}

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,15 +11,86 @@
 		21295F71256B069100AD0E30 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21295F70256B069100AD0E30 /* ContentView.swift */; };
 		21295F73256B069100AD0E30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21295F72256B069100AD0E30 /* Assets.xcassets */; };
 		21295F76256B069100AD0E30 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21295F75256B069100AD0E30 /* Preview Assets.xcassets */; };
+		215CCD2B25D06A540071EEA3 /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215CCD2A25D06A540071EEA3 /* Pin.swift */; };
+		216A7F8E256B077E0009CF30 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7F8D256B077E0009CF30 /* MenuView.swift */; };
+		216A7F91256B07AF0009CF30 /* Board1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7F90256B07AF0009CF30 /* Board1View.swift */; };
+		216A7F94256B08100009CF30 /* Board2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7F93256B08100009CF30 /* Board2View.swift */; };
+		216A7F97256B083F0009CF30 /* Board3View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7F96256B083F0009CF30 /* Board3View.swift */; };
+		216A7F9A256B08870009CF30 /* FirstLaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7F99256B08870009CF30 /* FirstLaunchView.swift */; };
+		216A7F9D256B08B80009CF30 /* GiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7F9C256B08B80009CF30 /* GiveView.swift */; };
+		216A7FA0256B08FC0009CF30 /* GetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7F9F256B08FC0009CF30 /* GetView.swift */; };
+		216A7FA3256B093E0009CF30 /* MapGiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FA2256B093E0009CF30 /* MapGiveView.swift */; };
+		216A7FA6256B096F0009CF30 /* MapGetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FA5256B096F0009CF30 /* MapGetView.swift */; };
+		216A7FA9256B09B40009CF30 /* GetRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FA8256B09B40009CF30 /* GetRequestView.swift */; };
+		216A7FAC256B09E40009CF30 /* GetConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FAB256B09E40009CF30 /* GetConfirmView.swift */; };
+		216A7FAF256B0A110009CF30 /* GiveRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FAE256B0A110009CF30 /* GiveRequestView.swift */; };
+		216A7FB2256B0A2E0009CF30 /* GiveConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FB1256B0A2E0009CF30 /* GiveConfirmView.swift */; };
+		216A7FB5256B0A5D0009CF30 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FB4256B0A5D0009CF30 /* LoginView.swift */; };
+		216A7FB8256B0A7B0009CF30 /* CreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FB7256B0A7B0009CF30 /* CreditsView.swift */; };
+		216A7FBB256B0A9D0009CF30 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FBA256B0A9D0009CF30 /* NotificationsView.swift */; };
+		216A7FBE256B0AC10009CF30 /* CharityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FBD256B0AC10009CF30 /* CharityView.swift */; };
+		216A7FC1256B0AEA0009CF30 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FC0256B0AEA0009CF30 /* TutorialView.swift */; };
+		216A7FC4256B0B060009CF30 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A7FC3256B0B060009CF30 /* HelpView.swift */; };
+		21AF56DA25D780A30061D8BC /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AF56D925D780A30061D8BC /* IAPManager.swift */; };
+		21B29410259EEADD004B8FD3 /* GGRegisterConfirm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2940F259EEADD004B8FD3 /* GGRegisterConfirm.swift */; };
+		21B29414259EEB12004B8FD3 /* LocationTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B29413259EEB12004B8FD3 /* LocationTransfer.swift */; };
+		21B2941B259EEC81004B8FD3 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2941A259EEC81004B8FD3 /* UserViewModel.swift */; };
+		21B2942625A0D3AF004B8FD3 /* FBAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2942425A0D3AE004B8FD3 /* FBAuth.swift */; };
+		21B2942725A0D3AF004B8FD3 /* FBAuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2942525A0D3AF004B8FD3 /* FBAuthError.swift */; };
+		21B2942E25A0D3DE004B8FD3 /* FBUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2942A25A0D3DD004B8FD3 /* FBUser.swift */; };
+		21B2942F25A0D3DE004B8FD3 /* FBFireStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2942B25A0D3DD004B8FD3 /* FBFireStoreError.swift */; };
+		21B2943025A0D3DE004B8FD3 /* FBFireStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2942C25A0D3DE004B8FD3 /* FBFireStore.swift */; };
+		21B2943125A0D3DE004B8FD3 /* FBKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2942D25A0D3DE004B8FD3 /* FBKeys.swift */; };
+		21B2943525A0D8E1004B8FD3 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2943425A0D8E1004B8FD3 /* UserInfo.swift */; };
+		21F0EAE32570A46F0053015C /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0EAE22570A46F0053015C /* SignUpView.swift */; };
+		21FAAD1126431C48000EEBD7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21FAAD1026431C48000EEBD7 /* GoogleService-Info.plist */; };
+		DFC7321F1828D9FE0665BEE5 /* Pods_Parkaroo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F02FC4294FE77D670D0671A /* Pods_Parkaroo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		21295F6B256B069100AD0E30 /* Parkaroo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Parkaroo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21295F6E256B069100AD0E30 /* ParkarooApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParkarooApp.swift; sourceTree = "<group>"; };
-		21295F70256B069100AD0E30 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		21295F70256B069100AD0E30 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; tabWidth = 4; };
 		21295F72256B069100AD0E30 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21295F75256B069100AD0E30 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		21295F77256B069100AD0E30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		215CCD2A25D06A540071EEA3 /* Pin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
+		216A7F8D256B077E0009CF30 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		216A7F90256B07AF0009CF30 /* Board1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board1View.swift; sourceTree = "<group>"; };
+		216A7F93256B08100009CF30 /* Board2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board2View.swift; sourceTree = "<group>"; };
+		216A7F96256B083F0009CF30 /* Board3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board3View.swift; sourceTree = "<group>"; };
+		216A7F99256B08870009CF30 /* FirstLaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchView.swift; sourceTree = "<group>"; };
+		216A7F9C256B08B80009CF30 /* GiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveView.swift; sourceTree = "<group>"; };
+		216A7F9F256B08FC0009CF30 /* GetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetView.swift; sourceTree = "<group>"; };
+		216A7FA2256B093E0009CF30 /* MapGiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGiveView.swift; sourceTree = "<group>"; };
+		216A7FA5256B096F0009CF30 /* MapGetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGetView.swift; sourceTree = "<group>"; };
+		216A7FA8256B09B40009CF30 /* GetRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRequestView.swift; sourceTree = "<group>"; };
+		216A7FAB256B09E40009CF30 /* GetConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConfirmView.swift; sourceTree = "<group>"; };
+		216A7FAE256B0A110009CF30 /* GiveRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveRequestView.swift; sourceTree = "<group>"; };
+		216A7FB1256B0A2E0009CF30 /* GiveConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiveConfirmView.swift; sourceTree = "<group>"; };
+		216A7FB4256B0A5D0009CF30 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		216A7FB7256B0A7B0009CF30 /* CreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsView.swift; sourceTree = "<group>"; };
+		216A7FBA256B0A9D0009CF30 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		216A7FBD256B0AC10009CF30 /* CharityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharityView.swift; sourceTree = "<group>"; };
+		216A7FC0256B0AEA0009CF30 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		216A7FC3256B0B060009CF30 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
+		21AF56D825D77E3C0061D8BC /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		21AF56D925D780A30061D8BC /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
+		21B2940F259EEADD004B8FD3 /* GGRegisterConfirm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGRegisterConfirm.swift; sourceTree = "<group>"; };
+		21B29413259EEB12004B8FD3 /* LocationTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTransfer.swift; sourceTree = "<group>"; };
+		21B2941A259EEC81004B8FD3 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		21B2942425A0D3AE004B8FD3 /* FBAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBAuth.swift; sourceTree = "<group>"; };
+		21B2942525A0D3AF004B8FD3 /* FBAuthError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBAuthError.swift; sourceTree = "<group>"; };
+		21B2942A25A0D3DD004B8FD3 /* FBUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBUser.swift; sourceTree = "<group>"; };
+		21B2942B25A0D3DD004B8FD3 /* FBFireStoreError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBFireStoreError.swift; sourceTree = "<group>"; };
+		21B2942C25A0D3DE004B8FD3 /* FBFireStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBFireStore.swift; sourceTree = "<group>"; };
+		21B2942D25A0D3DE004B8FD3 /* FBKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBKeys.swift; sourceTree = "<group>"; };
+		21B2943425A0D8E1004B8FD3 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		21F0EAE22570A46F0053015C /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		21FAAD1026431C48000EEBD7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5F02FC4294FE77D670D0671A /* Pods_Parkaroo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parkaroo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C76BCD290C9AC820E0CEB197 /* Pods-Parkaroo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parkaroo.debug.xcconfig"; path = "Target Support Files/Pods-Parkaroo/Pods-Parkaroo.debug.xcconfig"; sourceTree = "<group>"; };
+		D0E8FF601DBC9ABC63E12BFE /* Pods-Parkaroo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parkaroo.release.xcconfig"; path = "Target Support Files/Pods-Parkaroo/Pods-Parkaroo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFC7321F1828D9FE0665BEE5 /* Pods_Parkaroo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,6 +110,8 @@
 			children = (
 				21295F6D256B069100AD0E30 /* Parkaroo */,
 				21295F6C256B069100AD0E30 /* Products */,
+				4ED3D7D9D92D8D812092FB96 /* Frameworks */,
+				A9312FCC92550367C197955A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -53,9 +127,15 @@
 			isa = PBXGroup;
 			children = (
 				21295F6E256B069100AD0E30 /* ParkarooApp.swift */,
-				21295F70256B069100AD0E30 /* ContentView.swift */,
+				21AF56D725D77D8F0061D8BC /* InAppPurchases */,
+				21B2942325A0D38B004B8FD3 /* Auth */,
+				21B2942925A0D3BF004B8FD3 /* Firestore */,
+				215CCD2925D069E10071EEA3 /* Models */,
+				21B2940E259EEA5B004B8FD3 /* ViewModels */,
+				21B2940D259EEA51004B8FD3 /* Views */,
 				21295F72256B069100AD0E30 /* Assets.xcassets */,
 				21295F77256B069100AD0E30 /* Info.plist */,
+				21FAAD1026431C48000EEBD7 /* GoogleService-Info.plist */,
 				21295F74256B069100AD0E30 /* Preview Content */,
 			);
 			path = Parkaroo;
@@ -69,6 +149,99 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		215CCD2925D069E10071EEA3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				215CCD2A25D06A540071EEA3 /* Pin.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		21AF56D725D77D8F0061D8BC /* InAppPurchases */ = {
+			isa = PBXGroup;
+			children = (
+				21AF56D825D77E3C0061D8BC /* Configuration.storekit */,
+				21AF56D925D780A30061D8BC /* IAPManager.swift */,
+			);
+			path = InAppPurchases;
+			sourceTree = "<group>";
+		};
+		21B2940D259EEA51004B8FD3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				21295F70256B069100AD0E30 /* ContentView.swift */,
+				216A7F8D256B077E0009CF30 /* MenuView.swift */,
+				216A7F90256B07AF0009CF30 /* Board1View.swift */,
+				216A7F93256B08100009CF30 /* Board2View.swift */,
+				216A7F96256B083F0009CF30 /* Board3View.swift */,
+				216A7F99256B08870009CF30 /* FirstLaunchView.swift */,
+				216A7F9C256B08B80009CF30 /* GiveView.swift */,
+				216A7F9F256B08FC0009CF30 /* GetView.swift */,
+				216A7FA2256B093E0009CF30 /* MapGiveView.swift */,
+				216A7FA5256B096F0009CF30 /* MapGetView.swift */,
+				216A7FA8256B09B40009CF30 /* GetRequestView.swift */,
+				216A7FAB256B09E40009CF30 /* GetConfirmView.swift */,
+				216A7FAE256B0A110009CF30 /* GiveRequestView.swift */,
+				216A7FB1256B0A2E0009CF30 /* GiveConfirmView.swift */,
+				21F0EAE22570A46F0053015C /* SignUpView.swift */,
+				216A7FB4256B0A5D0009CF30 /* LoginView.swift */,
+				216A7FB7256B0A7B0009CF30 /* CreditsView.swift */,
+				216A7FBA256B0A9D0009CF30 /* NotificationsView.swift */,
+				216A7FBD256B0AC10009CF30 /* CharityView.swift */,
+				216A7FC0256B0AEA0009CF30 /* TutorialView.swift */,
+				216A7FC3256B0B060009CF30 /* HelpView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		21B2940E259EEA5B004B8FD3 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				21B2940F259EEADD004B8FD3 /* GGRegisterConfirm.swift */,
+				21B29413259EEB12004B8FD3 /* LocationTransfer.swift */,
+				21B2941A259EEC81004B8FD3 /* UserViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		21B2942325A0D38B004B8FD3 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				21B2942425A0D3AE004B8FD3 /* FBAuth.swift */,
+				21B2942525A0D3AF004B8FD3 /* FBAuthError.swift */,
+				21B2943425A0D8E1004B8FD3 /* UserInfo.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		21B2942925A0D3BF004B8FD3 /* Firestore */ = {
+			isa = PBXGroup;
+			children = (
+				21B2942C25A0D3DE004B8FD3 /* FBFireStore.swift */,
+				21B2942B25A0D3DD004B8FD3 /* FBFireStoreError.swift */,
+				21B2942D25A0D3DE004B8FD3 /* FBKeys.swift */,
+				21B2942A25A0D3DD004B8FD3 /* FBUser.swift */,
+			);
+			path = Firestore;
+			sourceTree = "<group>";
+		};
+		4ED3D7D9D92D8D812092FB96 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5F02FC4294FE77D670D0671A /* Pods_Parkaroo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A9312FCC92550367C197955A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C76BCD290C9AC820E0CEB197 /* Pods-Parkaroo.debug.xcconfig */,
+				D0E8FF601DBC9ABC63E12BFE /* Pods-Parkaroo.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -76,9 +249,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 21295F7A256B069100AD0E30 /* Build configuration list for PBXNativeTarget "Parkaroo" */;
 			buildPhases = (
+				336FE96B65B97092A13B620E /* [CP] Check Pods Manifest.lock */,
 				21295F67256B069100AD0E30 /* Sources */,
 				21295F68256B069100AD0E30 /* Frameworks */,
 				21295F69256B069100AD0E30 /* Resources */,
+				49E830119AE93A4FE0FE3751 /* [CP] Embed Pods Frameworks */,
+				2148383B25A2447400B5D7AC /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -128,18 +304,112 @@
 			files = (
 				21295F76256B069100AD0E30 /* Preview Assets.xcassets in Resources */,
 				21295F73256B069100AD0E30 /* Assets.xcassets in Resources */,
+				21FAAD1126431C48000EEBD7 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2148383B25A2447400B5D7AC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
+		336FE96B65B97092A13B620E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Parkaroo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		49E830119AE93A4FE0FE3751 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Parkaroo/Pods-Parkaroo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Parkaroo/Pods-Parkaroo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Parkaroo/Pods-Parkaroo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		21295F67256B069100AD0E30 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21AF56DA25D780A30061D8BC /* IAPManager.swift in Sources */,
+				21B2943025A0D3DE004B8FD3 /* FBFireStore.swift in Sources */,
+				21B2942625A0D3AF004B8FD3 /* FBAuth.swift in Sources */,
 				21295F71256B069100AD0E30 /* ContentView.swift in Sources */,
+				216A7F9A256B08870009CF30 /* FirstLaunchView.swift in Sources */,
+				215CCD2B25D06A540071EEA3 /* Pin.swift in Sources */,
+				216A7FA0256B08FC0009CF30 /* GetView.swift in Sources */,
+				216A7F97256B083F0009CF30 /* Board3View.swift in Sources */,
+				216A7FB5256B0A5D0009CF30 /* LoginView.swift in Sources */,
+				216A7FA3256B093E0009CF30 /* MapGiveView.swift in Sources */,
+				216A7F8E256B077E0009CF30 /* MenuView.swift in Sources */,
+				216A7FA6256B096F0009CF30 /* MapGetView.swift in Sources */,
+				21B2941B259EEC81004B8FD3 /* UserViewModel.swift in Sources */,
+				21B2943125A0D3DE004B8FD3 /* FBKeys.swift in Sources */,
+				216A7FC1256B0AEA0009CF30 /* TutorialView.swift in Sources */,
+				216A7F94256B08100009CF30 /* Board2View.swift in Sources */,
+				216A7FC4256B0B060009CF30 /* HelpView.swift in Sources */,
+				21B2942E25A0D3DE004B8FD3 /* FBUser.swift in Sources */,
 				21295F6F256B069100AD0E30 /* ParkarooApp.swift in Sources */,
+				216A7FB2256B0A2E0009CF30 /* GiveConfirmView.swift in Sources */,
+				21B29414259EEB12004B8FD3 /* LocationTransfer.swift in Sources */,
+				21B29410259EEADD004B8FD3 /* GGRegisterConfirm.swift in Sources */,
+				216A7FAC256B09E40009CF30 /* GetConfirmView.swift in Sources */,
+				216A7FB8256B0A7B0009CF30 /* CreditsView.swift in Sources */,
+				21B2942F25A0D3DE004B8FD3 /* FBFireStoreError.swift in Sources */,
+				216A7F91256B07AF0009CF30 /* Board1View.swift in Sources */,
+				21F0EAE32570A46F0053015C /* SignUpView.swift in Sources */,
+				216A7FBE256B0AC10009CF30 /* CharityView.swift in Sources */,
+				216A7F9D256B08B80009CF30 /* GiveView.swift in Sources */,
+				216A7FA9256B09B40009CF30 /* GetRequestView.swift in Sources */,
+				21B2942725A0D3AF004B8FD3 /* FBAuthError.swift in Sources */,
+				216A7FAF256B0A110009CF30 /* GiveRequestView.swift in Sources */,
+				21B2943525A0D8E1004B8FD3 /* UserInfo.swift in Sources */,
+				216A7FBB256B0A9D0009CF30 /* NotificationsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,12 +534,14 @@
 		};
 		21295F7B256B069100AD0E30 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C76BCD290C9AC820E0CEB197 /* Pods-Parkaroo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"Parkaroo/Preview Content\"";
-				DEVELOPMENT_TEAM = U5FHJM7JHW;
+				DEVELOPMENT_TEAM = VVWUKNQA45;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Parkaroo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -277,21 +549,22 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "max-rome.Parkaroo";
+				PRODUCT_BUNDLE_IDENTIFIER = org.parkaroo.maxrome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		21295F7C256B069100AD0E30 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0E8FF601DBC9ABC63E12BFE /* Pods-Parkaroo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Parkaroo/Preview Content\"";
-				DEVELOPMENT_TEAM = U5FHJM7JHW;
+				DEVELOPMENT_TEAM = VVWUKNQA45;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Parkaroo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -299,10 +572,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "max-rome.Parkaroo";
+				PRODUCT_BUNDLE_IDENTIFIER = org.parkaroo.maxrome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
