@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var userInfo: UserInfo
+    
+    
     @State private var showMenu = false
     @State private var showOnBoarding = false
     @AppStorage("OboardBeenViewed") private var hasOnboarded = false
@@ -92,6 +94,7 @@ struct ContentView: View {
                 hasOnboarded = true
             }
             self.userInfo.configureFirebaseStateDidChange()
+            NotificationsService.shared.configure()
         }.gesture(drag)
     }
 }

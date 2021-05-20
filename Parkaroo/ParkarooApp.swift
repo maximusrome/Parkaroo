@@ -10,9 +10,13 @@ import Firebase
 
 @main
 struct ParkarooApp: App {
+    
     init() {
         FirebaseApp.configure()
+        NotificationsService.shared.configure()
     }
+    
+    var iapManager = IAPManager()
     var locationTransfer = LocationTransfer()
     var gGRequestConfirm = GGRequestConfirm()
     var userInfo = UserInfo()
@@ -22,6 +26,7 @@ struct ParkarooApp: App {
                 .environmentObject(locationTransfer)
                 .environmentObject(gGRequestConfirm)
                 .environmentObject(userInfo)
+                .environmentObject(iapManager)
         }
     }
 }

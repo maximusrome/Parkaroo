@@ -1,4 +1,8 @@
 {
+  "identifier" : "AE796F25",
+  "nonRenewingSubscriptions" : [
+
+  ],
   "products" : [
     {
       "displayPrice" : "9.99",
@@ -63,6 +67,6 @@
   ],
   "version" : {
     "major" : 1,
-    "minor" : 0
+    "minor" : 1
   }
 }

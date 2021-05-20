@@ -10,20 +10,53 @@ import SwiftUI
 struct GetConfirmView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
+    @EnvironmentObject var userInfo: UserInfo
     @State var rating = 5
     @State private var showingRefundAlert = false
+    @State private var showRefundCompletedAlert = false
+    @Binding var presentRatingView: Bool
+    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State var depart = Int()
+    
     var body: some View {
+        
+        let refundAlert = Alert(title: Text("Are you sure?"), message: Text("Refunding your spot will give you one credit and your transactional fee. Refunding will also send a notification to the seller asking him/her to rate this interaction."), primaryButton: Alert.Button.default(Text("Yes"), action: {
+            requestRefund()
+            self.gGRequestConfirm.showBox3 = false
+            self.gGRequestConfirm.showBox4 = false
+            self.showRefundCompletedAlert = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.showingRefundAlert = true
+            }
+        }), secondaryButton: Alert.Button.default(Text("No")))
+        
+        let refundCompletedAlert = Alert(title: Text("Refund Processed"), message: nil, dismissButton: Alert.Button.default(Text("Okay")))
+        
         VStack {
             Spacer()
             VStack(alignment: .center) {
-                Text("Look for a \(self.locationTransfer.vehicle)")
+                Text("Spot Reserved")
+                    .font(.title2)
                     .bold()
                     .padding(.top)
-                Spacer()
+                Text("Look for a \(self.locationTransfer.seller?.vehicle ?? "")")
+                    .bold()
+                    .padding(.top)
+                Text("Departing in: \(depart) minutes")
+                    .padding(.vertical)
+                    .onReceive(timer, perform: { input in
+                        let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
+                        depart = Int(diff / 60)
+                    })
+                
                 HStack {
-                    Text("Rate Seller:")
+                    Text("Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? 0))")
                         .bold()
-                    RatingView(rating: $rating)
+                    Image(systemName: "star.fill")
+                        .foregroundColor(Color("orange1"))
+                    Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
+                        .font(.footnote)
                 }
                 Spacer()
                 HStack {
@@ -34,17 +67,15 @@ struct GetConfirmView: View {
                             .font(.system(size: 12))
                     }
                     .alert(isPresented: $showingRefundAlert) {
-                        Alert(title: Text("Are you sure?"), message: Text("Runding your spot will give you one credit and your transactional fee. Refunding will also send a notification to the seller asking him/her to rate this interaction."), primaryButton: Alert.Button.default(Text("Yes"), action: {
-                        }), secondaryButton: Alert.Button.default(Text("No")))
+                        showRefundCompletedAlert ? refundCompletedAlert : refundAlert
                     }
+                    
                     Button(action: {
                         self.gGRequestConfirm.showBox3 = false
                         self.gGRequestConfirm.showBox4 = false
                         self.gGRequestConfirm.moveBox = false
                         self.gGRequestConfirm.showingYouGotCreditAlert.toggle()
-                        self.locationTransfer.locations.removeLast()
-                        self.locationTransfer.locations1.removeLast()
-                        self.locationTransfer.deletePin()
+                        self.presentRatingView = true
                     }) {
                         Text("Complete Transfer")
                             .bold()
@@ -53,19 +84,45 @@ struct GetConfirmView: View {
                             .cornerRadius(50)
                     }
                 }.padding(.bottom)
-            }.frame(width: 250, height: 150)
+                
+            }
+            .frame(maxWidth: .infinity, minHeight: 200, maxHeight: 270)
+            .padding(.horizontal)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
             .cornerRadius(30)
             .shadow(radius: 5)
             .padding(.bottom)
+            .padding(.horizontal, 36)
+            
+        }
+        
+    }
+    
+    private func requestRefund() {
+        let credits = self.userInfo.user.credits + 1
+        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.userInfo.user.uid) { result in
+            switch result {
+            case .success(_):
+                let data = [C_BUYER:"", C_STATUS: pinStatus.available.rawValue]
+                self.locationTransfer.updateGettingPin(data: data)
+                self.locationTransfer.seller = nil
+                self.locationTransfer.gettingPin = nil
+                self.locationTransfer.gettingPinListener = nil
+                self.userInfo.user.credits = credits
+            case .failure(_):
+                print("Error Refunding")
+            }
         }
     }
 }
 struct GetConfirmView_Previews: PreviewProvider {
+    @State static var presentView: Bool = false
     static var previews: some View {
-        GetConfirmView()
+        GetConfirmView(presentRatingView: $presentView)
             .environmentObject(LocationTransfer())
             .environmentObject(GGRequestConfirm())
+            .environmentObject(UserInfo())
+            .previewLayout(.sizeThatFits)
     }
 }

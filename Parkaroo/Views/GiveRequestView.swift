@@ -12,15 +12,25 @@ import MapKit
 struct GiveRequestView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
+    @EnvironmentObject var userInfo: UserInfo
     @State var rating = 5
     @State private var showingOffMarketAlert = false
     @State private var showingMinuteOrDoneAlert = false
     @State private var showingMinuteAlert = false
+    
+    @Binding var showConfirmView: Bool?
+    
     func abc() -> Bool {
-        let minuteTest = NSPredicate(format: "SELF MATCHES %@",
-                                     "^[0-9]+$")
-        return minuteTest.evaluate(with: locationTransfer.minute)
+        if Int(locationTransfer.minute) != 0 {
+            let minuteTest = NSPredicate(format: "SELF MATCHES %@",
+                                         "^[0-9]+$")
+            return minuteTest.evaluate(with: locationTransfer.minute)
+        }
+        else {
+            return false
+        }
     }
+    
     var body: some View {
         VStack {
             Spacer()
@@ -42,9 +52,12 @@ struct GiveRequestView: View {
                 }.padding(.top)
                 Spacer()
                 HStack {
-                    Text("Your Rating:")
-                        .bold()
-                    RatingView(rating: $rating)
+                    Text("Your Rating: \(self.userInfo.user.numberOfRatings > 0 ? String(format: "%.2f", self.userInfo.user.rating) : "N/A")")
+                    Image(systemName: "star.fill")
+                        .foregroundColor(Color("orange1"))
+                    Text("\(self.userInfo.user.numberOfRatings > 0 ? String(self.userInfo.user.numberOfRatings) : "0") ratings")
+                        .font(.footnote)
+                    
                 }
                 Spacer()
                 HStack {
@@ -54,40 +67,19 @@ struct GiveRequestView: View {
                         Image(systemName: "trash")
                             .padding(.trailing, 15)
                     }.alert(isPresented: $showingOffMarketAlert) {
-                        Alert(title: Text("Are you sure?"), message: Text("Delete your spot"), primaryButton: Alert.Button.default(Text("Yes"), action: {
+                        Alert(title: Text("Cancel"), message: Text("Are you sure?"), primaryButton: Alert.Button.default(Text("Yes"), action: {
                             UIApplication.shared.endEditing()
-                            self.locationTransfer.locations.removeLast()
-                            self.locationTransfer.locations1.removeLast()
-                            self.gGRequestConfirm.moveBox = false
-                            self.gGRequestConfirm.moveBox1 = false
                             self.gGRequestConfirm.showBox1 = false
-                            self.gGRequestConfirm.showBox2 = false
-                            self.gGRequestConfirm.showBox3 = false
-                            self.gGRequestConfirm.showBox4 = false
-                            self.locationTransfer.deletePin()
+                            self.locationTransfer.minute = ""
                         }), secondaryButton: Alert.Button.default(Text("No")))
                     }
                     Button(action: {
                         if abc() {
                             UIApplication.shared.endEditing()
-                            self.locationTransfer.createMinute()
+                            self.locationTransfer.createPin()
                             self.showingMinuteAlert = false
-                            let db = Firestore.firestore()
-                            db.collection("pins").getDocuments() { (querySnapshot, err) in
-                                if err != nil {
-                                    print("There was an error")
-                                } else {
-                                    for document in querySnapshot!.documents {
-                                        self.locationTransfer.centerCoordinate1.latitude = document["latitude"] as! Double
-                                        self.locationTransfer.centerCoordinate1.longitude = document["longitude"] as! Double
-                                        print("coordinates read")
-                                        let newLocation = MKPointAnnotation()
-                                        newLocation.coordinate = self.locationTransfer.centerCoordinate1
-                                        self.locationTransfer.locations1.append(newLocation)
-                                        print("done")
-                                    }
-                                }
-                            }
+                            self.gGRequestConfirm.showBox1 = false
+                            self.showConfirmView = true
                         } else {
                             self.showingMinuteAlert = true
                         }
@@ -107,6 +99,7 @@ struct GiveRequestView: View {
                     }
                 }.padding(.bottom)
             }.frame(width: 250, height: 150)
+            .padding(.horizontal)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
             .cornerRadius(30)
@@ -116,14 +109,17 @@ struct GiveRequestView: View {
         }
     }
 }
+
 extension UIApplication {
     func endEditing() {
         sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
+
 struct GiveRequestView_Previews: PreviewProvider {
+    @State static var isShowing: Bool?
     static var previews: some View {
-        GiveRequestView()
+        GiveRequestView(showConfirmView: $isShowing)
             .environmentObject(LocationTransfer())
             .environmentObject(GGRequestConfirm())
     }

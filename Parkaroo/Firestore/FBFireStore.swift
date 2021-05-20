@@ -7,6 +7,7 @@
 import Firebase
 
 enum FBFirestore {
+    
     static func retrieveFBUser(uid: String, completion: @escaping (Result<FBUser, Error>) -> ()) {
         let reference = Firestore
             .firestore()
@@ -25,6 +26,7 @@ enum FBFirestore {
             }
         }
     }
+    
     static func mergeFBUser(_ data: [String: Any], uid: String, completion: @escaping (Result<Bool, Error>) -> ()) {
         let reference = Firestore
             .firestore()
@@ -38,6 +40,7 @@ enum FBFirestore {
             completion(.success(true))
         }
     }
+    
     fileprivate static func getDocument(for reference: DocumentReference, completion: @escaping (Result<[String : Any], Error>) -> ()) {
         reference.getDocument { (documentSnapshot, err) in
             if let err = err {
@@ -55,4 +58,6 @@ enum FBFirestore {
             completion(.success(data))
         }
     }
+    
+    
 }
