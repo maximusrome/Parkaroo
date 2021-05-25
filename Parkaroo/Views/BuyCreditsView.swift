@@ -13,7 +13,7 @@ struct BuyCreditsView: View {
     @EnvironmentObject var iapManager: IAPManager
     @EnvironmentObject var userInfo: UserInfo
     @State private var showPurchaseConfirmation = false
-    private var creditsPurchasing: products?
+    @State private var creditsPurchasing: Products?
     
     
     var body: some View {
@@ -34,6 +34,7 @@ struct BuyCreditsView: View {
                     Button(action: {
                         print(product.localizedTitle)
                         iapManager.purchaseProduct(product: product)
+                        self.creditsPurchasing = Products(rawValue: product.productIdentifier)
                     }, label: {
                         Text("Buy for $\(product.price)")
                             .foregroundColor(.blue)
@@ -47,7 +48,7 @@ struct BuyCreditsView: View {
                 switch iapManager.transactionState {
                 
                 case .purchased:
-                    userInfo.addCredits(numberOfCredits: 1) { result in
+                    userInfo.addCredits(numberOfCredits: self.creditsPurchasing?.creditValue ?? 0) { result in
                         switch result {
                         case .success(_):
                             self.showPurchaseConfirmation = true
@@ -66,53 +67,10 @@ struct BuyCreditsView: View {
             .alert(isPresented: $showPurchaseConfirmation, content: {
                 Alert(title: Text("Purchase Completed"), message: Text("The credits have been added to your account"), dismissButton: Alert.Button.default(Text("Okay")))
             })
-            
-//            HStack{
-//                Text("1 Credit")
-//                    .font(.title2)
-//                    .fontWeight(.bold)
-//                Spacer()
-//                Button(action: {}, label: {
-//                    Text("Buy for $9.99")
-//                })
-//            }
-//            .padding(.vertical)
-//
-//            Divider()
-//
-//            HStack{
-//                Text("5 Credits")
-//                    .font(.title2)
-//                    .fontWeight(.bold)
-//                Spacer()
-//                Button(action: {}, label: {
-//                    Text("Buy for $49.99")
-//                })
-//            }
-//            .padding(.vertical)
-//
-//            Divider()
-//
-//            HStack{
-//                Text("10 Credits")
-//                    .font(.title2)
-//                    .fontWeight(.bold)
-//                Spacer()
-//                Button(action: {}, label: {
-//                    Text("Buy for $99.99")
-//                })
-//            }
-//            .padding(.vertical)
-//
-//            Divider()
-            
             Spacer()
         }
         .padding()
-        .onAppear(perform: {
-            iapManager.getProducts(productIDs: productIDs)
-            SKPaymentQueue.default().add(iapManager)
-        })
+        
     }
     
 }

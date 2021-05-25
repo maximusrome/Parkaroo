@@ -15,6 +15,11 @@ class IAPManager: NSObject, ObservableObject, SKProductsRequestDelegate {
     @Published var transactionState: SKPaymentTransactionState?
     var request: SKProductsRequest!
     
+    @Published var transactionProduct: SKProduct?
+    @Published var creditProduct: SKProduct?
+    
+    @Published var currentPurchasingProduct: SKProduct?
+    
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         print("Did receive response")
         
@@ -22,8 +27,11 @@ class IAPManager: NSObject, ObservableObject, SKProductsRequestDelegate {
             for fetchedProduct in response.products {
                 DispatchQueue.main.async {
                     self.myProducts.append(fetchedProduct)
-                    self.myProducts.sort { p1, p2 in
-                        return Double(truncating: p1.price) < Double(truncating: p2.price)
+                    if fetchedProduct.productIdentifier == "parkaroo.1credit" {
+                        self.creditProduct = fetchedProduct
+                    }
+                    else if fetchedProduct.productIdentifier == "parking.spot" {
+                        self.transactionProduct = fetchedProduct
                     }
                 }
             }
@@ -86,69 +94,3 @@ extension IAPManager: SKPaymentTransactionObserver {
         }
     }
 }
-
-//private let allTicketIdentifiers: Set<String> = [
-//    "parkaroo.1credit",
-//    "parkaroo.5credits",
-//    "parkaroo.10credits"
-//]
-//class IAPManager: NSObject {
-//    static let shared = IAPManager()
-//    private override init() {
-//        super.init()
-//    }
-//    func getProducts() {
-//        let request = SKProductsRequest(productIdentifiers: allTicketIdentifiers)
-//        request.delegate = self
-//        request.start()
-//    }
-//    func purchase(product: SKProduct) -> Bool {
-//        if !IAPManager.shared.canMakePayments() {
-//            return false
-//        } else {
-//            let payment = SKPayment(product: product)
-//            SKPaymentQueue.default().add(payment)
-//        }
-//        return true
-//    }
-//    func canMakePayments() -> Bool {
-//        return SKPaymentQueue.canMakePayments()
-//    }
-//}
-//extension IAPManager: SKProductsRequestDelegate, SKRequestDelegate {
-//    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-//        let badProducts = response.invalidProductIdentifiers
-//        let goodProducts = response.products
-//        if !goodProducts.isEmpty {
-//            ProductsDB.shared.items = response.products
-//            print("bon ", ProductsDB.shared.items)
-//        }
-//        print("badProducts ", badProducts)
-//    }
-//    func request(_ request: SKRequest, didFailWithError error: Error) {
-//        print("didFailWithError ", error)
-//        DispatchQueue.main.async {
-//            print("purchase failed")
-//        }
-//    }
-//    func requestDidFinish(_ request: SKRequest) {
-//        DispatchQueue.main.async {
-//            print("request did finish ")
-//        }
-//    }
-//}
-//final class ProductsDB: ObservableObject, Identifiable {
-//    static let shared = ProductsDB()
-//    var items: [SKProduct] = [] {
-//        willSet {
-//            DispatchQueue.main.async {
-//                self.objectWillChange.send()
-//            }
-//        }
-//    }
-//    var price: [String] = ["$9.99", "$49.99", "$99.99"]
-//    var creditsArray: [Int] = [1, 5, 10]
-//}
-
-
-

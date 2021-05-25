@@ -2,93 +2,151 @@
 //  GiveConfirmView.swift
 //  Parkaroo
 //
-//  Created by max rome on 11/22/20.
+//  Created by Bernie Cartin on 5/8/21.
 //
 
 import SwiftUI
 
-//struct GiveConfirmView: View {
-//    @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
-//    @EnvironmentObject var locationTransfer: LocationTransfer
-//    @State var rating = 5
-//    var body: some View {
-//        VStack {
-//            Spacer()
-//            VStack(alignment: .center) {
-//                Text("Look for a \(self.locationTransfer.vehicle1)")
-//                    .bold()
-//                    .padding(.top)
-//                Spacer()
-//                HStack {
-//                    Text("Rate Buyer:")
-//                        .bold()
-//                    RatingView(rating: $rating)
-//                }
-//                Spacer()
-//                Text("Wait to recieve a credit\nYou will recieve an alert")
-//                    .multilineTextAlignment(.center)
-//                    .padding(.bottom)
-//            }.frame(width: 250, height: 150)
-//            .background(Color("white1"))
-//            .foregroundColor(Color("black1"))
-//            .cornerRadius(30)
-//            .shadow(radius: 5)
-//            .padding(.bottom)
-//        }.onAppear() {
-//        }.alert(isPresented: $gGRequestConfirm.showingYouGotCreditAlert) {
-//            return Alert(title: Text("You got a Credit!"), message: Text("You recieved one credit for giving your spot. Congrats! Check your credits detail page to see your credits."), dismissButton: .default(Text("Okay"), action: {
-//                self.gGRequestConfirm.showBox1 = false
-//                self.gGRequestConfirm.showBox2 = false
-//                self.gGRequestConfirm.moveBox1 = false
-//            }))
-//        }
-//    }
-//}
-//struct GiveConfirmView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        GiveConfirmView()
-//            .environmentObject(GGRequestConfirm())
-//            .environmentObject(LocationTransfer())
-//    }
-//}
-
-
-struct RatingView: View {
-    @Binding var rating: Int
-    var label = ""
-    var maximumRating = 5
-    var offImage: Image?
-    var onImage = Image(systemName: "star.fill")
-    var offColor = Color.gray
-    var onColor = Color("orange1")
+struct GiveConfirmView: View {
+    // MARK: PROPERTIES
+    @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
+    @EnvironmentObject var locationTransfer: LocationTransfer
+    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    @State var departureMinutes = Int()
+    @Binding var presentRatingView: Bool
+    @Binding var showConfirmView: Bool?
+    @State var showCancelAlert = false
+    
+    // MARK: BODY
     
     var body: some View {
-        HStack {
-            if label.isEmpty == false {
-                Text(label)
-            }
-            ForEach(1..<maximumRating + 1) { number in
-                self.image(for: number)
-                    .font(.title)
-                    .foregroundColor(number > self.rating ? self.offColor : self.onColor)
-                    .onTapGesture {
-                        self.rating = number
+        VStack(alignment: .center){
+            Text("Spot \(self.locationTransfer.givingPin?.status.capitalized ?? "")")
+                .font(.title2)
+                .bold()
+                .padding(.top)
+                .padding(.bottom, 8)
+            
+            Text("Departure in: \(departureMinutes) Minutes")
+                .bold()
+                .padding(.bottom, 8)
+                .onReceive(timer, perform: { input in
+                    let diff = Date().distance(to: self.locationTransfer.givingPin?.departure.dateValue() ?? Date())
+                    departureMinutes = Int(diff / 60)
+                })
+            
+            if let buyer = locationTransfer.buyer {
+                VStack {
+                    Text("Buyer: \(buyer.vehicle)")
+                        .padding(.bottom, 8)
+                    
+                    HStack {
+                        Text("Rating: \(self.locationTransfer.buyer?.numberOfRatings ?? 0 > 0 ? String(self.locationTransfer.buyer?.rating ?? 0) : "N/A")")
+                        
+                        Image(systemName: "star.fill")
+                            .foregroundColor(Color("orange1"))
+                        Text("\(self.locationTransfer.buyer?.numberOfRatings ?? 0) ratings")
+                            .font(.footnote)
                     }
+                }
+                .padding()
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25.0)
+                        .stroke(Color.gray, lineWidth: 2)
+                )
+                
+                Spacer()
+                
+                Button(action: {
+                    self.presentRatingView = true
+                }) {
+                    Text("\(locationTransfer.givingPin?.ratingSubmitted ?? false ? "Complete Transfer" : "Waiting on Buyer")")
+                        .bold()
+                        .padding(10)
+                        .background(locationTransfer.givingPin?.ratingSubmitted ?? false ? Color("orange1") : Color(white: 0.8))
+                        .cornerRadius(50)
+                        .padding(.top)
+                }
+                .padding(.bottom)
+                .disabled(!(locationTransfer.givingPin?.ratingSubmitted ?? false))
+                
+                if !(locationTransfer.givingPin?.ratingSubmitted ?? false) {
+                    Button(action: {
+                        self.showCancelAlert = true
+                    }) {
+                        Text("Cancel")
+                    }
+                    .padding(.bottom)
+                }
+                
             }
+            else {
+                VStack {
+                    Text("No Buyer")
+                        .padding(.bottom, 8)
+                    
+                    Text("Wait for a buyer to earn a free credit")
+                        .font(.footnote)
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25.0)
+                        .stroke(Color.gray, lineWidth: 2)
+                )
+                
+                Spacer()
+                
+                Button(action: {
+                    self.showCancelAlert = true
+                }) {
+                    Text("Cancel")
+                        .bold()
+                        .padding(10)
+                        .background(Color(white: 0.8))
+                        .cornerRadius(50)
+                        .padding(.vertical)
+                }
+            }
+            
+            
+            Spacer()
+            
         }
-    }
-    
-    func image(for number: Int) -> Image {
-        if number > rating {
-            return offImage ?? onImage
-        } else {
-            return onImage
-        }
+        .frame(maxWidth: .infinity, minHeight: 250, maxHeight: 320)
+        .padding(.horizontal)
+        .background(Color("white1"))
+        .foregroundColor(Color("black1"))
+        .cornerRadius(30)
+        .shadow(radius: 5)
+        .padding(.bottom)
+        .padding(.horizontal, 48)
+        .alert(isPresented: $locationTransfer.ratingSubmitted, content: {
+            Alert(title: Text("Buyer Input Received"), message: Text("Complete the transfer to receive a free credit"), dismissButton: .default(Text("Ok")))
+        })
+        .alert(isPresented: $showCancelAlert, content: {
+            Alert(title: Text("Are you sure?"), primaryButton: .default(Text("Yes"), action: {
+                locationTransfer.deletePin()
+                locationTransfer.minute = ""
+                if let buyer = locationTransfer.buyer {
+                    NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled his spot")
+                }
+                self.showConfirmView = false
+            }), secondaryButton: .cancel(Text("No")))
+        })
+        
     }
 }
-struct RatingView_Previews: PreviewProvider {
+
+struct GiveConfirmView_Previews: PreviewProvider {
+    @State static var presentView: Bool = false
+    @State static var showConfirmView: Bool?
     static var previews: some View {
-        RatingView(rating: .constant(5))
+        GiveConfirmView(presentRatingView: $presentView, showConfirmView: $showConfirmView)
             .previewLayout(.sizeThatFits)
+            .environmentObject(GGRequestConfirm())
+            .environmentObject(LocationTransfer())
     }
 }

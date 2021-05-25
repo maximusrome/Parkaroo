@@ -11,3 +11,5 @@ enum pinStatus: String {
     case available = "available"
     case reserved = "reserved"
 }
+
+

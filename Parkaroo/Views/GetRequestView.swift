@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct GetRequestView: View {
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
@@ -15,6 +16,12 @@ struct GetRequestView: View {
     @State private var showingCancelReserveAlert = false
     @State private var showingReserveSetupAlert = false
     @State private var showingNotEnoughCreditsAlert = false
+    
+    @EnvironmentObject var iapManager: IAPManager
+    @State private var showPurchaseConfirmation = false
+//    @State private var product: SKProduct?
+    
+    @State private var showActivityIndicator = false
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -76,31 +83,50 @@ struct GetRequestView: View {
             .padding(.bottom)
             .padding(.bottom, gGRequestConfirm.moveBox ? 170 : 0)
         }
+        .onChange(of: iapManager.transactionState, perform: { value in
+            
+            if iapManager.currentPurchasingProduct?.productIdentifier == "parking.spot" {
+                
+                switch iapManager.transactionState {
+                
+                case .purchased:
+                    userInfo.addCredits(numberOfCredits: 1) { result in
+                        switch result {
+                        case .success(_):
+                            iapManager.currentPurchasingProduct = nil
+                            self.completeTransaction()
+                        //                        self.showPurchaseConfirmation = true
+                        case .failure(_):
+                            print("Error updating credits")
+                        //                        self.showActivityIndicator = false
+                        }
+                    }
+                case .failed:
+                    iapManager.currentPurchasingProduct = nil
+                    print("Error Purchasing")
+                //                self.showActivityIndicator = false
+                case .purchasing:
+                    //                self.showActivityIndicator = true
+                    print("Purchasing...")
+                default:
+                    iapManager.currentPurchasingProduct = nil
+                    print("Other Error")
+                //                self.showActivityIndicator = false
+                }
+            }
+        })
     }
     
     
     private func reserveSpot() {
         if self.userInfo.isUserAuthenticated == .signedIn {
             if self.userInfo.user.credits > 0 {
-                let credits = self.userInfo.user.credits
-                FBFirestore.mergeFBUser([C_CREDITS:credits - 1], uid: self.userInfo.user.uid) { result in
-                    switch result {
-                    case .success(_):
-                        self.gGRequestConfirm.showBox3 = false
-                        self.gGRequestConfirm.showBox4 = true
-                        let data = [C_BUYER:userInfo.user.uid, C_STATUS: pinStatus.reserved.rawValue]
-                        self.locationTransfer.updateGettingPin(data: data)
-                        if let id = self.locationTransfer.gettingPin?.id {
-                            self.locationTransfer.fetchGettingPin(id: id)
-                        }
-                        self.userInfo.user.credits -= 1
-                        if let seller = locationTransfer.seller {
-                            NotificationsService.shared.sendSpotReservedNotification(uid: seller.uid)
-                        }
-                    case .failure(_):
-                        print("Error requesting spot")
-                    }
+                
+                if let product = iapManager.transactionProduct {
+                    iapManager.currentPurchasingProduct = product
+                    iapManager.purchaseProduct(product: product)
                 }
+                
             }
             else {
                 self.showingNotEnoughCreditsAlert = true
@@ -108,6 +134,28 @@ struct GetRequestView: View {
             
         } else {
             self.showingReserveSetupAlert = true
+        }
+    }
+    
+    private func completeTransaction() {
+        let credits = self.userInfo.user.credits
+        FBFirestore.mergeFBUser([C_CREDITS:credits - 1], uid: self.userInfo.user.uid) { result in
+            switch result {
+            case .success(_):
+                self.gGRequestConfirm.showBox3 = false
+                self.gGRequestConfirm.showBox4 = true
+                let data = [C_BUYER:userInfo.user.uid, C_STATUS: pinStatus.reserved.rawValue]
+                self.locationTransfer.updateGettingPin(data: data)
+                if let id = self.locationTransfer.gettingPin?.id {
+                    self.locationTransfer.fetchGettingPin(id: id)
+                }
+                self.userInfo.user.credits -= 1
+                if let seller = locationTransfer.seller {
+                    NotificationsService.shared.sendNotification(uid: seller.uid, message: "Your spot was reserved")
+                }
+            case .failure(_):
+                print("Error requesting spot")
+            }
         }
     }
 }
@@ -122,5 +170,6 @@ struct GetRequestView_Previews: PreviewProvider {
             .environmentObject(GGRequestConfirm())
             .environmentObject(LocationTransfer())
             .environmentObject(UserInfo())
+            .environmentObject(IAPManager())
     }
 }

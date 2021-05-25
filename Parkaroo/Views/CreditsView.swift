@@ -6,84 +6,95 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct CreditsView: View {
     @EnvironmentObject var userInfo: UserInfo
     @EnvironmentObject var locationTransfer: LocationTransfer
     @State private var showingCreditSetupAlert = false
-//    @ObservedObject var products = ProductsDB.shared
-    @State private var showBuyCreditsView = false
     @State private var showSignInAlert = false
     
+    @EnvironmentObject var iapManager: IAPManager
+    @State private var showPurchaseConfirmation = false
+    
+    @State private var showActivityIndicator = false
     
     
     var body: some View {
-        VStack {
-            Spacer()
-            Text("Your Credits")
-                .bold()
-                .padding(.bottom)
-            Text("\(String(self.userInfo.user.credits))")
-                .bold()
-            Spacer()
-            Button(action: {
-                if userInfo.isUserAuthenticated == .signedIn {
-                    self.showBuyCreditsView = true
-                }
-                else {
-                    showSignInAlert = true
-                }
-            }, label: {
-                Text("Buy Credits")
+        ZStack {
+            VStack {
+                Spacer()
+                Text("Your Credits")
                     .bold()
+                    .padding(.bottom)
+                Text("\(String(self.userInfo.user.credits))")
+                    .bold()
+                Spacer()
+                Button(action: {
+                    if userInfo.isUserAuthenticated == .signedIn {
+                        if let product = iapManager.creditProduct {
+                            iapManager.currentPurchasingProduct = product
+                            iapManager.purchaseProduct(product: product)
+                        }
+                    }
+                    else {
+                        showSignInAlert = true
+                    }
+                }, label: {
+                    Text("Buy 1 Credit")
+                        .bold()
+                })
+                
+                Spacer()
+            }
+            .font(.title)
+            .foregroundColor(Color("black1"))
+            .navigationBarTitle("Credits", displayMode: .inline)
+            .alert(isPresented: $showSignInAlert, content: {
+                Alert(title: Text("You must be signed in to buy credits"))
+            })
+            .alert(isPresented: $showPurchaseConfirmation, content: {
+                
+                Alert(title: Text("Purchase Completed"), message: Text("The credits have been added to your account"), dismissButton: Alert.Button.default(Text("Okay"), action: {
+                    self.showActivityIndicator = false
+                }))
+            })
+            .onChange(of: iapManager.transactionState, perform: { value in
+                
+                if iapManager.currentPurchasingProduct?.productIdentifier == "parkaroo.1credit"  {
+                    
+                    switch iapManager.transactionState {
+                    
+                    case .purchased:
+                        iapManager.currentPurchasingProduct = nil
+                        userInfo.addCredits(numberOfCredits: 1) { result in
+                            switch result {
+                            case .success(_):
+                                self.showPurchaseConfirmation = true
+                            case .failure(_):
+                                print("Error updating credits")
+                                self.showActivityIndicator = false
+                            }
+                        }
+                    case .failed:
+                        print("Error Purchasing")
+                        self.showActivityIndicator = false
+                        iapManager.currentPurchasingProduct = nil
+                    case .purchasing:
+                        self.showActivityIndicator = true
+                        print("Purchasing...")
+                    default:
+                        print("Other Error")
+                        self.showActivityIndicator = false
+                        iapManager.currentPurchasingProduct = nil
+                    }
+                }
             })
             
-            Spacer()
-//            ForEach((0 ..< self.products.items.count), id: \.self) { column in
-//                HStack {
-//                    Spacer()
-//                    Text(self.products.items[column].localizedDescription)
-//                        .bold()
-//                    Spacer()
-//                    Text(self.products.price[column])
-//                        .bold()
-//                        .padding(10)
-//                        .background(Color("orange1"))
-//                        .cornerRadius(50)
-//                        .font(.title3)
-//                        .onTapGesture {
-//                            if self.userInfo.isUserAuthenticated == .undefined || self.userInfo.isUserAuthenticated == .signedOut {
-//                                self.showingCreditSetupAlert.toggle()
-//                            } else {
-//                                let _ = IAPManager.shared.purchase(product: self.products.items[column])
-//                                self.locationTransfer.credits = self.locationTransfer.credits + self.products.creditsArray[column]
-//                                self.locationTransfer.createCredit()
-//                                self.locationTransfer.readCredit()
-//                            }
-//                        }
-//                        .alert(isPresented: $showingCreditSetupAlert) {
-//                            Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under menu."), dismissButton: .default(Text("Okay")))
-//                        }
-//                    Spacer()
-//                }.padding(.vertical)
-//            }
-//            Spacer()
+            if showActivityIndicator {
+                ActivityIndicatorView()
+            }
         }
-        .font(.title)
-        .foregroundColor(Color("black1"))
-        .navigationBarTitle("Credits", displayMode: .inline)
-//        .onAppear() {
-//            IAPManager.shared.getProducts()
-//            if self.userInfo.isUserAuthenticated == .signedIn {
-//                self.locationTransfer.readCredit()
-//            }
-//        }
-        .sheet(isPresented: $showBuyCreditsView, content: {
-            BuyCreditsView()
-        })
-        .alert(isPresented: $showSignInAlert, content: {
-            Alert(title: Text("You must be signed in to buy credits"))
-        })
     }
 }
 
@@ -94,5 +105,6 @@ struct CreditsView_Previews: PreviewProvider {
         CreditsView()
             .environmentObject(UserInfo())
             .environmentObject(LocationTransfer())
+            .environmentObject(IAPManager())
     }
 }

@@ -21,7 +21,7 @@ struct GetConfirmView: View {
     
     var body: some View {
         
-        let refundAlert = Alert(title: Text("Are you sure?"), message: Text("Refunding your spot will give you one credit and your transactional fee. Refunding will also send a notification to the seller asking him/her to rate this interaction."), primaryButton: Alert.Button.default(Text("Yes"), action: {
+        let refundAlert = Alert(title: Text("Are you sure?"), message: Text("Refunding your spot will give you back one credit, your transactional fee is not refundable. Refunding will also send a notification to the seller asking him/her to rate this interaction."), primaryButton: Alert.Button.default(Text("Yes"), action: {
             requestRefund()
             self.gGRequestConfirm.showBox3 = false
             self.gGRequestConfirm.showBox4 = false
@@ -104,6 +104,9 @@ struct GetConfirmView: View {
         FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.userInfo.user.uid) { result in
             switch result {
             case .success(_):
+                if let seller = locationTransfer.seller {
+                    NotificationsService.shared.sendNotification(uid: seller.uid, message: "The buyer has canceled his reservation.")
+                }
                 let data = [C_BUYER:"", C_STATUS: pinStatus.available.rawValue]
                 self.locationTransfer.updateGettingPin(data: data)
                 self.locationTransfer.seller = nil

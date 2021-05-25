@@ -24,11 +24,7 @@ struct GiveView: View {
             Button(action: {
                 self.gGRequestConfirm.showBox1 = false
                 if self.userInfo.isUserAuthenticated == .signedIn {
-//                    let newLocation = MKPointAnnotation()
-//                    newLocation.coordinate = self.locationTransfer.centerCoordinate
-//                    self.locationTransfer.locations.append(newLocation)
                     self.gGRequestConfirm.showBox1 = true
-//                    self.locationTransfer.createPin()
                 } else {
                     self.showingMakeAvaliableSetupAlert.toggle()
                 }
@@ -50,7 +46,7 @@ struct GiveView: View {
             }
             VStack {
                 Spacer()
-                GiveConfirmView2(presentRatingView: $presentRatingView, showConfirmView: $showConfirmView)
+                GiveConfirmView(presentRatingView: $presentRatingView, showConfirmView: $showConfirmView)
                     .offset(y: self.showConfirmView ?? false ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }

@@ -29,7 +29,7 @@ struct MapGiveView: UIViewRepresentable {
             let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
             let region = MKCoordinateRegion(center: coordinate, span: span)
             view.setRegion(region, animated: true)
-            locationTransfer.logoTap1 = false
+//            locationTransfer.logoTap1 = false
         }
     }
     

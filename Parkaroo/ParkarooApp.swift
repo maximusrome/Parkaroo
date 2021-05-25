@@ -7,14 +7,13 @@
 
 import SwiftUI
 import Firebase
+import FirebaseMessaging
+import StoreKit
 
 @main
 struct ParkarooApp: App {
-    
-    init() {
-        FirebaseApp.configure()
-        NotificationsService.shared.configure()
-    }
+ 
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var iapManager = IAPManager()
     var locationTransfer = LocationTransfer()
@@ -27,6 +26,26 @@ struct ParkarooApp: App {
                 .environmentObject(gGRequestConfirm)
                 .environmentObject(userInfo)
                 .environmentObject(iapManager)
+                .onAppear(perform: {
+                    iapManager.getProducts(productIDs: productIDs)
+                    SKPaymentQueue.default().add(iapManager)
+                })
         }
     }
 }
+
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        FirebaseApp.configure()
+        NotificationsService.shared.configure()
+        
+        return true
+    }
+    
+}
+
+
+

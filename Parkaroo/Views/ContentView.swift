@@ -94,7 +94,6 @@ struct ContentView: View {
                 hasOnboarded = true
             }
             self.userInfo.configureFirebaseStateDidChange()
-            NotificationsService.shared.configure()
         }.gesture(drag)
     }
 }

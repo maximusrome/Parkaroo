@@ -11,133 +11,78 @@ import Firebase
 import FirebaseMessaging
 import FirebaseFunctions
 
-class NotificationsService: NSObject, MessagingDelegate, UIApplicationDelegate {
+class NotificationsService: NSObject, UIApplicationDelegate {
     
     private override init() {}
     static let shared = NotificationsService()
     let unCenter = UNUserNotificationCenter.current()
     var window: UIWindow?
     
+    let gcmMessageIDKey = "gcm.message_id"
+    
     lazy var functions = Functions.functions()
     
-    func authorize() {
-        let options: UNAuthorizationOptions = [.alert, .badge, .sound]
-        unCenter.requestAuthorization(options: options) { (granted, error) in
-            if let err = error {
-                print(err.localizedDescription)
-                return
-            }
-            guard granted else {return}
-            DispatchQueue.main.async {
-                self.configure()
-            }
-        }
-    }
-    
-   // fGWJVRzQgkJQlfotYxR0gU:APA91bG7IXr0k_refZTmjDKDoz3K0LpMOm4Z9rHD9irNSLH0zWcXzUZjfc_Ud1YPlwrH5HUGFrEpsKZSH43wo5kJkdr0ixf-qwp6VSULon1x0KnfiBdZMGlPSxNLDVRbtyUDFdpcw3t-
-    
-    
-    func unauthorize() {
-        UIApplication.shared.unregisterForRemoteNotifications()
-    }
-    
     func configure() {
-        unCenter.delegate = self
+        UNUserNotificationCenter.current().delegate = self
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { _, _ in }
+        UIApplication.shared.registerForRemoteNotifications()
         Messaging.messaging().delegate = self
-        
-        let application = UIApplication.shared
-        application.registerForRemoteNotifications()
     }
-    
-    func notificationsAuthStatus(completion: @escaping(_ status: Bool) -> Void) {
-        unCenter.getNotificationSettings { (settings) in
-            DispatchQueue.main.async {
-                if settings.authorizationStatus == .authorized {
-                    completion(true)
-                }
-                else {
-                    completion(false)
-                }
-            }
-        }
-    }
-    
-    func saveToken() {
-        if let uid = Auth.auth().currentUser?.uid {
-            Messaging.messaging().token { token, error in
-                if let err = error {
-                    print("Error Retrieving Token: ", err.localizedDescription)
-                    return
-                }
-                if let token = token {
-                    FBFirestore.mergeFBUser([C_TOKEN:token], uid: uid) { result in
-                        switch result {
-                        
-                        case .success(_):
-                            print("Token Saved 1")
-                        case .failure(_):
-                            print("Token Failed")
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        print("Setting apns", deviceToken)
-        Messaging.messaging().apnsToken = deviceToken
-    }
+}
+
+extension NotificationsService: MessagingDelegate {
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
-        subscribeToNotifications(topic: C_EVERYONE)
-        if let uid = Auth.auth().currentUser?.uid {
-            FBFirestore.mergeFBUser([C_TOKEN:fcmToken], uid: uid) { result in
-                switch result {
-                
-                case .success(_):
-                    print("Token Saved 2")
-                case .failure(_):
-                    print("Token Failed")
-                }
+        let tokenDict = ["token": fcmToken ?? ""]
+        NotificationCenter.default.post(
+            name: Notification.Name("FCMToken"),
+            object: nil,
+            userInfo: tokenDict)
+        
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        FBFirestore.mergeFBUser(tokenDict, uid: uid) { result in
+            switch result {
+
+            case .success(_):
+                print("Token Saved: ", fcmToken)
+            case .failure(_):
+                print("Error Saving Token")
             }
         }
     }
-    
-    func subscribeToNotifications(topic: String) {
-        Messaging.messaging().subscribe(toTopic: topic)
-    }
-    
-    func unsubscribeFromNotifications(topic: String) {
-        Messaging.messaging().unsubscribe(fromTopic: topic)
-    }
-    
-    
-    
 }
 
 extension NotificationsService: UNUserNotificationCenterDelegate {
-  
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        let userInfo = response.notification.request.content.userInfo
-
-          Messaging.messaging().appDidReceiveMessage(userInfo)
-        completionHandler()
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print(error.localizedDescription)
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        let userInfo = notification.request.content.userInfo
-        Messaging.messaging().appDidReceiveMessage(userInfo)
-        completionHandler([.banner, .sound, .badge])
+        completionHandler([[.banner, .sound]])
     }
     
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        Messaging.messaging().appDidReceiveMessage(userInfo)
-          completionHandler(.noData)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        completionHandler()
     }
     
-    func sendSpotReservedNotification(uid: String) {
-        self.functions.httpsCallable("spotReserved").call(["user":uid], completion: { (result, error) in
+//    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//        Messaging.messaging().appDidReceiveMessage(userInfo)
+//
+//        if let messageID = userInfo[gcmMessageIDKey] {
+//            print("MessageID: \(messageID)")
+//        }
+//
+//        completionHandler(.noData)
+//    }
+    
+    func sendNotification(uid: String, message: String) {
+        self.functions.httpsCallable("createNotification").call(["user":uid, "message":message], completion: { (result, error) in
             if let error = error as NSError? {
               if error.domain == FunctionsErrorDomain {
                 let message = error.localizedDescription

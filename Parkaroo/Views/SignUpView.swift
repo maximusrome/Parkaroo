@@ -80,7 +80,6 @@ struct SignUpView: View {
                             self.errorString = error.localizedDescription
                             self.showError = true
                         case .success( _):
-                            NotificationsService.shared.authorize()
                             self.presentationMode.wrappedValue.dismiss()
                         }
                     }
