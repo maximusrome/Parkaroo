@@ -4,10 +4,9 @@
 //
 //  Created by max rome on 11/22/20.
 //
-
 import SwiftUI
 
-struct HelpView: View {
+struct FAQSView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -31,7 +30,7 @@ struct HelpView: View {
                     Text("Is this app legal?")
                         .bold()
                         .font(.title3)
-                    Text("Yes, this app is 100% legal. Trading information a parking spot is legal.\n")
+                    Text("Yes, this app is 100% legal. Trading information for a parking spot is legal.\n")
                     Text("What if someone leaves the spot before I get there and there is another car in the spot?")
                         .bold()
                         .font(.title3)
@@ -43,20 +42,15 @@ struct HelpView: View {
                     Text("Can I make money from this app?")
                         .bold()
                         .font(.title3)
-                    Text("No, but you can earn credits which you can use for getting a spot.\n\n")
-                    Text("Additional Support")
-                        .bold()
-                        .font(.title)
-                    Text("\nIf you have questions, comments, or feedback contact help@parkaroo.org")
-                        .padding(.bottom)
+                    Text("No, but you can earn credits which you can use to get a spot.")
                 }
             }
         }.padding(.horizontal)
         .navigationBarTitle("Help", displayMode: .inline)
     }
 }
-struct HelpView_Previews: PreviewProvider {
+struct FAQSView_Previews: PreviewProvider {
     static var previews: some View {
-        HelpView()
+        FAQSView()
     }
 }
