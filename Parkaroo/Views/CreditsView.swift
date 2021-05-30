@@ -17,8 +17,6 @@ struct CreditsView: View {
     @EnvironmentObject var iapManager: IAPManager
     @State private var showPurchaseConfirmation = false
     
-    @State private var showActivityIndicator = false
-    
     
     var body: some View {
         ZStack {
@@ -56,7 +54,7 @@ struct CreditsView: View {
             .alert(isPresented: $showPurchaseConfirmation, content: {
                 
                 Alert(title: Text("Purchase Completed"), message: Text("The credits have been added to your account"), dismissButton: Alert.Button.default(Text("Okay"), action: {
-                    self.showActivityIndicator = false
+                    iapManager.showActivityIndicator = false
                 }))
             })
             .onChange(of: iapManager.transactionState, perform: { value in
@@ -73,25 +71,25 @@ struct CreditsView: View {
                                 self.showPurchaseConfirmation = true
                             case .failure(_):
                                 print("Error updating credits")
-                                self.showActivityIndicator = false
+                                iapManager.showActivityIndicator = false
                             }
                         }
                     case .failed:
                         print("Error Purchasing")
-                        self.showActivityIndicator = false
+                        iapManager.showActivityIndicator = false
                         iapManager.currentPurchasingProduct = nil
                     case .purchasing:
-                        self.showActivityIndicator = true
+                        iapManager.showActivityIndicator = true
                         print("Purchasing...")
                     default:
                         print("Other Error")
-                        self.showActivityIndicator = false
+                        iapManager.showActivityIndicator = false
                         iapManager.currentPurchasingProduct = nil
                     }
                 }
             })
             
-            if showActivityIndicator {
+            if iapManager.showActivityIndicator {
                 ActivityIndicatorView()
             }
         }

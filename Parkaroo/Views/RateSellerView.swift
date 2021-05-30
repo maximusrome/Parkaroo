@@ -35,11 +35,12 @@ struct RateSellerView: View {
                     .bold()
                     .padding(.horizontal, 24)
                     .padding(.vertical, 8)
-                    .background(Color("orange1"))
+                    .background(rating > 0 ? Color("orange1") : Color(white: 0.8))
                     .cornerRadius(50)
                     .padding(.top)
             }
             .padding(.bottom)
+            .disabled(rating <= 0)
             
         }
         .frame(width: 300, height: 200)
@@ -82,6 +83,7 @@ struct RateSellerView: View {
         locationTransfer.givingPin = nil
         locationTransfer.gettingPin = nil
         locationTransfer.minute = ""
+        locationTransfer.cleanUpGettingPin()
         self.rating = 0
     }
 }

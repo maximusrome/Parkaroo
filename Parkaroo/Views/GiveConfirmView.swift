@@ -29,12 +29,20 @@ struct GiveConfirmView: View {
                 .padding(.top)
                 .padding(.bottom, 8)
             
-            Text("Departure in: \(departureMinutes) Minutes")
+            Text("Departure in: \(departureMinutes >= 0 ? String(departureMinutes) + " Minutes" : "" )")
                 .bold()
                 .padding(.bottom, 8)
                 .onReceive(timer, perform: { input in
                     let diff = Date().distance(to: self.locationTransfer.givingPin?.departure.dateValue() ?? Date())
                     departureMinutes = Int(diff / 60)
+                    if departureMinutes < 0 {
+                        if locationTransfer.buyer == nil {
+                            locationTransfer.deletePin()
+                            locationTransfer.minute = ""
+                            locationTransfer.givingPin = nil
+                            self.showConfirmView = false
+                        }
+                    }
                 })
             
             if let buyer = locationTransfer.buyer {
@@ -43,7 +51,7 @@ struct GiveConfirmView: View {
                         .padding(.bottom, 8)
                     
                     HStack {
-                        Text("Rating: \(self.locationTransfer.buyer?.numberOfRatings ?? 0 > 0 ? String(self.locationTransfer.buyer?.rating ?? 0) : "N/A")")
+                        Text("Rating: \(self.locationTransfer.buyer?.numberOfRatings ?? 0 > 0 ? (String(format: "%.2f", self.locationTransfer.buyer?.rating ?? 0)) : "N/A")")
                         
                         Image(systemName: "star.fill")
                             .foregroundColor(Color("orange1"))
@@ -60,7 +68,10 @@ struct GiveConfirmView: View {
                 Spacer()
                 
                 Button(action: {
+                    self.showConfirmView = false
                     self.presentRatingView = true
+                    self.locationTransfer.givingPin = nil
+                    self.locationTransfer.locations.removeAll()
                 }) {
                     Text("\(locationTransfer.givingPin?.ratingSubmitted ?? false ? "Complete Transfer" : "Waiting on Buyer")")
                         .bold()
@@ -127,7 +138,7 @@ struct GiveConfirmView: View {
             Alert(title: Text("Buyer Input Received"), message: Text("Complete the transfer to receive a free credit"), dismissButton: .default(Text("Ok")))
         })
         .alert(isPresented: $showCancelAlert, content: {
-            Alert(title: Text("Are you sure?"), primaryButton: .default(Text("Yes"), action: {
+            Alert(title: Text("Are you sure?"), message: Text("The Buyer will be asked to rate you."), primaryButton: .default(Text("Yes"), action: {
                 locationTransfer.deletePin()
                 locationTransfer.minute = ""
                 if let buyer = locationTransfer.buyer {

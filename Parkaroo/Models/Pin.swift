@@ -25,7 +25,7 @@ struct Pin: Identifiable {
         self.latitude = data[C_LATITUDE] as! Double
         self.status = data[C_STATUS] as! String
         self.departure = data[C_DEPARTURE] as! Timestamp
-        self.seller = data[C_SELLER] as! String
+        self.seller = data[C_SELLER] as! String 
         if let buyer = data[C_BUYER] as? String {
             self.buyer = buyer
         }

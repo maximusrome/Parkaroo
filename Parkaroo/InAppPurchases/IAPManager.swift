@@ -19,6 +19,7 @@ class IAPManager: NSObject, ObservableObject, SKProductsRequestDelegate {
     @Published var creditProduct: SKProduct?
     
     @Published var currentPurchasingProduct: SKProduct?
+    @Published var showActivityIndicator = false
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         print("Did receive response")

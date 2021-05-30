@@ -54,6 +54,8 @@
 		CBA83E962654ADA400528C7C /* ProductIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA83E952654ADA400528C7C /* ProductIDs.swift */; };
 		CBA83E992655EFE800528C7C /* NotificationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA83E982655EFE700528C7C /* NotificationsService.swift */; };
 		CBA83E9B2659518F00528C7C /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA83E9A2659518F00528C7C /* ActivityIndicatorView.swift */; };
+		CBA83EA526608FB400528C7C /* SellerCanceledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA83EA426608FB400528C7C /* SellerCanceledView.swift */; };
+		CBA83EA72661560500528C7C /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA83EA62661560400528C7C /* LocationService.swift */; };
 		DFC7321F1828D9FE0665BEE5 /* Pods_Parkaroo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F02FC4294FE77D670D0671A /* Pods_Parkaroo.framework */; };
 /* End PBXBuildFile section */
 
@@ -111,6 +113,8 @@
 		CBA83E952654ADA400528C7C /* ProductIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductIDs.swift; sourceTree = "<group>"; };
 		CBA83E982655EFE700528C7C /* NotificationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsService.swift; sourceTree = "<group>"; };
 		CBA83E9A2659518F00528C7C /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
+		CBA83EA426608FB400528C7C /* SellerCanceledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerCanceledView.swift; sourceTree = "<group>"; };
+		CBA83EA62661560400528C7C /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		D0E8FF601DBC9ABC63E12BFE /* Pods-Parkaroo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parkaroo.release.xcconfig"; path = "Target Support Files/Pods-Parkaroo/Pods-Parkaroo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -208,6 +212,7 @@
 				216A7FA8256B09B40009CF30 /* GetRequestView.swift */,
 				216A7FAB256B09E40009CF30 /* GetConfirmView.swift */,
 				216A7FAE256B0A110009CF30 /* GiveRequestView.swift */,
+				CB0D345E2647535C00F1470B /* GiveConfirmView.swift */,
 				216A7FB1256B0A2E0009CF30 /* RatingView.swift */,
 				21F0EAE22570A46F0053015C /* SignUpView.swift */,
 				216A7FB4256B0A5D0009CF30 /* LoginView.swift */,
@@ -216,11 +221,11 @@
 				216A7FBD256B0AC10009CF30 /* CharityView.swift */,
 				216A7FC0256B0AEA0009CF30 /* TutorialView.swift */,
 				216A7FC3256B0B060009CF30 /* HelpView.swift */,
-				CB0D345E2647535C00F1470B /* GiveConfirmView.swift */,
 				CBA83E6E264A273200528C7C /* RateSellerView.swift */,
 				CBA83E70264C209D00528C7C /* RateBuyerView.swift */,
 				CBA83E9326549F2800528C7C /* BuyCreditsView.swift */,
 				CBA83E9A2659518F00528C7C /* ActivityIndicatorView.swift */,
+				CBA83EA426608FB400528C7C /* SellerCanceledView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -287,6 +292,7 @@
 			isa = PBXGroup;
 			children = (
 				CBA83E982655EFE700528C7C /* NotificationsService.swift */,
+				CBA83EA62661560400528C7C /* LocationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -432,6 +438,7 @@
 				21295F71256B069100AD0E30 /* ContentView.swift in Sources */,
 				CBA83E9B2659518F00528C7C /* ActivityIndicatorView.swift in Sources */,
 				216A7F9A256B08870009CF30 /* FirstLaunchView.swift in Sources */,
+				CBA83EA72661560500528C7C /* LocationService.swift in Sources */,
 				CB0D345F2647535C00F1470B /* GiveConfirmView.swift in Sources */,
 				215CCD2B25D06A540071EEA3 /* Pin.swift in Sources */,
 				216A7FA0256B08FC0009CF30 /* GetView.swift in Sources */,
@@ -445,6 +452,7 @@
 				216A7FC1256B0AEA0009CF30 /* TutorialView.swift in Sources */,
 				216A7F94256B08100009CF30 /* Board2View.swift in Sources */,
 				216A7FC4256B0B060009CF30 /* HelpView.swift in Sources */,
+				CBA83EA526608FB400528C7C /* SellerCanceledView.swift in Sources */,
 				21B2942E25A0D3DE004B8FD3 /* FBUser.swift in Sources */,
 				21295F6F256B069100AD0E30 /* ParkarooApp.swift in Sources */,
 				216A7FB2256B0A2E0009CF30 /* RatingView.swift in Sources */,
@@ -609,7 +617,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = org.parkaroo.maxrome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -636,7 +644,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = org.parkaroo.maxrome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

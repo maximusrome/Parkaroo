@@ -52,4 +52,32 @@ class UserInfo: ObservableObject {
         completion(result)
     }
     }
+    
+    func AddOneCredit() {
+        var credits = self.user.credits
+        credits += 1
+        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.user.uid) { result in
+            switch result {
+            
+            case .success(_):
+                self.user.credits = credits
+            case .failure(_):
+                print("Error updating credits")
+            }
+        }
+    }
+    
+    func RemoveOneCredit() {
+        var credits = self.user.credits
+        credits -= 1
+        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.user.uid) { result in
+            switch result {
+            
+            case .success(_):
+                self.user.credits = credits
+            case .failure(_):
+                print("Error updating credits")
+            }
+        }
+    }
 }

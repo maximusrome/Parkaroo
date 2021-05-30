@@ -15,7 +15,7 @@ struct GiveRequestView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var rating = 5
     @State private var showingOffMarketAlert = false
-    @State private var showingMinuteOrDoneAlert = false
+//    @State private var showingMinuteOrDoneAlert = false
     @State private var showingMinuteAlert = false
     
     @Binding var showConfirmView: Bool?
@@ -83,19 +83,15 @@ struct GiveRequestView: View {
                         } else {
                             self.showingMinuteAlert = true
                         }
-                        self.showingMinuteOrDoneAlert.toggle()
+//                        self.showingMinuteOrDoneAlert.toggle()
                     }) {
                         Text("Make Avaliable")
                             .bold()
                             .padding(10)
                             .background(Color("orange1"))
                             .cornerRadius(50)
-                    }.alert(isPresented: $showingMinuteOrDoneAlert) {
-                        if self.showingMinuteAlert {
-                            return Alert(title: Text("Invalid Departure Time"), message: Text(""), dismissButton: .default(Text("Okay")))
-                        } else {
-                            return Alert(title: Text("Done"), message: Text("Now, wait for someone to reserve your spot. This screen will update when someone has reserved it."), dismissButton: .default(Text("Okay")))
-                        }
+                    }.alert(isPresented: $showingMinuteAlert) {
+                        return Alert(title: Text("Invalid Departure Time"), message: Text(""), dismissButton: .default(Text("Okay")))
                     }
                 }.padding(.bottom)
             }.frame(width: 250, height: 150)

@@ -13,15 +13,15 @@ struct GetRequestView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var userInfo: UserInfo
     @State var rating = 5
-    @State private var showingCancelReserveAlert = false
+//    @State private var showingCancelReserveAlert = false
     @State private var showingReserveSetupAlert = false
     @State private var showingNotEnoughCreditsAlert = false
     
     @EnvironmentObject var iapManager: IAPManager
     @State private var showPurchaseConfirmation = false
-//    @State private var product: SKProduct?
     
     @State private var showActivityIndicator = false
+    @Binding var gettingPinAnnotation: CustomMKPointAnnotation?
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -31,7 +31,7 @@ struct GetRequestView: View {
         VStack {
             Spacer()
             VStack(alignment: .center) {
-                Text("Deparature: \(depart) minutes")
+                Text("Deparature: \(depart >= 0 ? String(depart) + " Minutes" : "")")
                     .bold()
                     .padding(.top)
                     .onReceive(timer, perform: { input in
@@ -50,16 +50,17 @@ struct GetRequestView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        self.showingCancelReserveAlert = true
+//                        self.showingCancelReserveAlert = true
+                        self.gGRequestConfirm.showBox3 = false
                     }) {
                         Image(systemName: "trash")
                             .padding(.trailing, 15)
                     }
-                    .alert(isPresented: $showingCancelReserveAlert) {
-                        Alert(title: Text("Cancel"), message: Text("Are you sure?"), primaryButton: Alert.Button.default(Text("Yes"), action: {
-                            self.gGRequestConfirm.showBox3 = false
-                        }), secondaryButton: Alert.Button.default(Text("No")))
-                    }
+//                    .alert(isPresented: $showingCancelReserveAlert) {
+//                        Alert(title: Text("Cancel"), message: Text("Are you sure?"), primaryButton: Alert.Button.default(Text("Yes"), action: {
+//                            self.gGRequestConfirm.showBox3 = false
+//                        }), secondaryButton: Alert.Button.default(Text("No")))
+//                    }
                     Button(action: {
                         reserveSpot()
                     }) {
@@ -90,7 +91,8 @@ struct GetRequestView: View {
                 switch iapManager.transactionState {
                 
                 case .purchased:
-                    userInfo.addCredits(numberOfCredits: 1) { result in
+                    iapManager.showActivityIndicator = false
+                    userInfo.addCredits(numberOfCredits: -1) { result in
                         switch result {
                         case .success(_):
                             iapManager.currentPurchasingProduct = nil
@@ -98,20 +100,19 @@ struct GetRequestView: View {
                         //                        self.showPurchaseConfirmation = true
                         case .failure(_):
                             print("Error updating credits")
-                        //                        self.showActivityIndicator = false
                         }
                     }
                 case .failed:
                     iapManager.currentPurchasingProduct = nil
                     print("Error Purchasing")
-                //                self.showActivityIndicator = false
+                    iapManager.showActivityIndicator = false
                 case .purchasing:
-                    //                self.showActivityIndicator = true
+                    iapManager.showActivityIndicator = true
                     print("Purchasing...")
                 default:
                     iapManager.currentPurchasingProduct = nil
                     print("Other Error")
-                //                self.showActivityIndicator = false
+                    iapManager.showActivityIndicator = false
                 }
             }
         })
@@ -122,11 +123,21 @@ struct GetRequestView: View {
         if self.userInfo.isUserAuthenticated == .signedIn {
             if self.userInfo.user.credits > 0 {
                 
-                if let product = iapManager.transactionProduct {
-                    iapManager.currentPurchasingProduct = product
-                    iapManager.purchaseProduct(product: product)
-                }
+                // COMMENT TO TEST ON SIMULATOR
+//                if let product = iapManager.transactionProduct {
+//                    iapManager.currentPurchasingProduct = product
+//                    iapManager.purchaseProduct(product: product)
+//                }
                 
+               //UNCOMMENT TO TEST ON SIMULATOR
+                userInfo.addCredits(numberOfCredits: -1) { result in
+                    switch result {
+                    case .success(_):
+                        self.completeTransaction()
+                    case .failure(_):
+                        print("Error updating credits")
+                    }
+                }
             }
             else {
                 self.showingNotEnoughCreditsAlert = true
@@ -138,24 +149,26 @@ struct GetRequestView: View {
     }
     
     private func completeTransaction() {
-        let credits = self.userInfo.user.credits
-        FBFirestore.mergeFBUser([C_CREDITS:credits - 1], uid: self.userInfo.user.uid) { result in
-            switch result {
-            case .success(_):
-                self.gGRequestConfirm.showBox3 = false
-                self.gGRequestConfirm.showBox4 = true
-                let data = [C_BUYER:userInfo.user.uid, C_STATUS: pinStatus.reserved.rawValue]
-                self.locationTransfer.updateGettingPin(data: data)
-                if let id = self.locationTransfer.gettingPin?.id {
-                    self.locationTransfer.fetchGettingPin(id: id)
-                }
-                self.userInfo.user.credits -= 1
-                if let seller = locationTransfer.seller {
-                    NotificationsService.shared.sendNotification(uid: seller.uid, message: "Your spot was reserved")
-                }
-            case .failure(_):
-                print("Error requesting spot")
-            }
+        self.gGRequestConfirm.showBox3 = false
+        self.gGRequestConfirm.showBox4 = true
+        let data = [C_BUYER:userInfo.user.uid, C_STATUS: pinStatus.reserved.rawValue]
+        self.locationTransfer.updateGettingPin(data: data)
+        if let id = self.locationTransfer.gettingPin?.id {
+            self.locationTransfer.fetchGettingPin(id: id)
+        }
+        if let seller = locationTransfer.seller {
+            NotificationsService.shared.sendNotification(uid: seller.uid, message: "Your spot was reserved")
+        }
+        
+        // add pin
+        
+        if let location = locationTransfer.gettingPin?.location {
+            let annotation = CustomMKPointAnnotation()
+            annotation.coordinate = location
+            annotation.id = locationTransfer.gettingPin?.id
+            annotation.type = .reserved
+            
+            self.gettingPinAnnotation = annotation
         }
     }
 }
@@ -164,8 +177,9 @@ struct GetRequestView: View {
 
 
 struct GetRequestView_Previews: PreviewProvider {
+    @State static var annotation: CustomMKPointAnnotation? = CustomMKPointAnnotation()
     static var previews: some View {
-        GetRequestView()
+        GetRequestView(gettingPinAnnotation: $annotation)
             .previewLayout(.sizeThatFits)
             .environmentObject(GGRequestConfirm())
             .environmentObject(LocationTransfer())

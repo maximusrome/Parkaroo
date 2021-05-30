@@ -21,22 +21,24 @@ struct GiveView: View {
         ZStack {
             MapGiveView(annotations: locationTransfer.locations)
                 .edgesIgnoringSafeArea(.all)
-            Button(action: {
-                self.gGRequestConfirm.showBox1 = false
-                if self.userInfo.isUserAuthenticated == .signedIn {
-                    self.gGRequestConfirm.showBox1 = true
-                } else {
-                    self.showingMakeAvaliableSetupAlert.toggle()
+            if locationTransfer.givingPin == nil {
+                Button(action: {
+                    self.gGRequestConfirm.showBox1 = false
+                    if self.userInfo.isUserAuthenticated == .signedIn {
+                        self.gGRequestConfirm.showBox1 = true
+                    } else {
+                        self.showingMakeAvaliableSetupAlert.toggle()
+                    }
+                }) {
+                    Image(systemName: "mappin.and.ellipse")
+                        .font(.title)
+                        .frame(width: 32.0, height: 32.0)
+                        .foregroundColor(Color("orange1"))
+                        .padding()
+                }.disabled(userInfo.isUserAuthenticated == .signedIn && gGRequestConfirm.showBox1)
+                .alert(isPresented: $showingMakeAvaliableSetupAlert) {
+                    Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under menu."), dismissButton: .default(Text("Okay")))
                 }
-            }) {
-                Image(systemName: "mappin.and.ellipse")
-                    .font(.title)
-                    .frame(width: 32.0, height: 32.0)
-                    .foregroundColor(Color("orange1"))
-                    .padding()
-            }.disabled(userInfo.isUserAuthenticated == .signedIn && gGRequestConfirm.showBox1)
-            .alert(isPresented: $showingMakeAvaliableSetupAlert) {
-                Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under menu."), dismissButton: .default(Text("Okay")))
             }
             VStack {
                 Spacer()

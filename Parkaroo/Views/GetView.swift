@@ -11,22 +11,25 @@ import Firebase
 struct GetView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
+    @EnvironmentObject var userInfo: UserInfo
+    @EnvironmentObject var iapManager: IAPManager
     
     @State var presentRatingView = false
+    @State var gettingAnnotation: CustomMKPointAnnotation?
     
     var body: some View {
         ZStack {
-            MapGetView(annotations1: locationTransfer.locations1)
+            MapGetView(gettingPinAnnotation: $gettingAnnotation, annotations1: locationTransfer.locations1)
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 Spacer()
-                GetRequestView()
+                GetRequestView(gettingPinAnnotation: $gettingAnnotation)
                     .offset(y: self.gGRequestConfirm.showBox3 ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
-                GetConfirmView(presentRatingView: $presentRatingView)
+                GetConfirmView(presentRatingView: $presentRatingView, gettingPinAnnotation: $gettingAnnotation)
                     .offset(y: self.gGRequestConfirm.showBox4 ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
@@ -36,25 +39,28 @@ struct GetView: View {
                     .offset(y: self.presentRatingView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
+            VStack {
+                Spacer()
+                SellerCanceledView(presentRatingView: $presentRatingView)
+                    .offset(y: self.locationTransfer.sellerCanceled ? 0 : UIScreen.main.bounds.height)
+                    .animation(.default)
+            }
+            
+            if iapManager.showActivityIndicator {
+                ActivityIndicatorView()
+            }
         }.onAppear() {
             self.locationTransfer.fetchLocations()
-//            let db = Firestore.firestore()
-//            db.collection("pins").getDocuments() { (querySnapshot, err) in
-//                if err != nil {
-//                    print("There was an error")
-//                } else {
-//                    for document in querySnapshot!.documents {
-//                        self.locationTransfer.centerCoordinate1.latitude = document["latitude"] as! Double
-//                        self.locationTransfer.centerCoordinate1.longitude = document["longitude"] as! Double
-//                        print("coordinates read")
-//                        let newLocation = MKPointAnnotation()
-//                        newLocation.coordinate = self.locationTransfer.centerCoordinate1
-//                        self.locationTransfer.locations1.append(newLocation)
-//                        print("done")
-//                    }
-//                }
-//            }
         }
+        .onReceive(locationTransfer.updatePublisher, perform: { _ in
+            if locationTransfer.sellerCanceled {
+                self.gGRequestConfirm.showBox3 = false
+                self.gGRequestConfirm.showBox4 = false
+                self.gGRequestConfirm.moveBox = false
+                self.gettingAnnotation = nil
+                self.userInfo.AddOneCredit()
+            }
+        })
     }
 }
 struct GetView_Previews: PreviewProvider {
@@ -62,5 +68,7 @@ struct GetView_Previews: PreviewProvider {
         GetView()
             .environmentObject(LocationTransfer())
             .environmentObject(GGRequestConfirm())
+            .environmentObject(UserInfo())
+            .environmentObject(IAPManager())
     }
 }

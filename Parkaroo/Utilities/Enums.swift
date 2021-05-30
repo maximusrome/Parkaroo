@@ -12,4 +12,8 @@ enum pinStatus: String {
     case reserved = "reserved"
 }
 
+enum pinType {
+    case normal
+    case reserved
+}
 

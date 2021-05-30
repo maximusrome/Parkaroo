@@ -8,6 +8,7 @@
 import Foundation
 import MapKit
 import Firebase
+import Combine
 
 class LocationTransfer: ObservableObject {
     
@@ -41,6 +42,9 @@ class LocationTransfer: ObservableObject {
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     
+    var publisher: AnyPublisher<Void, Never>! = nil
+    let updatePublisher = PassthroughSubject<Void, Never>()
+    
     func createPin() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser!.uid
@@ -61,13 +65,26 @@ class LocationTransfer: ObservableObject {
             
             self.givingPin = Pin(data: data)
             self.fetchGivingPin()
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = self.centerCoordinate
+            self.locations.append(annotation)
         }
     }
     
     func updateGettingPin(data: [String:Any]) {
         if let gettingPin = gettingPin {
             let db = Firestore.firestore()
-            db.collection(C_PINS).document(gettingPin.id).setData(data, merge: true)
+            db.collection(C_PINS).document(gettingPin.id).getDocument { snapshot, error in
+                if error != nil {
+                    print("There was an error")
+                }
+                else {
+                    if snapshot?.exists ?? false {
+                        db.collection(C_PINS).document(gettingPin.id).setData(data, merge: true)
+                    }
+                }
+            }
         }
     }
     
@@ -103,11 +120,14 @@ class LocationTransfer: ObservableObject {
         }
     }
     
-    
     func deletePin() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser!.uid
         db.collection("pins").document(userID).delete()
+        self.givingPin = nil
+        self.seller = nil
+        self.buyer = nil
+        self.locations.removeAll()
     }
     
     func createCredit() {
@@ -187,19 +207,26 @@ class LocationTransfer: ObservableObject {
     
     func fetchLocations() {
         let db = Firestore.firestore()
-        _ = db.collection(C_PINS).whereField("status", isEqualTo: "available").addSnapshotListener { querySnapshot, error in
+        _ = db.collection(C_PINS).whereField("status", isEqualTo: "available").addSnapshotListener { [weak self] querySnapshot, error in
             guard let documents = querySnapshot?.documents else {
                 print("No Pins")
                 return
             }
             
-            self.pins = documents.map { queryDocumentSnapshot in
+            
+            self?.pins = documents.map { queryDocumentSnapshot in
                 var data = queryDocumentSnapshot.data()
                 data[C_ID] = queryDocumentSnapshot.documentID
                 return Pin(data: data)
             }
             
-            self.locations1 = documents.map { queryDocumentSnapshot in
+            if let index = self?.pins.firstIndex(where: { pin in
+                return pin.id == Auth.auth().currentUser?.uid
+            }) {
+                self?.pins.remove(at: index)
+            }
+            
+            self?.locations1 = documents.map { queryDocumentSnapshot in
                 let data = queryDocumentSnapshot.data()
                 
                 let latitude = data[C_LATITUDE] as? Double ?? 0.0
@@ -208,8 +235,15 @@ class LocationTransfer: ObservableObject {
                 let annotation = CustomMKPointAnnotation()
                 annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
                 annotation.id = queryDocumentSnapshot.documentID
+                annotation.type = .normal
                 
                 return annotation
+            }
+            
+            if let index = self?.locations1.firstIndex(where: { annotation in
+                return annotation.id == Auth.auth().currentUser?.uid
+            }) {
+                self?.locations1.remove(at: index)
             }
         }
     }
@@ -234,7 +268,7 @@ class LocationTransfer: ObservableObject {
                 
                 self?.ratingSubmitted = data[C_RATINGSUBMITTED] as? Bool ?? false
                 
-                if let buyerID = data[C_BUYER] as? String {
+                if let buyerID = data[C_BUYER] as? String, buyerID.count > 0 {
                     FBFirestore.retrieveFBUser(uid: buyerID) { [weak self] result in
                         switch result {
                         case .failure(let error):
@@ -243,6 +277,9 @@ class LocationTransfer: ObservableObject {
                             self?.buyer = user
                         }
                     }
+                }
+                else {
+                    self?.buyer = nil
                 }
             }
         })
@@ -268,12 +305,23 @@ class LocationTransfer: ObservableObject {
             }
             else {
                 self?.sellerCanceled = true
+                self?.updatePublisher.send()
             }
         })
+    }
+    
+    func cleanUpGettingPin() {
+        if let listener = gettingPinListener {
+            listener.remove()
+        }
+        self.gettingPin = nil
+        self.seller = nil
+        self.sellerCanceled = false
     }
 }
 
 
 class CustomMKPointAnnotation: MKPointAnnotation {
     var id: String!
+    var type: pinType!
 }

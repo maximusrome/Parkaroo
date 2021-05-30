@@ -15,6 +15,7 @@ struct GetConfirmView: View {
     @State private var showingRefundAlert = false
     @State private var showRefundCompletedAlert = false
     @Binding var presentRatingView: Bool
+    @Binding var gettingPinAnnotation: CustomMKPointAnnotation?
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var depart = Int()
@@ -25,13 +26,12 @@ struct GetConfirmView: View {
             requestRefund()
             self.gGRequestConfirm.showBox3 = false
             self.gGRequestConfirm.showBox4 = false
-            self.showRefundCompletedAlert = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.showingRefundAlert = true
-            }
+
         }), secondaryButton: Alert.Button.default(Text("No")))
         
-        let refundCompletedAlert = Alert(title: Text("Refund Processed"), message: nil, dismissButton: Alert.Button.default(Text("Okay")))
+        let refundCompletedAlert = Alert(title: Text("Refund Processed"), message: nil, dismissButton: Alert.Button.default(Text("Okay"), action: {
+            self.showRefundCompletedAlert = false
+        }))
         
         VStack {
             Spacer()
@@ -43,7 +43,7 @@ struct GetConfirmView: View {
                 Text("Look for a \(self.locationTransfer.seller?.vehicle ?? "")")
                     .bold()
                     .padding(.top)
-                Text("Departing in: \(depart) minutes")
+                Text("Departing in: \(depart >= 0 ? String(depart) + " Minutes" : "")")
                     .padding(.vertical)
                     .onReceive(timer, perform: { input in
                         let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
@@ -61,14 +61,15 @@ struct GetConfirmView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        self.showingRefundAlert.toggle()
+                        self.showingRefundAlert = true
                     }) {
-                        Text("Refund")
+                        Text("Cancel")
                             .font(.system(size: 12))
                     }
                     .alert(isPresented: $showingRefundAlert) {
                         showRefundCompletedAlert ? refundCompletedAlert : refundAlert
                     }
+                   
                     
                     Button(action: {
                         self.gGRequestConfirm.showBox3 = false
@@ -76,6 +77,7 @@ struct GetConfirmView: View {
                         self.gGRequestConfirm.moveBox = false
                         self.gGRequestConfirm.showingYouGotCreditAlert.toggle()
                         self.presentRatingView = true
+                        self.gettingPinAnnotation = nil
                     }) {
                         Text("Complete Transfer")
                             .bold()
@@ -104,14 +106,13 @@ struct GetConfirmView: View {
         FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.userInfo.user.uid) { result in
             switch result {
             case .success(_):
+                self.gettingPinAnnotation = nil
                 if let seller = locationTransfer.seller {
                     NotificationsService.shared.sendNotification(uid: seller.uid, message: "The buyer has canceled his reservation.")
                 }
                 let data = [C_BUYER:"", C_STATUS: pinStatus.available.rawValue]
                 self.locationTransfer.updateGettingPin(data: data)
-                self.locationTransfer.seller = nil
-                self.locationTransfer.gettingPin = nil
-                self.locationTransfer.gettingPinListener = nil
+                self.locationTransfer.cleanUpGettingPin()
                 self.userInfo.user.credits = credits
             case .failure(_):
                 print("Error Refunding")
@@ -121,8 +122,9 @@ struct GetConfirmView: View {
 }
 struct GetConfirmView_Previews: PreviewProvider {
     @State static var presentView: Bool = false
+    @State static var annotation: CustomMKPointAnnotation? = CustomMKPointAnnotation()
     static var previews: some View {
-        GetConfirmView(presentRatingView: $presentView)
+        GetConfirmView(presentRatingView: $presentView, gettingPinAnnotation: $annotation)
             .environmentObject(LocationTransfer())
             .environmentObject(GGRequestConfirm())
             .environmentObject(UserInfo())
