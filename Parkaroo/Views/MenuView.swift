@@ -43,19 +43,17 @@ struct MenuView: View {
             
             if Auth.auth().currentUser?.uid != nil {
                 Button(action: {
-                    self.locationTransfer.deletePin()
-                    self.locationTransfer.locations.removeAll()
-                    self.locationTransfer.locations1.removeAll()
+                    self.locationTransfer.fullCleanUp {
+                        FBAuth.logOut { (_) in }
+                    }
                     self.gGRequestConfirm.moveBox = false
                     self.gGRequestConfirm.moveBox1 = false
                     self.gGRequestConfirm.showBox1 = false
                     self.gGRequestConfirm.showBox2 = false
                     self.gGRequestConfirm.showBox3 = false
                     self.gGRequestConfirm.showBox4 = false
-                    self.locationTransfer.credits = 0
-                    FBAuth.logOut { (result) in
-                        self.presentationMode.wrappedValue.dismiss()
-                    }
+                    self .gGRequestConfirm.showGiveConfirmView = false
+                    self.presentationMode.wrappedValue.dismiss()
                 }) {
                     HStack {
                         Image(systemName: "person")

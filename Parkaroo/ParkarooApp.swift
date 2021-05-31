@@ -30,6 +30,23 @@ struct ParkarooApp: App {
                     iapManager.getProducts(productIDs: productIDs)
                     SKPaymentQueue.default().add(iapManager)
                 })
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                    if let uid = Auth.auth().currentUser?.uid {
+                        FBFirestore.mergeFBUser([C_BADGECOUNT:0], uid: uid) { result in
+                            switch result {
+                            
+                            case .success(_):
+                                print("Badge Cleared")
+                            case .failure(_):
+                                print("Error Clearing Badge")
+                            }
+                        }
+                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification), perform: { _ in
+                    locationTransfer.fullCleanUp { }
+                })
         }
     }
 }
@@ -41,7 +58,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         FirebaseApp.configure()
         configuteNotifications()
-        LocationService.shared.checkLocationAuthStatus()
+        LocationService.shared.requestLocation()
 //        NotificationsService.shared.configure()
         
         return true

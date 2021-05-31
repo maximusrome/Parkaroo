@@ -86,6 +86,15 @@ struct MapGiveView: UIViewRepresentable {
             let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
             parent.mapView.setRegion(viewRegion, animated: true)
         }
+        
+        func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+            userLocation.title = ""
+        }
+        
+        func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+            let userLocation = mapView.view(for: mapView.userLocation)
+            userLocation?.isEnabled = false
+        }
     }
 }
 

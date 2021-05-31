@@ -48,15 +48,21 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         }
     }
     
+    func requestLocation() {
+        if (CLLocationManager.authorizationStatus() == .authorizedAlways) || (CLLocationManager.authorizationStatus() == .authorizedWhenInUse) {
+            manager?.requestLocation()
+        }
+        else {
+            useDefaultLocation()
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {return}
         self.currentLocation = location
         let latitude = location.coordinate.latitude
         let longitude = location.coordinate.longitude
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.delegate?.locationReceived(location: location)
-        }
+        self.delegate?.locationReceived(location: location)
     }
     
     func updateMapLocation() {
@@ -70,11 +76,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         self.currentLocation = location
         let latitude = location.coordinate.latitude
         let longitude = location.coordinate.longitude
-        
-                
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) { [weak self] in
-            self?.delegate?.locationReceived(location: location)
-        }
+        self.delegate?.locationReceived(location: location)
         
     }
     

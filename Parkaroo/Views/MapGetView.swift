@@ -25,20 +25,18 @@ struct MapGetView: UIViewRepresentable {
     }
     
     func updateUIView(_ view: MKMapView, context: Context) {
-        if annotations1.count != (view.annotations.count - 1) {
+        var extra = 1
+        if let annotation = gettingPinAnnotation {
+            extra = 2
+            if view.view(for: annotation) == nil {
+                view.addAnnotation(annotation)
+            }
+        }
+        
+        if annotations1.count != (view.annotations.count - extra) {
             view.removeAnnotations(view.annotations)
             view.addAnnotations(annotations1)
         }
-        if let annotation = gettingPinAnnotation {
-            view.addAnnotation(annotation)
-        }
-//        if locationTransfer.logoTap {
-//            let coordinate = CLLocationCoordinate2D(latitude: 40.7812, longitude: -73.9665)
-//            let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-//            let region = MKCoordinateRegion(center: coordinate, span: span)
-//            view.setRegion(region, animated: true)
-//            locationTransfer.logoTap = false
-//        }
     }
     
     func makeCoordinator() -> Coordinator {
@@ -80,7 +78,13 @@ struct MapGetView: UIViewRepresentable {
                     return nil
                 }
             }
-            else {return nil}
+            else {
+                let userAnnotation = mapView.view(for: annotation)
+                userAnnotation?.canShowCallout = false
+                userAnnotation?.isEnabled = false
+                userAnnotation?.isUserInteractionEnabled = false
+                return userAnnotation
+            }
         }
         
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -102,6 +106,15 @@ struct MapGetView: UIViewRepresentable {
         fileprivate func centerMapOnCoordinate(coordinate: CLLocationCoordinate2D) {
             let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
             parent.mapView.setRegion(viewRegion, animated: true)
+        }
+        
+        func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+            userLocation.title = ""
+        }
+        
+        func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+            let userLocation = mapView.view(for: mapView.userLocation)
+            userLocation?.isEnabled = false
         }
     }
 }

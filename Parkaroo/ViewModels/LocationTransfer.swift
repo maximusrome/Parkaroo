@@ -318,6 +318,30 @@ class LocationTransfer: ObservableObject {
         self.seller = nil
         self.sellerCanceled = false
     }
+    
+    func fullCleanUp(completion: @escaping () -> Void) {
+        if let listener = gettingPinListener {
+            listener.remove()
+        }
+        if let listener = givingPinListener {
+            listener.remove()
+        }
+        self.deletePin()
+        if gettingPin != nil {
+            let data = [C_BUYER:"", C_STATUS: pinStatus.available.rawValue]
+            self.updateGettingPin(data: data)
+            self.cleanUpGettingPin()
+        }
+        self.seller = nil
+        self.sellerCanceled = false
+        self.givingPin = nil
+        self.buyer = nil
+        
+        self.locations.removeAll()
+        self.locations1.removeAll()
+        
+        completion()
+    }
 }
 
 

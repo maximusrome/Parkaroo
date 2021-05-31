@@ -43,7 +43,7 @@ struct GetConfirmView: View {
                 Text("Look for a \(self.locationTransfer.seller?.vehicle ?? "")")
                     .bold()
                     .padding(.top)
-                Text("Departing in: \(depart >= 0 ? String(depart) + " Minutes" : "")")
+                Text("Departing in: \(depart >= 0 ? String(depart) : "0")  Minutes")
                     .padding(.vertical)
                     .onReceive(timer, perform: { input in
                         let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())

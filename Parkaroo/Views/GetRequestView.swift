@@ -124,20 +124,20 @@ struct GetRequestView: View {
             if self.userInfo.user.credits > 0 {
                 
                 // COMMENT TO TEST ON SIMULATOR
-//                if let product = iapManager.transactionProduct {
-//                    iapManager.currentPurchasingProduct = product
-//                    iapManager.purchaseProduct(product: product)
-//                }
+                if let product = iapManager.transactionProduct {
+                    iapManager.currentPurchasingProduct = product
+                    iapManager.purchaseProduct(product: product)
+                }
                 
                //UNCOMMENT TO TEST ON SIMULATOR
-                userInfo.addCredits(numberOfCredits: -1) { result in
-                    switch result {
-                    case .success(_):
-                        self.completeTransaction()
-                    case .failure(_):
-                        print("Error updating credits")
-                    }
-                }
+//                userInfo.addCredits(numberOfCredits: -1) { result in
+//                    switch result {
+//                    case .success(_):
+//                        self.completeTransaction()
+//                    case .failure(_):
+//                        print("Error updating credits")
+//                    }
+//                }
             }
             else {
                 self.showingNotEnoughCreditsAlert = true

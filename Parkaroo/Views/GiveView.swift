@@ -14,7 +14,7 @@ struct GiveView: View {
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @State private var showingMakeAvaliableSetupAlert = false
     
-    @State var showConfirmView: Bool?
+//    @State var showConfirmView: Bool?
     @State var presentRatingView = false
     
     var body: some View {
@@ -42,14 +42,14 @@ struct GiveView: View {
             }
             VStack {
                 Spacer()
-                GiveRequestView(showConfirmView: $showConfirmView)
+                GiveRequestView()
                     .offset(y: self.gGRequestConfirm.showBox1 ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
-                GiveConfirmView(presentRatingView: $presentRatingView, showConfirmView: $showConfirmView)
-                    .offset(y: self.showConfirmView ?? false ? 0 : UIScreen.main.bounds.height)
+                GiveConfirmView(presentRatingView: $presentRatingView)
+                    .offset(y: self.gGRequestConfirm.showGiveConfirmView ?? false ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {

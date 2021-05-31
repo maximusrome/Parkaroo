@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FBUser {
+struct FBUser: Equatable {
     let uid: String
     let vehicle: String
     let email: String
@@ -15,8 +15,10 @@ struct FBUser {
     var numberOfRatings: Int = 0
     var credits: Int = 0
     var badgeCount: Int = 0
+    var basicNotifications = true
+    var advancedNotifications = false
     
-    init(uid: String, vehicle: String, email: String, rating: Float, numberOfRatings: Int, credits: Int, badgeCount: Int) {
+    init(uid: String, vehicle: String, email: String, rating: Float, numberOfRatings: Int, credits: Int, badgeCount: Int, basicNotifications: Bool, advancedNotifications: Bool) {
         self.uid = uid
         self.vehicle = vehicle
         self.email = email
@@ -24,6 +26,8 @@ struct FBUser {
         self.numberOfRatings = numberOfRatings
         self.credits = credits
         self.badgeCount = badgeCount
+        self.basicNotifications = basicNotifications
+        self.advancedNotifications = advancedNotifications
     }
 }
 
@@ -36,13 +40,17 @@ extension FBUser {
         let numberOfRatings = documentData[C_NUMBEROFRATINGS] as? Int ?? 0
         let credits = documentData[C_CREDITS] as? Int ?? 0
         let badgeCount = documentData[C_BADGECOUNT] as? Int ?? 0
+        let basicNotifications = documentData[C_BASICNOTIFICATIONS] as? Bool ?? true
+        let advancedNotifications = documentData[C_ADVANCEDNOTIFICATIONS] as? Bool ?? false
         self.init(uid: uid,
                   vehicle: vehicle,
                   email: email,
                   rating: rating,
                   numberOfRatings: numberOfRatings,
                   credits: credits,
-                  badgeCount: badgeCount
+                  badgeCount: badgeCount,
+                  basicNotifications: basicNotifications,
+                  advancedNotifications: advancedNotifications
         )
     }
     

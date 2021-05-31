@@ -8,12 +8,17 @@
 import Foundation
 import Firebase
 
-class UserInfo: ObservableObject {
+class UserInfo: ObservableObject, Equatable {
+    
+    static func == (lhs: UserInfo, rhs: UserInfo) -> Bool {
+        return lhs.user.uid == rhs.user.uid
+    }
+    
     enum FBAuthState {
         case undefined, signedOut, signedIn
     }
     @Published var isUserAuthenticated: FBAuthState = .undefined
-    @Published var user: FBUser = .init(uid: "", vehicle: "", email: "", rating: 0, numberOfRatings: 0, credits: 0, badgeCount: 0)
+    @Published var user: FBUser = .init(uid: "", vehicle: "", email: "", rating: 0, numberOfRatings: 0, credits: 0, badgeCount: 0, basicNotifications: true, advancedNotifications: false)
     var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     
     

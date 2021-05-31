@@ -5,6 +5,28 @@ admin.initializeApp()
 
 const db = admin.firestore()
 
+exports.sendNewSpotNotifications = functions.firestore
+.document('pins/{pinId}')
+.onCreate(async (snapshot, context) => {
+    const pinId = context.params.pinId
+
+    return db.collection('users').where('advanced_notifications', '==', true).get().then((snap) => {
+        const docs = snap.docs
+
+        docs.forEach(function (doc) {
+            const accountData = doc.data()
+            const user = accountData.uid as string
+            const token = accountData.token as string
+            let badgeCount = accountData.badge_count as number 
+            if (pinId != user) {
+                badgeCount++
+                sendNotification('New parking spot available!', badgeCount, token)
+                updateBadgeCount(user, badgeCount)
+            }
+        })
+    }).catch()
+})
+
 
 exports.createNotification = functions.https
     .onCall((data, _context) => {
@@ -16,10 +38,13 @@ exports.createNotification = functions.https
        ref.get().then((snap) => {
             const accountData = snap.data()!
             const token = accountData.token as string 
+            const basic = accountData.basic_notifications as boolean
             let badgeCount = accountData.badge_count as number 
-            badgeCount++
-            sendNotification(message, badgeCount, token)
-            updateBadgeCount(user, badgeCount)
+            if (basic == true) {
+                badgeCount++
+                sendNotification(message, badgeCount, token)
+                updateBadgeCount(user, badgeCount)
+            }
         }).catch()
 })
 

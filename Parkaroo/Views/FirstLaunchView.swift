@@ -102,6 +102,9 @@ struct FirstLaunchView: View {
                     Spacer()
                     Button(action: {
                         self.isPresenting.toggle()
+//                        configuteNotifications()
+                        LocationService.shared.checkLocationAuthStatus()
+
                     }) {
                         Text("Done")
                             .padding(10)

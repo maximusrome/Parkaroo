@@ -8,6 +8,9 @@
 import Foundation
 
 let C_ID = "id"
+let C_UID = "uid"
+let C_VEHICLE = "vehicle"
+let C_EMAIL = "email"
 let C_PINS = "pins"
 let C_LATITUDE = "latitude"
 let C_LONGITUDE = "longitude"
@@ -23,4 +26,6 @@ let C_RATINGSUBMITTED = "rating_submitted"
 let C_TOKEN = "token"
 let C_EVERYONE = "everyone"
 let C_BADGECOUNT = "badge_count"
+let C_BASICNOTIFICATIONS = "basic_notifications"
+let C_ADVANCEDNOTIFICATIONS = "advanced_notifications"
  

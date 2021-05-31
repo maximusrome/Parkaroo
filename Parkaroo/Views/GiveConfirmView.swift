@@ -16,7 +16,7 @@ struct GiveConfirmView: View {
     
     @State var departureMinutes = Int()
     @Binding var presentRatingView: Bool
-    @Binding var showConfirmView: Bool?
+//    @Binding var showConfirmView: Bool?
     @State var showCancelAlert = false
     
     // MARK: BODY
@@ -29,7 +29,7 @@ struct GiveConfirmView: View {
                 .padding(.top)
                 .padding(.bottom, 8)
             
-            Text("Departure in: \(departureMinutes >= 0 ? String(departureMinutes) + " Minutes" : "" )")
+            Text("Departure in: \(departureMinutes >= 0 ? String(departureMinutes) : "0" ) Minutes")
                 .bold()
                 .padding(.bottom, 8)
                 .onReceive(timer, perform: { input in
@@ -40,7 +40,7 @@ struct GiveConfirmView: View {
                             locationTransfer.deletePin()
                             locationTransfer.minute = ""
                             locationTransfer.givingPin = nil
-                            self.showConfirmView = false
+                            self.gGRequestConfirm.showGiveConfirmView = false
                         }
                     }
                 })
@@ -68,7 +68,7 @@ struct GiveConfirmView: View {
                 Spacer()
                 
                 Button(action: {
-                    self.showConfirmView = false
+                    self.gGRequestConfirm.showGiveConfirmView = false
                     self.presentRatingView = true
                     self.locationTransfer.givingPin = nil
                     self.locationTransfer.locations.removeAll()
@@ -144,7 +144,7 @@ struct GiveConfirmView: View {
                 if let buyer = locationTransfer.buyer {
                     NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled his spot")
                 }
-                self.showConfirmView = false
+                self.gGRequestConfirm.showGiveConfirmView = false
             }), secondaryButton: .cancel(Text("No")))
         })
         
@@ -153,9 +153,8 @@ struct GiveConfirmView: View {
 
 struct GiveConfirmView_Previews: PreviewProvider {
     @State static var presentView: Bool = false
-    @State static var showConfirmView: Bool?
     static var previews: some View {
-        GiveConfirmView(presentRatingView: $presentView, showConfirmView: $showConfirmView)
+        GiveConfirmView(presentRatingView: $presentView)
             .previewLayout(.sizeThatFits)
             .environmentObject(GGRequestConfirm())
             .environmentObject(LocationTransfer())

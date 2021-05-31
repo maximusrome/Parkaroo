@@ -18,7 +18,7 @@ struct GiveRequestView: View {
 //    @State private var showingMinuteOrDoneAlert = false
     @State private var showingMinuteAlert = false
     
-    @Binding var showConfirmView: Bool?
+//    @Binding var showConfirmView: Bool?
     
     func abc() -> Bool {
         if Int(locationTransfer.minute) != 0 {
@@ -62,24 +62,28 @@ struct GiveRequestView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        self.showingOffMarketAlert = true
+//                        self.showingOffMarketAlert = true
+                        UIApplication.shared.endEditing()
+                        self.gGRequestConfirm.showBox1 = false
+                        self.locationTransfer.minute = ""
                     }){
                         Image(systemName: "trash")
                             .padding(.trailing, 15)
-                    }.alert(isPresented: $showingOffMarketAlert) {
-                        Alert(title: Text("Cancel"), message: Text("Are you sure?"), primaryButton: Alert.Button.default(Text("Yes"), action: {
-                            UIApplication.shared.endEditing()
-                            self.gGRequestConfirm.showBox1 = false
-                            self.locationTransfer.minute = ""
-                        }), secondaryButton: Alert.Button.default(Text("No")))
                     }
+//                    .alert(isPresented: $showingOffMarketAlert) {
+//                        Alert(title: Text("Cancel"), message: Text("Are you sure?"), primaryButton: Alert.Button.default(Text("Yes"), action: {
+//                            UIApplication.shared.endEditing()
+//                            self.gGRequestConfirm.showBox1 = false
+//                            self.locationTransfer.minute = ""
+//                        }), secondaryButton: Alert.Button.default(Text("No")))
+//                    }
                     Button(action: {
                         if abc() {
                             UIApplication.shared.endEditing()
                             self.locationTransfer.createPin()
                             self.showingMinuteAlert = false
                             self.gGRequestConfirm.showBox1 = false
-                            self.showConfirmView = true
+                            self.gGRequestConfirm.showGiveConfirmView = true
                         } else {
                             self.showingMinuteAlert = true
                         }
@@ -113,9 +117,8 @@ extension UIApplication {
 }
 
 struct GiveRequestView_Previews: PreviewProvider {
-    @State static var isShowing: Bool?
     static var previews: some View {
-        GiveRequestView(showConfirmView: $isShowing)
+        GiveRequestView()
             .environmentObject(LocationTransfer())
             .environmentObject(GGRequestConfirm())
     }
