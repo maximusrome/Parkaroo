@@ -10,7 +10,7 @@ struct FAQSView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                Text("FAQ's")
+                Text("Frequently Asked Questions")
                     .bold()
                     .font(.title)
                     .padding(.vertical)
@@ -46,7 +46,7 @@ struct FAQSView: View {
                 }
             }
         }.padding(.horizontal)
-        .navigationBarTitle("Help", displayMode: .inline)
+        .navigationBarTitle("Frequently Asked Questions", displayMode: .inline)
     }
 }
 struct FAQSView_Previews: PreviewProvider {

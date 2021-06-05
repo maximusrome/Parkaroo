@@ -33,7 +33,3 @@ extension EmailAuthError: LocalizedError {
         }
     }
 }
-
-
-
-

@@ -17,7 +17,6 @@ struct FBUser: Equatable {
     var badgeCount: Int = 0
     var basicNotifications = true
     var advancedNotifications = false
-    
     init(uid: String, vehicle: String, email: String, rating: Float, numberOfRatings: Int, credits: Int, badgeCount: Int, basicNotifications: Bool, advancedNotifications: Bool) {
         self.uid = uid
         self.vehicle = vehicle
@@ -30,7 +29,6 @@ struct FBUser: Equatable {
         self.advancedNotifications = advancedNotifications
     }
 }
-
 extension FBUser {
     init?(documentData: [String : Any]) {
         let uid = documentData[FBKeys.User.uid] as? String ?? ""
@@ -53,7 +51,6 @@ extension FBUser {
                   advancedNotifications: advancedNotifications
         )
     }
-    
     static func dataDict(uid: String, vehicle: String, email: String) -> [String: Any] {
         var data: [String: Any]
         if vehicle != "" {
@@ -70,8 +67,4 @@ extension FBUser {
         }
         return data
     }
-    
-
-    
-    
 }

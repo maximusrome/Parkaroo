@@ -1,0 +1,130 @@
+//
+//  GiveConfirmView.swift
+//  Parkaroo
+//
+//  Created by Bernie Cartin on 5/8/21.
+//
+
+import SwiftUI
+
+struct GiveConfirmView: View {
+    @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
+    @EnvironmentObject var locationTransfer: LocationTransfer
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State var departureMinutes = Int()
+    @Binding var presentRatingView: Bool
+    @State var showCancelAlert = false
+    var body: some View {
+        VStack(alignment: .center){
+            Text("Spot \(self.locationTransfer.givingPin?.status.capitalized ?? "")")
+                .bold()
+                .font(.title)
+                .padding()
+            Text("Departure in: \(departureMinutes >= 0 ? String(departureMinutes) : "0" ) Minutes")
+                .bold()
+                .padding(.bottom, 10)
+                .onReceive(timer, perform: { input in
+                    let diff = Date().distance(to: self.locationTransfer.givingPin?.departure.dateValue() ?? Date())
+                    departureMinutes = Int(diff / 60)
+                    if departureMinutes < 0 {
+                        if locationTransfer.buyer == nil {
+                            locationTransfer.deletePin()
+                            locationTransfer.minute = ""
+                            locationTransfer.givingPin = nil
+                            self.gGRequestConfirm.showGiveConfirmView = false
+                        }
+                    }
+                })
+            if let buyer = locationTransfer.buyer {
+                VStack {
+                    Text("Buyer: \(buyer.vehicle)")
+                        .padding(.bottom, 10)
+                    HStack {
+                        Text("Rating: \(self.locationTransfer.buyer?.numberOfRatings ?? 0 > 0 ? (String(format: "%.2f", self.locationTransfer.buyer?.rating ?? 0)) : "N/A")")
+                        Image(systemName: "star.fill")
+                            .foregroundColor(Color("orange1"))
+                        Text("\(self.locationTransfer.buyer?.numberOfRatings ?? 0) ratings")
+                            .font(.footnote)
+                    }
+                }.padding()
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25.0)
+                        .stroke(Color.gray, lineWidth: 2)
+                )
+                Spacer()
+                HStack {
+                    if !(locationTransfer.givingPin?.ratingSubmitted ?? false) {
+                        Button(action: {
+                            self.showCancelAlert = true
+                        }) {
+                            Text("Cancel")
+                                .padding(10)
+                        }
+                    }
+                    Button(action: {
+                        self.gGRequestConfirm.showGiveConfirmView = false
+                        self.presentRatingView = true
+                        self.locationTransfer.givingPin = nil
+                        self.locationTransfer.locations.removeAll()
+                    }) {
+                        Text("\(locationTransfer.givingPin?.ratingSubmitted ?? false ? "Complete Transfer" : "Waiting on Buyer")")
+                            .bold()
+                            .padding(10)
+                            .background(locationTransfer.givingPin?.ratingSubmitted ?? false ? Color("orange1") : Color(white: 0.7))
+                            .cornerRadius(50)
+                    }.disabled(!(locationTransfer.givingPin?.ratingSubmitted ?? false))
+                }.padding()
+                .padding(.bottom, 10)
+            } else {
+                VStack {
+                    Text("No Buyer")
+                        .padding(.bottom, 10)
+                    Text("Wait for a buyer to earn a credit")
+                        .font(.footnote)
+                        .multilineTextAlignment(.center)
+                }.padding()
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25.0)
+                        .stroke(Color.gray, lineWidth: 2)
+                )
+                Spacer()
+                Button(action: {
+                    self.showCancelAlert = true
+                }) {
+                    Text("Cancel")
+                        .bold()
+                        .padding(10)
+                        .background(Color(white: 0.7))
+                        .cornerRadius(50)
+                        .padding()
+                        .padding(.bottom, 10)
+                }
+            }
+        }.frame(width: 300, height: 300)
+        .background(Color("white1"))
+        .foregroundColor(Color("black1"))
+        .cornerRadius(30)
+        .shadow(radius: 5)
+        .padding(.bottom)
+        .padding(.horizontal, 50)
+        .alert(isPresented: $showCancelAlert, content: {
+            Alert(title: Text("Are you sure?"), message: Text("If someone reserved this spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
+                locationTransfer.deletePin()
+                locationTransfer.minute = ""
+                if let buyer = locationTransfer.buyer {
+                    NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The driver has canceled their spot")
+                }
+                self.gGRequestConfirm.showGiveConfirmView = false
+            }))
+        })
+    }
+}
+struct GiveConfirmView_Previews: PreviewProvider {
+    @State static var presentView: Bool = false
+    static var previews: some View {
+        GiveConfirmView(presentRatingView: $presentView)
+            .previewLayout(.sizeThatFits)
+            .environmentObject(GGRequestConfirm())
+            .environmentObject(LocationTransfer())
+    }
+}

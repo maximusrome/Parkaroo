@@ -49,6 +49,5 @@ struct MailView: UIViewControllerRepresentable {
     }
     func updateUIViewController(_ uiViewController: MFMailComposeViewController,
                                 context: UIViewControllerRepresentableContext<MailView>) {
-        
     }
 }

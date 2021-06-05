@@ -18,7 +18,6 @@ struct Pin: Identifiable {
     let seller: String
     var buyer: String?
     var ratingSubmitted = false
-    
     init(data: [String:Any]) {
         self.id = data[C_ID] as! String
         self.longitude = data[C_LONGITUDE] as! Double
@@ -31,7 +30,6 @@ struct Pin: Identifiable {
         }
         self.ratingSubmitted = data[C_RATINGSUBMITTED] as! Bool
     }
-
     var location: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }

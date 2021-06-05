@@ -11,47 +11,34 @@ import Firebase
 import Combine
 
 class LocationTransfer: ObservableObject {
-    
     @Published var pin = [Pin]()
     @Published var pins = [Pin]()
-    
     @Published var locations = [MKPointAnnotation]()
     @Published var locations1 = [CustomMKPointAnnotation]()
-    @Published var logoTap = true
-    @Published var logoTap1 = true
     @Published var vehicle = ""
     @Published var vehicle1 = ""
     @Published var minute = ""
     @Published var minute1 = ""
     @Published var centerCoordinate = CLLocationCoordinate2D()
     @Published var centerCoordinate1 = CLLocationCoordinate2D()
-    
     @Published var credits = 0
-    
     @Published var departure = Timestamp()
     @Published var givingPin: Pin?
     @Published var gettingPin: Pin?
-    
     @Published var buyer: FBUser?
     @Published var seller: FBUser?
-    
     @Published var ratingSubmitted = false
-    
     @Published var sellerCanceled = false
-    
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
-    
     var publisher: AnyPublisher<Void, Never>! = nil
     let updatePublisher = PassthroughSubject<Void, Never>()
-    
     func createPin() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser!.uid
         if let minuteDouble = Double(self.minute) {
             let departureTime = Date().addingTimeInterval(60.0 * (minuteDouble + 1))
             let departureTimeStamp = Timestamp(date: departureTime)
-            
             var data = [String:Any]()
             data[C_ID] = userID
             data[C_LONGITUDE] = self.centerCoordinate.longitude
@@ -60,18 +47,14 @@ class LocationTransfer: ObservableObject {
             data[C_DEPARTURE] = departureTimeStamp
             data[C_SELLER] = userID
             data[C_RATINGSUBMITTED] = false
-            
             db.collection(C_PINS).document(userID).setData(data)
-            
             self.givingPin = Pin(data: data)
             self.fetchGivingPin()
-            
             let annotation = MKPointAnnotation()
             annotation.coordinate = self.centerCoordinate
             self.locations.append(annotation)
         }
     }
-    
     func updateGettingPin(data: [String:Any]) {
         if let gettingPin = gettingPin {
             let db = Firestore.firestore()
@@ -87,7 +70,6 @@ class LocationTransfer: ObservableObject {
             }
         }
     }
-    
     func readPin(id: String) {
         let db = Firestore.firestore()
         db.collection(C_PINS).document(id).getDocument { [weak self] documentSnapshot, error in
@@ -98,7 +80,6 @@ class LocationTransfer: ObservableObject {
                     print("No Document")
                     return
                 }
-                
                 if data[C_ID] == nil {
                     data[C_ID] = id
                 }
@@ -107,7 +88,6 @@ class LocationTransfer: ObservableObject {
             }
         }
     }
-    
     func readSeller() {
         guard let uid = self.gettingPin?.seller else {return}
         FBFirestore.retrieveFBUser(uid: uid) { [weak self] result in
@@ -119,7 +99,6 @@ class LocationTransfer: ObservableObject {
             }
         }
     }
-    
     func deletePin() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser!.uid
@@ -129,13 +108,11 @@ class LocationTransfer: ObservableObject {
         self.buyer = nil
         self.locations.removeAll()
     }
-    
     func createCredit() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser!.uid
         db.collection("users").document(userID).setData(["credits": self.credits], merge: true)
     }
-    
     func readCredit() {
         let db = Firestore.firestore()
         db.collection("users").getDocuments() { (querySnapshot, err) in
@@ -149,13 +126,11 @@ class LocationTransfer: ObservableObject {
             }
         }
     }
-    
     func updateCredit() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser!.uid
         db.collection("users").document(userID).updateData(["credits": self.credits])
     }
-    
     func createMinute() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser!.uid
@@ -164,9 +139,7 @@ class LocationTransfer: ObservableObject {
             let departureTimeStamp = Timestamp(date: departureTime)
             db.collection("pins").document(userID).setData(["minute": self.minute, "departure":departureTimeStamp], merge: true)
         }
-        
     }
-    
     func readMinute() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser!.uid
@@ -185,7 +158,6 @@ class LocationTransfer: ObservableObject {
             }
         }
     }
-    
     func readVehicle(uid: String) {
         let db = Firestore.firestore()
         db.collection("users").document(uid).getDocument { (document, error) in
@@ -203,8 +175,6 @@ class LocationTransfer: ObservableObject {
             }
         }
     }
-    
-    
     func fetchLocations() {
         let db = Firestore.firestore()
         _ = db.collection(C_PINS).whereField("status", isEqualTo: "available").addSnapshotListener { [weak self] querySnapshot, error in
@@ -212,34 +182,26 @@ class LocationTransfer: ObservableObject {
                 print("No Pins")
                 return
             }
-            
-            
             self?.pins = documents.map { queryDocumentSnapshot in
                 var data = queryDocumentSnapshot.data()
                 data[C_ID] = queryDocumentSnapshot.documentID
                 return Pin(data: data)
             }
-            
             if let index = self?.pins.firstIndex(where: { pin in
                 return pin.id == Auth.auth().currentUser?.uid
             }) {
                 self?.pins.remove(at: index)
             }
-            
             self?.locations1 = documents.map { queryDocumentSnapshot in
                 let data = queryDocumentSnapshot.data()
-                
                 let latitude = data[C_LATITUDE] as? Double ?? 0.0
                 let longitude = data[C_LONGITUDE] as? Double ?? 0.0
-                
                 let annotation = CustomMKPointAnnotation()
                 annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
                 annotation.id = queryDocumentSnapshot.documentID
                 annotation.type = .normal
-                
                 return annotation
             }
-            
             if let index = self?.locations1.firstIndex(where: { annotation in
                 return annotation.id == Auth.auth().currentUser?.uid
             }) {
@@ -247,7 +209,6 @@ class LocationTransfer: ObservableObject {
             }
         }
     }
-    
     func fetchGivingPin() {
         if let listener = givingPinListener {
             listener.remove()
@@ -265,9 +226,7 @@ class LocationTransfer: ObservableObject {
                     data[C_ID] = documentSnapshot?.documentID
                 }
                 self?.givingPin = Pin(data: data)
-                
                 self?.ratingSubmitted = data[C_RATINGSUBMITTED] as? Bool ?? false
-                
                 if let buyerID = data[C_BUYER] as? String, buyerID.count > 0 {
                     FBFirestore.retrieveFBUser(uid: buyerID) { [weak self] result in
                         switch result {
@@ -284,7 +243,6 @@ class LocationTransfer: ObservableObject {
             }
         })
     }
-    
     func fetchGettingPin(id: String) {
         if let listener = gettingPinListener {
             listener.remove()
@@ -295,7 +253,6 @@ class LocationTransfer: ObservableObject {
                 print(err.localizedDescription)
                 return
             }
-
             if let data = documentSnapshot?.data() {
                 var data = data
                 if data[C_ID] == nil {
@@ -309,7 +266,6 @@ class LocationTransfer: ObservableObject {
             }
         })
     }
-    
     func cleanUpGettingPin() {
         if let listener = gettingPinListener {
             listener.remove()
@@ -318,7 +274,6 @@ class LocationTransfer: ObservableObject {
         self.seller = nil
         self.sellerCanceled = false
     }
-    
     func fullCleanUp(completion: @escaping () -> Void) {
         if let listener = gettingPinListener {
             listener.remove()
@@ -336,15 +291,11 @@ class LocationTransfer: ObservableObject {
         self.sellerCanceled = false
         self.givingPin = nil
         self.buyer = nil
-        
         self.locations.removeAll()
         self.locations1.removeAll()
-        
         completion()
     }
 }
-
-
 class CustomMKPointAnnotation: MKPointAnnotation {
     var id: String!
     var type: pinType!

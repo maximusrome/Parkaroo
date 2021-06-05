@@ -29,10 +29,7 @@ struct FBAuth {
             data[C_BADGECOUNT] = 0
             data[C_BASICNOTIFICATIONS] = true
             data[C_ADVANCEDNOTIFICATIONS] = false
-            data[C_CREDITS] = 0
-//            let data = FBUser.dataDict(uid: authResult!.user.uid,
-//                                       vehicle: vehicle,
-//                                       email: authResult!.user.email!)
+            data[C_CREDITS] = 1
             FBFirestore.mergeFBUser(data, uid: authResult!.user.uid) { (result) in
                 completionHandler(result)
             }

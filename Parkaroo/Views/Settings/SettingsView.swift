@@ -10,7 +10,7 @@ import MessageUI
 
 struct SettingsView: View {
     @State private var showContactUs = false
-    @State private var showReportBug = false
+    @State private var showReportProblem = false
     @State var result: Result<MFMailComposeResult, Error>? = nil
     var body: some View {
         List {
@@ -41,22 +41,18 @@ struct SettingsView: View {
                 }) {
                     SettingsCell(title: "Contact Us", imgName: "envelope")
                 }.sheet(isPresented: $showContactUs) {
-                    MailView(result: self.$result, newSubject: "", newMsgBody: "Write your message here.")
+                    MailView(result: self.$result, newSubject: "Contact Us", newMsgBody: "")
                 }
                 Button(action: {
-                    self.reportBug()
+                    self.reportProblem()
                 }) {
                     SettingsCell(title: "Report Bug", imgName: "exclamationmark.triangle")
-                }.sheet(isPresented: $showReportBug) {
-                    MailView(result: self.$result, newSubject: "Report bug", newMsgBody: "I am enjoying Parkaroo but I would like to report a bug.")
+                }.sheet(isPresented: $showReportProblem) {
+                    MailView(result: self.$result, newSubject: "Report Problem", newMsgBody: "")
                 }
             }
         }.listStyle(GroupedListStyle())
         .navigationBarTitle("Settings", displayMode: .inline)
-        
-        .onAppear() {
-            AppReviewRequest.requestreviewIfNeeded()
-        }
     }
     func inviteFriends() {
         print("pressed invite friends")
@@ -73,10 +69,10 @@ struct SettingsView: View {
             // Alert : Unable to send the mail
         }
     }
-    func reportBug() {
+    func reportProblem() {
         print("pressed report bug")
         if MFMailComposeViewController.canSendMail() {
-            self.showReportBug = true
+            self.showReportProblem = true
         } else {
             print("Error sending mail")
             // Alert : Unable to send the mail
@@ -86,5 +82,26 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
+    }
+}
+struct SettingsCell: View {
+    var title : String
+    var imgName : String
+    var body: some View {
+        HStack {
+            Image(systemName: imgName)
+                .font(.headline)
+                .foregroundColor(Color("black1"))
+            Text(title)
+                .font(.headline)
+                .foregroundColor(Color("black1"))
+                .padding(.leading, 10)
+            Spacer()
+        }
+    }
+}
+struct SettingsCell_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingsCell(title: "Features", imgName: "sparks")
     }
 }
