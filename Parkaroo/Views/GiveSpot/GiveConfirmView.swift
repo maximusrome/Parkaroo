@@ -109,7 +109,7 @@ struct GiveConfirmView: View {
         .padding(.bottom)
         .padding(.horizontal, 50)
         .alert(isPresented: $showCancelAlert, content: {
-            Alert(title: Text("Are you sure?"), message: Text("If someone reserved your spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
+            Alert(title: Text("Are you sure?"), message: Text("If someone has reserved your spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
                 locationTransfer.deletePin()
                 locationTransfer.minute = ""
                 if let buyer = locationTransfer.buyer {

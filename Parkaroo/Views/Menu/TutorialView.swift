@@ -30,7 +30,7 @@ struct TutorialView: View {
                         .bold()
                         .font(.title)
                         .padding(.vertical)
-                    Text("Step 1: Go to the Give Spot tab and move the pin over your car's location and click it.\n")
+                    Text("Step 1: Get a credit by giving up your spot. Go to the Give Spot tab and move the pin over your car's location and click it.\n")
                     Text("Step 2: Enter your departure time and click Make Avaliable. Enable notifications to be alerted when someone has reserved your spot.\n")
                     Text("Step 3: After the buyer clicks Complete Transfer, rate the buyer and you will receive a credit.")
                     Spacer()

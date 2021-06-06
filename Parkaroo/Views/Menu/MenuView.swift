@@ -11,6 +11,7 @@ struct MenuView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var gGRequestConfirm : GGRequestConfirm
     @EnvironmentObject var locationTransfer : LocationTransfer
+    @EnvironmentObject var userInfo : UserInfo
     @State private var logOutClicked = false
     var body: some View {
         VStack(alignment: .leading, spacing: 60) {
@@ -48,7 +49,7 @@ struct MenuView: View {
                             self.locationTransfer.fullCleanUp {
                                 FBAuth.logOut { (_) in }
                             }
-                            self.locationTransfer.credits = 0
+                            self.userInfo.user.credits = 0
                             self.gGRequestConfirm.moveBox = false
                             self.gGRequestConfirm.moveBox1 = false
                             self.gGRequestConfirm.showBox1 = false
@@ -88,5 +89,8 @@ struct MenuView: View {
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         MenuView()
+            .environmentObject(GGRequestConfirm())
+            .environmentObject(LocationTransfer())
+            .environmentObject(UserInfo())
     }
 }

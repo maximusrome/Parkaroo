@@ -31,7 +31,7 @@ struct GiveRequestView: View {
                 HStack {
                     Text("Departing in:")
                         .bold()
-                    TextField("10    ", text: $locationTransfer.minute)
+                    TextField("10     ", text: $locationTransfer.minute)
                         .onChange(of: self.locationTransfer.minute, perform: { value in
                             if value.count > 3 {
                                 self.locationTransfer.minute = String(value.prefix(3))
