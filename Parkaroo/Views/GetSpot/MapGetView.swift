@@ -91,7 +91,7 @@ struct MapGetView: UIViewRepresentable {
             }
         }
         fileprivate func centerMapOnCoordinate(coordinate: CLLocationCoordinate2D) {
-            let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 3000, longitudinalMeters: 3000)
+            let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
             parent.mapView.setRegion(viewRegion, animated: true)
         }
         func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {

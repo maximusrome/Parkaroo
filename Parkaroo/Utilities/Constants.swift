@@ -28,4 +28,3 @@ let C_EVERYONE = "everyone"
 let C_BADGECOUNT = "badge_count"
 let C_BASICNOTIFICATIONS = "basic_notifications"
 let C_ADVANCEDNOTIFICATIONS = "advanced_notifications"
- 

@@ -37,7 +37,7 @@ struct ContentView: View {
                         }
                     GiveView()
                         .tabItem {
-                            Image(systemName: "rectangle.fill")
+                            Image(systemName: "p.square.fill")
                             Text("Give Spot")
                         }
                 }
@@ -112,6 +112,7 @@ struct ContentView: View {
                                     }) {
                                         Image(systemName: "bell")
                                             .imageScale(.large)
+                                            .frame(width: 50, height: 50, alignment: .leading)
                                     }, trailing:
                                         Button(action: {
                                             withAnimation {
@@ -120,6 +121,7 @@ struct ContentView: View {
                                         }) {
                                             Image(systemName: self.showMenu ? "xmark" : "line.horizontal.3")
                                                 .imageScale(.large)
+                                                .frame(width: 50, height: 50, alignment: .trailing)
                                         })
         }.accentColor(Color("orange1"))
         .alert(isPresented: $showSetUpNotifications, content: {

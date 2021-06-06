@@ -20,7 +20,7 @@ struct GiveConfirmView: View {
                 .bold()
                 .font(.title)
                 .padding()
-            Text("Departure in: \(departureMinutes >= 0 ? String(departureMinutes) : "0" ) Minutes")
+            Text("Departing in: \(departureMinutes >= 0 ? String(departureMinutes) : "0" ) minutes")
                 .bold()
                 .padding(.bottom, 10)
                 .onReceive(timer, perform: { input in
@@ -57,8 +57,9 @@ struct GiveConfirmView: View {
                         Button(action: {
                             self.showCancelAlert = true
                         }) {
-                            Text("Cancel")
-                                .padding(10)
+                            Text("cancel")
+                                .padding(.vertical, 10)
+                                .padding(.horizontal)
                         }
                     }
                     Button(action: {
@@ -77,9 +78,9 @@ struct GiveConfirmView: View {
                 .padding(.bottom, 10)
             } else {
                 VStack {
-                    Text("No Buyer")
+                    Text("Awaiting Buyer")
                         .padding(.bottom, 10)
-                    Text("Wait for a buyer to earn a credit")
+                    Text("You will soon earn a credit")
                         .font(.footnote)
                         .multilineTextAlignment(.center)
                 }.padding()
@@ -112,7 +113,7 @@ struct GiveConfirmView: View {
                 locationTransfer.deletePin()
                 locationTransfer.minute = ""
                 if let buyer = locationTransfer.buyer {
-                    NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The driver has canceled their spot")
+                    NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled their spot")
                 }
                 self.gGRequestConfirm.showGiveConfirmView = false
             }))

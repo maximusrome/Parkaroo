@@ -34,9 +34,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app uses your location to quickly help you find parking spots.</string>
+	<string>This app uses your location to help you quickly find parking spots.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app uses your location to quickly help you find parking spots.</string>
+	<string>This app uses your location to help you quickly find parking spots.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

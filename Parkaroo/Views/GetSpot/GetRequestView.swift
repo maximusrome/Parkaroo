@@ -25,7 +25,7 @@ struct GetRequestView: View {
     var body: some View {
         VStack {
             VStack(alignment: .center) {
-                Text("Departing in: \(depart >= 0 ? String(depart) + " Minutes" : "")")
+                Text("Departing in: \(depart >= 0 ? String(depart) + " minutes" : "")")
                     .bold()
                     .padding()
                     .padding(.top, 10)
@@ -47,8 +47,9 @@ struct GetRequestView: View {
                     Button(action: {
                         self.gGRequestConfirm.showBox3 = false
                     }) {
-                        Text("Close")
-                            .padding(10)
+                        Text("close")
+                            .padding(.vertical, 10)
+                            .padding(.horizontal)
                     }
                     Button(action: {
                         reserveBegin()
@@ -124,19 +125,19 @@ struct GetRequestView: View {
     }
     private func reserveSpot() {
         // UNCOMMENT TO RUN PRODUCTION VERSION
-        if let product = iapManager.transactionProduct {
-            iapManager.currentPurchasingProduct = product
-            iapManager.purchaseProduct(product: product)
-        }
+        //        if let product = iapManager.transactionProduct {
+        //            iapManager.currentPurchasingProduct = product
+        //            iapManager.purchaseProduct(product: product)
+        //        }
         //UNCOMMENT TO TEST ON SIMULATOR
-//                userInfo.addCredits(numberOfCredits: -1) { result in
-//                    switch result {
-//                    case .success(_):
-//                        self.completeTransaction()
-//                    case .failure(_):
-//                        print("Error updating credits")
-//                    }
-//                }
+        userInfo.addCredits(numberOfCredits: -1) { result in
+            switch result {
+            case .success(_):
+                self.completeTransaction()
+            case .failure(_):
+                print("Error updating credits")
+            }
+        }
     }
     private func completeTransaction() {
         self.gGRequestConfirm.showBox3 = false

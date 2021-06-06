@@ -25,7 +25,7 @@ struct GetConfirmView: View {
                     .bold()
                     .font(.title)
                     .padding()
-                Text("Departing in: \(depart >= 0 ? String(depart) : "0")  Minutes")
+                Text("Departing in: \(depart >= 0 ? String(depart) : "0") minutes")
                     .bold()
                     .padding(.bottom, 10)
                     .onReceive(timer, perform: { input in
@@ -50,12 +50,13 @@ struct GetConfirmView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                            self.showingRefundAlert.toggle()
+                        self.showingRefundAlert.toggle()
                     }) {
-                        Text("Cancel")
-                            .padding(10)
+                        Text("cancel")
+                            .padding(.vertical, 10)
+                            .padding(.horizontal)
                     }.alert(isPresented: $showingRefundAlert) {
-                        Alert(title: Text("Are you sure?"), message: Text("By cancelling your spot the other driver will be able to rate you in this interaction. Your credit will be refunded but in order to refund your $0.99 service fee you must contact apple."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
+                        Alert(title: Text("Are you sure?"), message: Text("By cancelling this spot your credit will be refunded but in order to refund your $0.99 service fee you must contact apple."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                             requestRefund()
                             self.gGRequestConfirm.showBox3 = false
                             self.gGRequestConfirm.showBox4 = false

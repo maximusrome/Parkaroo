@@ -25,9 +25,9 @@ struct SellerCanceledView: View {
                     self.locationTransfer.gettingPin = nil
                     self.locationTransfer.sellerCanceled = false
                 }) {
-                    Text("Close")
-                        .padding()
-                        .cornerRadius(50)
+                    Text("close")
+                        .padding(.vertical, 10)
+                        .padding(.horizontal)
                 }
                 Button(action: {
                     self.locationTransfer.gettingPin = nil
@@ -43,7 +43,6 @@ struct SellerCanceledView: View {
             }.padding()
             .padding(.bottom, 10)
         }.frame(width: 300, height: 200, alignment: .center)
-        .padding(.horizontal)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
         .cornerRadius(30)

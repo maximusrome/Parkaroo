@@ -33,8 +33,7 @@ struct RateBuyerView: View {
                     .cornerRadius(50)
                     .padding()
                     .padding(.bottom, 10)
-                    .disabled(rating <= 0)
-            }
+            }.disabled(rating <= 0)
         }.frame(width: 300, height: 200, alignment: .center)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))

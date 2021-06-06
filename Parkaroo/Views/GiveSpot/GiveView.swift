@@ -34,7 +34,7 @@ struct GiveView: View {
                         .padding()
                 }.disabled(userInfo.isUserAuthenticated == .signedIn && gGRequestConfirm.showBox1)
                 .alert(isPresented: $showingMakeAvaliableSetupAlert) {
-                    Alert(title: Text("Get Set Up"), message: Text("To give a spot you must have an account and earn a credit. Go to Sign Up or Login under the side menu."), dismissButton: .default(Text("Okay")))
+                    Alert(title: Text("Get Set Up"), message: Text("To give a spot you must have an account. Go to Sign Up or Login under menu."), dismissButton: .default(Text("Okay")))
                 }
             }
             VStack {

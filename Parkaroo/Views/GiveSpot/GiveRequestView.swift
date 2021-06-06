@@ -31,7 +31,7 @@ struct GiveRequestView: View {
                 HStack {
                     Text("Departing in:")
                         .bold()
-                    TextField("e.g. 5", text: $locationTransfer.minute)
+                    TextField("10    ", text: $locationTransfer.minute)
                         .onChange(of: self.locationTransfer.minute, perform: { value in
                             if value.count > 3 {
                                 self.locationTransfer.minute = String(value.prefix(3))
@@ -40,8 +40,7 @@ struct GiveRequestView: View {
                         .keyboardType(.numberPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .fixedSize()
-                    Text("Minutes")
-                        .bold()
+                    Text("minutes")
                 }.padding()
                 .padding(.top, 5)
                 Spacer()
@@ -60,8 +59,9 @@ struct GiveRequestView: View {
                         self.gGRequestConfirm.showBox1 = false
                         self.locationTransfer.minute = ""
                     }){
-                        Text("Close")
-                            .padding(10)
+                        Text("close")
+                            .padding(.vertical, 10)
+                            .padding(.horizontal)
                     }
                     Button(action: {
                         if abc() {
@@ -74,7 +74,7 @@ struct GiveRequestView: View {
                             self.showingMinuteAlert = true
                         }
                     }) {
-                        Text("Make Avaliable")
+                        Text("Make Available")
                             .bold()
                             .padding(10)
                             .background(Color("orange1"))

@@ -46,7 +46,7 @@ struct SettingsView: View {
                 Button(action: {
                     self.reportProblem()
                 }) {
-                    SettingsCell(title: "Report Bug", imgName: "exclamationmark.triangle")
+                    SettingsCell(title: "Report Problem", imgName: "exclamationmark.triangle")
                 }.sheet(isPresented: $showReportProblem) {
                     MailView(result: self.$result, newSubject: "Report Problem", newMsgBody: "")
                 }
@@ -70,7 +70,7 @@ struct SettingsView: View {
         }
     }
     func reportProblem() {
-        print("pressed report bug")
+        print("pressed report problem")
         if MFMailComposeViewController.canSendMail() {
             self.showReportProblem = true
         } else {

@@ -43,7 +43,7 @@ struct UserViewModel {
         if isPasswordValid() {
             return " \n"
         } else {
-            return "Must be more than 6 characters containing a mix of letters and numbers"
+            return "Enter a password with 6 or more characters containing at least one number"
         }
     }
     var isSignUpComplete: Bool {

@@ -84,7 +84,7 @@ struct LoginView: View {
                             .foregroundColor(Color("orange1"))
                             .padding(.bottom, 50)
                     }.alert(isPresented: $showPasswordResetAlert) {
-                        Alert(title: Text("Password Reset"), message: Text(self.errString ?? "Reset email sent successfully. Check your email."), dismissButton: .default(Text("Okay")))
+                        Alert(title: Text("Password Reset"), message: Text(self.errString ?? "Password reset email sent successfully. Check your email."), dismissButton: .default(Text("Okay")))
                     }
                 }
             }.font(.body)

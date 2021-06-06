@@ -61,8 +61,7 @@ class LocationTransfer: ObservableObject {
             db.collection(C_PINS).document(gettingPin.id).getDocument { snapshot, error in
                 if error != nil {
                     print("There was an error")
-                }
-                else {
+                } else {
                     if snapshot?.exists ?? false {
                         db.collection(C_PINS).document(gettingPin.id).setData(data, merge: true)
                     }
@@ -236,8 +235,7 @@ class LocationTransfer: ObservableObject {
                             self?.buyer = user
                         }
                     }
-                }
-                else {
+                } else {
                     self?.buyer = nil
                 }
             }
@@ -259,8 +257,7 @@ class LocationTransfer: ObservableObject {
                     data[C_ID] = documentSnapshot?.documentID
                 }
                 self?.gettingPin = Pin(data: data)
-            }
-            else {
+            } else {
                 self?.sellerCanceled = true
                 self?.updatePublisher.send()
             }
