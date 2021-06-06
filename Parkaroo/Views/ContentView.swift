@@ -125,7 +125,7 @@ struct ContentView: View {
                                         })
         }.accentColor(Color("orange1"))
         .alert(isPresented: $showSetUpNotifications, content: {
-            Alert(title: Text("Get Set Up"), message: Text("To customize your notifications you must have an account. Go to Sign Up or Login under menu."), dismissButton: Alert.Button.default(Text("Okay")))
+            Alert(title: Text("Get Set Up"), message: Text("To customize your notifications you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
         })
         .onAppear {
             if !hasOnboarded {

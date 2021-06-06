@@ -60,11 +60,11 @@ struct GetRequestView: View {
                             .background(Color("orange1"))
                             .cornerRadius(50)
                     }.alert(isPresented: $showingReserveSetupAlert) {
-                        Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under menu."), dismissButton: .default(Text("Okay")))
+                        Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                     }
                     Text("")
                         .alert(isPresented: $showingNotEnoughCreditsAlert) {
-                            Alert(title: Text("Not enough credits"), message: Text("You don't have enough credits. You can give up your spot to earn a credit or purchase them in the credits screen under menu."), dismissButton: .default(Text("Okay")))
+                            Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. You can give up your spot to earn a credit or purchase them in the credits page under the menu."), dismissButton: .default(Text("Okay")))
                         }
                     Text("")
                         .alert(isPresented: $showingGoodToGoAlert) {
@@ -125,19 +125,19 @@ struct GetRequestView: View {
     }
     private func reserveSpot() {
         // UNCOMMENT TO RUN PRODUCTION VERSION
-        //        if let product = iapManager.transactionProduct {
-        //            iapManager.currentPurchasingProduct = product
-        //            iapManager.purchaseProduct(product: product)
-        //        }
+                if let product = iapManager.transactionProduct {
+                    iapManager.currentPurchasingProduct = product
+                    iapManager.purchaseProduct(product: product)
+                }
         //UNCOMMENT TO TEST ON SIMULATOR
-        userInfo.addCredits(numberOfCredits: -1) { result in
-            switch result {
-            case .success(_):
-                self.completeTransaction()
-            case .failure(_):
-                print("Error updating credits")
-            }
-        }
+//        userInfo.addCredits(numberOfCredits: -1) { result in
+//            switch result {
+//            case .success(_):
+//                self.completeTransaction()
+//            case .failure(_):
+//                print("Error updating credits")
+//            }
+//        }
     }
     private func completeTransaction() {
         self.gGRequestConfirm.showBox3 = false

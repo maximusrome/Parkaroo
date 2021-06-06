@@ -94,7 +94,7 @@ struct GetConfirmView: View {
             case .success(_):
                 self.gettingPinAnnotation = nil
                 if let seller = locationTransfer.seller {
-                    NotificationsService.shared.sendNotification(uid: seller.uid, message: "The buyer has canceled his reservation.")
+                    NotificationsService.shared.sendNotification(uid: seller.uid, message: "The buyer has canceled their reservation.")
                 }
                 let data = [C_BUYER:"", C_STATUS: pinStatus.available.rawValue]
                 self.locationTransfer.updateGettingPin(data: data)

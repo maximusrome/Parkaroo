@@ -66,7 +66,6 @@ struct SettingsView: View {
             self.showContactUs = true
         } else {
             print("Error sending mail")
-            // Alert : Unable to send the mail
         }
     }
     func reportProblem() {
@@ -75,7 +74,6 @@ struct SettingsView: View {
             self.showReportProblem = true
         } else {
             print("Error sending mail")
-            // Alert : Unable to send the mail
         }
     }
 }

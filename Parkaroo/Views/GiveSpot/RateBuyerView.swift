@@ -42,7 +42,7 @@ struct RateBuyerView: View {
         .padding(.bottom)
         .padding(.horizontal, 50)
         .alert(isPresented: $showAlertMessage, content: {
-            Alert(title: Text("Rating Submitted"), message: Text("You have earned a free credit. Thanks for using Parkaroo."), dismissButton: .default(Text("Done")))
+            Alert(title: Text("Rating Submitted"), message: Text("You have earned a credit. Thanks for using Parkaroo."), dismissButton: .default(Text("Done")))
         })
     }
     private func updateRating() {

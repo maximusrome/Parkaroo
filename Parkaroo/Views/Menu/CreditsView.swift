@@ -43,7 +43,7 @@ struct CreditsView: View {
                         .background(Color("orange1"))
                         .cornerRadius(50)
                 }.alert(isPresented: $showSignInAlert, content: {
-                    Alert(title: Text("Get Set Up"), message: Text("To purchase a credit you must have an account. Go to Sign Up or Login under menu."), dismissButton: Alert.Button.default(Text("Okay")))
+                    Alert(title: Text("Get Set Up"), message: Text("To buy a credit you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
                 })
                 Spacer()
             }.font(.title)
