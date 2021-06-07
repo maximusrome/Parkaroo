@@ -57,7 +57,6 @@ struct MenuView: View {
                             self.gGRequestConfirm.showBox3 = false
                             self.gGRequestConfirm.showBox4 = false
                             self.gGRequestConfirm.showGiveConfirmView = false
-                            self.presentationMode.wrappedValue.dismiss()
                         }))
                     }
                 }

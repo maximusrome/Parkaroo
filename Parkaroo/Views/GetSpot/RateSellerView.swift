@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RateSellerView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
-    @Binding var presentView: Bool
+    @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @State var rating: Int = 0
     @State var showAlertMessage = false
     var body: some View {
@@ -22,7 +22,7 @@ struct RateSellerView: View {
             RatingView(rating: $rating)
             Spacer()
             Button(action: {
-                presentView = false
+                self.gGRequestConfirm.showSellerRatingView = false
                 updateRating()
                 locationTransfer.updateGettingPin(data: [C_RATINGSUBMITTED:true])
                 cleanUp()
@@ -66,19 +66,19 @@ struct RateSellerView: View {
         }
     }
     private func cleanUp() {
-        locationTransfer.buyer = nil
-        locationTransfer.seller = nil
-        locationTransfer.givingPin = nil
-        locationTransfer.gettingPin = nil
-        locationTransfer.minute = ""
-        locationTransfer.cleanUpGettingPin()
-        self.rating = 0
+    locationTransfer.buyer = nil
+    locationTransfer.seller = nil
+    locationTransfer.givingPin = nil
+    locationTransfer.gettingPin = nil
+    locationTransfer.minute = ""
+    locationTransfer.cleanUpGettingPin()
+    self.rating = 0
     }
 }
 struct RateSellerView_Previews: PreviewProvider {
-    @State static var presentView: Bool = false
     static var previews: some View {
-        RateSellerView(presentView: $presentView)
+        RateSellerView()
             .environmentObject(LocationTransfer())
+            .environmentObject(GGRequestConfirm())
     }
 }

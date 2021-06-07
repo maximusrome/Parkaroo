@@ -32,7 +32,7 @@ struct SellerCanceledView: View {
                 Button(action: {
                     self.locationTransfer.gettingPin = nil
                     self.locationTransfer.sellerCanceled = false
-                    self.presentRatingView = true
+                    self.gGRequestConfirm.showSellerRatingView = true
                 }) {
                     Text("Rate Seller")
                         .bold()
@@ -42,7 +42,7 @@ struct SellerCanceledView: View {
                 }
             }.padding()
             .padding(.bottom, 10)
-        }.frame(width: 300, height: 200, alignment: .center)
+        }.frame(width: 300, height: 200)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
         .cornerRadius(30)

@@ -24,7 +24,7 @@ struct CharityView: View {
                     .bold()
                     .font(.title)
                     .padding(.vertical)
-                Text("Hello, my name is Max, I am 15 years old and I created this app becuase my family was frustrated with the search for on-street parking in NYC. Each day, after school, I taught my self how to code and eight months later Parkaroo version 1.0 was launched.\n\nI hope this helps improve your parking experience, and makes you feel good about supporting a great charity and encouraging a young entrepreneur.\n")
+                Text("Hello, my name is Max, I am 15 years old and I created this app becuase I was frustrated with my family's search for on-street parking. Each day, after school, I taught my self how to code and eight months later Parkaroo version 1.0 was launched.\n\nI hope this helps improve your parking experience, and makes you feel good about supporting a great charity and encouraging a young entrepreneur.\n")
                 Spacer()
             }.padding()
             .navigationBarTitle("Charity", displayMode: .inline)

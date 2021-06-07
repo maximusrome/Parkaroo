@@ -24,7 +24,7 @@ struct GetRequestView: View {
     @State var depart = Int()
     var body: some View {
         VStack {
-            VStack(alignment: .center) {
+            VStack {
                 Text("Departing in: \(depart >= 0 ? String(depart) + " minutes" : "")")
                     .bold()
                     .padding()
@@ -45,7 +45,7 @@ struct GetRequestView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        self.gGRequestConfirm.showBox3 = false
+                        self.gGRequestConfirm.showBox3.toggle()
                     }) {
                         Text("close")
                             .padding(.vertical, 10)
@@ -125,19 +125,19 @@ struct GetRequestView: View {
     }
     private func reserveSpot() {
         // UNCOMMENT TO RUN PRODUCTION VERSION
-                if let product = iapManager.transactionProduct {
-                    iapManager.currentPurchasingProduct = product
-                    iapManager.purchaseProduct(product: product)
-                }
+//                if let product = iapManager.transactionProduct {
+//                    iapManager.currentPurchasingProduct = product
+//                    iapManager.purchaseProduct(product: product)
+//                }
         //UNCOMMENT TO TEST ON SIMULATOR
-//        userInfo.addCredits(numberOfCredits: -1) { result in
-//            switch result {
-//            case .success(_):
-//                self.completeTransaction()
-//            case .failure(_):
-//                print("Error updating credits")
-//            }
-//        }
+        userInfo.addCredits(numberOfCredits: -1) { result in
+            switch result {
+            case .success(_):
+                self.completeTransaction()
+            case .failure(_):
+                print("Error updating credits")
+            }
+        }
     }
     private func completeTransaction() {
         self.gGRequestConfirm.showBox3 = false

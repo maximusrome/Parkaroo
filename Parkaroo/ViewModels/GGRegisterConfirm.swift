@@ -16,4 +16,7 @@ class GGRequestConfirm: ObservableObject {
     @Published var moveBox1 = false
     @Published var showingYouGotCreditAlert = false
     @Published var showGiveConfirmView = false
+    
+    @Published var showBuyerRatingView = false
+    @Published var showSellerRatingView = false
 }

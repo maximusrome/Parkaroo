@@ -15,7 +15,7 @@ struct GiveConfirmView: View {
     @Binding var presentRatingView: Bool
     @State var showCancelAlert = false
     var body: some View {
-        VStack(alignment: .center){
+        VStack {
             Text("Spot \(self.locationTransfer.givingPin?.status.capitalized ?? "")")
                 .bold()
                 .font(.title)
@@ -64,7 +64,7 @@ struct GiveConfirmView: View {
                     }
                     Button(action: {
                         self.gGRequestConfirm.showGiveConfirmView = false
-                        self.presentRatingView = true
+                        self.gGRequestConfirm.showBuyerRatingView = true
                         self.locationTransfer.givingPin = nil
                         self.locationTransfer.locations.removeAll()
                     }) {
@@ -92,7 +92,7 @@ struct GiveConfirmView: View {
                 Button(action: {
                     self.showCancelAlert = true
                 }) {
-                    Text("Cancel")
+                    Text("cancel")
                         .bold()
                         .padding(10)
                         .background(Color(white: 0.7))
@@ -112,10 +112,11 @@ struct GiveConfirmView: View {
             Alert(title: Text("Are you sure?"), message: Text("If someone has reserved your spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
                 locationTransfer.deletePin()
                 locationTransfer.minute = ""
+                self.gGRequestConfirm.showGiveConfirmView = false
+                self.locationTransfer.sellerCanceled = true
                 if let buyer = locationTransfer.buyer {
                     NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled their spot")
                 }
-                self.gGRequestConfirm.showGiveConfirmView = false
             }))
         })
     }

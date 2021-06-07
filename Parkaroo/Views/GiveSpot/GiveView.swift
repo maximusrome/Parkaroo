@@ -18,7 +18,7 @@ struct GiveView: View {
         ZStack {
             MapGiveView(annotations: locationTransfer.locations)
                 .edgesIgnoringSafeArea(.all)
-            if locationTransfer.givingPin == nil {
+            if locationTransfer.givingPin == nil && !self.gGRequestConfirm.showBuyerRatingView {
                 Button(action: {
                     self.gGRequestConfirm.showBox1 = false
                     if self.userInfo.isUserAuthenticated == .signedIn {
@@ -51,8 +51,8 @@ struct GiveView: View {
             }
             VStack {
                 Spacer()
-                RateBuyerView(presentView: $presentRatingView)
-                    .offset(y: self.presentRatingView ? 0 : UIScreen.main.bounds.height)
+                RateBuyerView()
+                    .offset(y: self.gGRequestConfirm.showBuyerRatingView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
         }.onAppear() {

@@ -20,7 +20,7 @@ struct GetConfirmView: View {
     var body: some View {
         VStack {
             Spacer()
-            VStack(alignment: .center) {
+            VStack {
                 Text("Spot Reserved")
                     .bold()
                     .font(.title)
@@ -50,7 +50,7 @@ struct GetConfirmView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        self.showingRefundAlert.toggle()
+                        self.showingRefundAlert = true
                     }) {
                         Text("cancel")
                             .padding(.vertical, 10)
@@ -67,7 +67,7 @@ struct GetConfirmView: View {
                         self.gGRequestConfirm.showBox4 = false
                         self.gGRequestConfirm.moveBox = false
                         self.gGRequestConfirm.showingYouGotCreditAlert.toggle()
-                        self.presentRatingView = true
+                        self.gGRequestConfirm.showSellerRatingView = true
                         self.gettingPinAnnotation = nil
                     }) {
                         Text("Complete Transfer")

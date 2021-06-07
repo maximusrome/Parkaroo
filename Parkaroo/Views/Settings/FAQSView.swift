@@ -21,7 +21,7 @@ struct FAQSView: View {
                 Text("Should I tell my friends about this app?")
                     .bold()
                     .font(.title3)
-                Text("Absolutely yes. The more people that use the app, the more spots that will be avaliable, and hence a better experience for everyone.\n")
+                Text("Absolutely yes. The more people that use the app, the more spots that will be available, and hence a better experience for everyone.\n")
                 Text("How do I get a credit?")
                     .bold()
                     .font(.title3)
@@ -33,6 +33,7 @@ struct FAQSView: View {
                 Group {
                     Text("What if the seller leaves the spot before I get there and the spot is gone?")
                         .bold()
+                        .font(.title3)
                     Text("There is a button to completely refund your credit. You will be able to rate the seller. In this instance, we recommend giving the seller a low rating, so others in the future will know that he/she is less reliable than other high rated sellers.\n")
                 }
             }

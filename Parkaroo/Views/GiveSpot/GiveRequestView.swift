@@ -27,7 +27,7 @@ struct GiveRequestView: View {
     }
     var body: some View {
         VStack {
-            VStack(alignment: .center) {
+            VStack {
                 HStack {
                     Text("Departing in:")
                         .bold()

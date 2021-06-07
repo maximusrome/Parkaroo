@@ -30,7 +30,7 @@ struct NotificationsSheet : View {
                 FBFirestore.mergeFBUser([C_ADVANCEDNOTIFICATIONS:value], uid: self.userInfo.user.uid) { result in
                 }
             })
-            Text("Advanced: Be alerted immediately when spots are made avaliable *Enable when looking for parking*")
+            Text("Advanced: Be alerted immediately when spots are made available *Enable when looking for parking*")
         }.padding(.bottom, (UIApplication.shared.windows.last?.safeAreaInsets.bottom)! + 25)
         .padding(.horizontal)
         .padding(.top, 25)

@@ -33,8 +33,8 @@ struct GetView: View {
             }
             VStack {
                 Spacer()
-                RateSellerView(presentView: $presentRatingView)
-                    .offset(y: self.presentRatingView ? 0 : UIScreen.main.bounds.height)
+                RateSellerView()
+                    .offset(y: self.gGRequestConfirm.showSellerRatingView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
