@@ -10,7 +10,6 @@ import SwiftUI
 struct SellerCanceledView: View {
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @EnvironmentObject var locationTransfer: LocationTransfer
-    @Binding var presentRatingView: Bool
     var body: some View {
         VStack {
             Text("Seller Canceled")
@@ -23,7 +22,7 @@ struct SellerCanceledView: View {
             HStack {
                 Button(action: {
                     self.locationTransfer.gettingPin = nil
-                    self.locationTransfer.sellerCanceled = false
+                    self.locationTransfer.showSellerCanceledView = false
                 }) {
                     Text("close")
                         .padding(.vertical, 10)
@@ -31,7 +30,7 @@ struct SellerCanceledView: View {
                 }
                 Button(action: {
                     self.locationTransfer.gettingPin = nil
-                    self.locationTransfer.sellerCanceled = false
+                    self.locationTransfer.showSellerCanceledView = false
                     self.gGRequestConfirm.showSellerRatingView = true
                 }) {
                     Text("Rate Seller")
@@ -52,11 +51,9 @@ struct SellerCanceledView: View {
     }
 }
 struct SellerCanceledView_Previews: PreviewProvider {
-    @State static var presentView: Bool = false
     static var previews: some View {
-        SellerCanceledView(presentRatingView: $presentView)
+        SellerCanceledView()
             .environmentObject(LocationTransfer())
             .environmentObject(GGRequestConfirm())
-            .previewLayout(.sizeThatFits)
     }
 }

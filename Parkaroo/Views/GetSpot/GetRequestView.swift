@@ -45,7 +45,7 @@ struct GetRequestView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        self.gGRequestConfirm.showBox3.toggle()
+                        self.gGRequestConfirm.showGetRequestView.toggle()
                     }) {
                         Text("close")
                             .padding(.vertical, 10)
@@ -81,7 +81,6 @@ struct GetRequestView: View {
             .shadow(radius: 5)
             .padding(.bottom)
             .padding(.horizontal, 50)
-            .padding(.bottom, gGRequestConfirm.moveBox ? 170 : 0)
         }
         .onChange(of: iapManager.transactionState, perform: { value in
             if iapManager.currentPurchasingProduct?.productIdentifier == "parking.spot" {
@@ -125,10 +124,10 @@ struct GetRequestView: View {
     }
     private func reserveSpot() {
         // UNCOMMENT TO RUN PRODUCTION VERSION
-//                if let product = iapManager.transactionProduct {
-//                    iapManager.currentPurchasingProduct = product
-//                    iapManager.purchaseProduct(product: product)
-//                }
+        //                if let product = iapManager.transactionProduct {
+        //                    iapManager.currentPurchasingProduct = product
+        //                    iapManager.purchaseProduct(product: product)
+        //                }
         //UNCOMMENT TO TEST ON SIMULATOR
         userInfo.addCredits(numberOfCredits: -1) { result in
             switch result {
@@ -140,8 +139,8 @@ struct GetRequestView: View {
         }
     }
     private func completeTransaction() {
-        self.gGRequestConfirm.showBox3 = false
-        self.gGRequestConfirm.showBox4 = true
+        self.gGRequestConfirm.showGetRequestView = false
+        self.gGRequestConfirm.showGetConfirmView = true
         let data = [C_BUYER:userInfo.user.uid, C_STATUS: pinStatus.reserved.rawValue]
         self.locationTransfer.updateGettingPin(data: data)
         if let id = self.locationTransfer.gettingPin?.id {

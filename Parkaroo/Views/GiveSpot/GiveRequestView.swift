@@ -56,7 +56,7 @@ struct GiveRequestView: View {
                 HStack {
                     Button(action: {
                         UIApplication.shared.endEditing()
-                        self.gGRequestConfirm.showBox1 = false
+                        self.gGRequestConfirm.showGiveRequestView = false
                         self.locationTransfer.minute = ""
                     }){
                         Text("close")
@@ -68,7 +68,7 @@ struct GiveRequestView: View {
                             UIApplication.shared.endEditing()
                             self.locationTransfer.createPin()
                             self.showingMinuteAlert = false
-                            self.gGRequestConfirm.showBox1 = false
+                            self.gGRequestConfirm.showGiveRequestView = false
                             self.gGRequestConfirm.showGiveConfirmView = true
                         } else {
                             self.showingMinuteAlert = true
@@ -91,7 +91,6 @@ struct GiveRequestView: View {
             .shadow(radius: 5)
             .padding(.bottom)
             .padding(.horizontal, 50)
-            .padding(.bottom, gGRequestConfirm.moveBox1 ? 170 : 0)
         }
     }
 }

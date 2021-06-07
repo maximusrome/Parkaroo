@@ -13,16 +13,15 @@ struct GiveView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @State private var showingMakeAvaliableSetupAlert = false
-    @State var presentRatingView = false
     var body: some View {
         ZStack {
             MapGiveView(annotations: locationTransfer.locations)
                 .edgesIgnoringSafeArea(.all)
             if locationTransfer.givingPin == nil && !self.gGRequestConfirm.showBuyerRatingView {
                 Button(action: {
-                    self.gGRequestConfirm.showBox1 = false
+                    self.gGRequestConfirm.showGiveRequestView = false
                     if self.userInfo.isUserAuthenticated == .signedIn {
-                        self.gGRequestConfirm.showBox1 = true
+                        self.gGRequestConfirm.showGiveRequestView = true
                     } else {
                         self.showingMakeAvaliableSetupAlert.toggle()
                     }
@@ -32,7 +31,7 @@ struct GiveView: View {
                         .frame(width: 32.0, height: 32.0)
                         .foregroundColor(Color("orange1"))
                         .padding()
-                }.disabled(userInfo.isUserAuthenticated == .signedIn && gGRequestConfirm.showBox1)
+                }.disabled(userInfo.isUserAuthenticated == .signedIn && gGRequestConfirm.showGiveRequestView)
                 .alert(isPresented: $showingMakeAvaliableSetupAlert) {
                     Alert(title: Text("Get Set Up"), message: Text("To give a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                 }
@@ -40,12 +39,12 @@ struct GiveView: View {
             VStack {
                 Spacer()
                 GiveRequestView()
-                    .offset(y: self.gGRequestConfirm.showBox1 ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: self.gGRequestConfirm.showGiveRequestView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
-                GiveConfirmView(presentRatingView: $presentRatingView)
+                GiveConfirmView()
                     .offset(y: self.gGRequestConfirm.showGiveConfirmView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }

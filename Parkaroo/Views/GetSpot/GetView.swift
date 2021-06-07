@@ -13,7 +13,6 @@ struct GetView: View {
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @EnvironmentObject var userInfo: UserInfo
     @EnvironmentObject var iapManager: IAPManager
-    @State var presentRatingView = false
     @State var gettingAnnotation: CustomMKPointAnnotation?
     var body: some View {
         ZStack {
@@ -22,25 +21,25 @@ struct GetView: View {
             VStack {
                 Spacer()
                 GetRequestView(gettingPinAnnotation: $gettingAnnotation)
-                    .offset(y: self.gGRequestConfirm.showBox3 ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: self.gGRequestConfirm.showGetRequestView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
-                GetConfirmView(presentRatingView: $presentRatingView, gettingPinAnnotation: $gettingAnnotation)
-                    .offset(y: self.gGRequestConfirm.showBox4 ? 0 : UIScreen.main.bounds.height)
+                GetConfirmView(gettingPinAnnotation: $gettingAnnotation)
+                    .offset(y: self.gGRequestConfirm.showGetConfirmView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
                 RateSellerView()
-                    .offset(y: self.gGRequestConfirm.showSellerRatingView ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: self.gGRequestConfirm.showSellerRatingView && !self.locationTransfer.showSellerCanceledView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
-                SellerCanceledView(presentRatingView: $presentRatingView)
-                    .offset(y: self.locationTransfer.sellerCanceled ? 0 : UIScreen.main.bounds.height)
+                SellerCanceledView()
+                    .offset(y: self.locationTransfer.showSellerCanceledView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             if iapManager.showActivityIndicator {
@@ -50,10 +49,9 @@ struct GetView: View {
             self.locationTransfer.fetchLocations()
         }
         .onReceive(locationTransfer.updatePublisher, perform: { _ in
-            if locationTransfer.sellerCanceled {
-                self.gGRequestConfirm.showBox3 = false
-                self.gGRequestConfirm.showBox4 = false
-                self.gGRequestConfirm.moveBox = false
+            if locationTransfer.showSellerCanceledView {
+                self.gGRequestConfirm.showGetRequestView = false
+                self.gGRequestConfirm.showGetConfirmView = false
                 self.gettingAnnotation = nil
                 self.userInfo.AddOneCredit()
             }

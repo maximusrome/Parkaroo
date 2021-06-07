@@ -8,15 +8,10 @@
 import Foundation
 
 class GGRequestConfirm: ObservableObject {
-    @Published var showBox1 = false
-    @Published var showBox2 = false
-    @Published var showBox3 = false
-    @Published var showBox4 = false
-    @Published var moveBox = false
-    @Published var moveBox1 = false
-    @Published var showingYouGotCreditAlert = false
+    @Published var showGiveRequestView = false
     @Published var showGiveConfirmView = false
-    
     @Published var showBuyerRatingView = false
+    @Published var showGetRequestView = false
+    @Published var showGetConfirmView = false
     @Published var showSellerRatingView = false
 }

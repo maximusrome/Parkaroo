@@ -77,11 +77,6 @@ struct SettingsView: View {
         }
     }
 }
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
-    }
-}
 struct SettingsCell: View {
     var title : String
     var imgName : String
@@ -98,8 +93,8 @@ struct SettingsCell: View {
         }
     }
 }
-struct SettingsCell_Previews: PreviewProvider {
+struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsCell(title: "Features", imgName: "sparks")
+        SettingsView()
     }
 }

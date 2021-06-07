@@ -12,7 +12,6 @@ struct GiveConfirmView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var departureMinutes = Int()
-    @Binding var presentRatingView: Bool
     @State var showCancelAlert = false
     var body: some View {
         VStack {
@@ -110,21 +109,26 @@ struct GiveConfirmView: View {
         .padding(.horizontal, 50)
         .alert(isPresented: $showCancelAlert, content: {
             Alert(title: Text("Are you sure?"), message: Text("If someone has reserved your spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
-                locationTransfer.deletePin()
-                locationTransfer.minute = ""
+                cleanUp()
                 self.gGRequestConfirm.showGiveConfirmView = false
-                self.locationTransfer.sellerCanceled = true
                 if let buyer = locationTransfer.buyer {
                     NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled their spot")
                 }
             }))
         })
     }
+    private func cleanUp() {
+        locationTransfer.buyer = nil
+        locationTransfer.seller = nil
+        locationTransfer.givingPin = nil
+        locationTransfer.gettingPin = nil
+        locationTransfer.minute = ""
+        locationTransfer.cleanUpGettingPin()
+    }
 }
 struct GiveConfirmView_Previews: PreviewProvider {
-    @State static var presentView: Bool = false
     static var previews: some View {
-        GiveConfirmView(presentRatingView: $presentView)
+        GiveConfirmView()
             .previewLayout(.sizeThatFits)
             .environmentObject(GGRequestConfirm())
             .environmentObject(LocationTransfer())

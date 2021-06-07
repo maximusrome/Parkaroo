@@ -25,7 +25,7 @@ struct RateSellerView: View {
                 self.gGRequestConfirm.showSellerRatingView = false
                 updateRating()
                 locationTransfer.updateGettingPin(data: [C_RATINGSUBMITTED:true])
-                cleanUp()
+                self.rating = 0
             }) {
                 Text("Submit")
                     .bold()
@@ -64,15 +64,6 @@ struct RateSellerView: View {
                 print("Error")
             }
         }
-    }
-    private func cleanUp() {
-    locationTransfer.buyer = nil
-    locationTransfer.seller = nil
-    locationTransfer.givingPin = nil
-    locationTransfer.gettingPin = nil
-    locationTransfer.minute = ""
-    locationTransfer.cleanUpGettingPin()
-    self.rating = 0
     }
 }
 struct RateSellerView_Previews: PreviewProvider {

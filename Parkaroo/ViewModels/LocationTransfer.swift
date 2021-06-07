@@ -16,11 +16,8 @@ class LocationTransfer: ObservableObject {
     @Published var locations = [MKPointAnnotation]()
     @Published var locations1 = [CustomMKPointAnnotation]()
     @Published var vehicle = ""
-    @Published var vehicle1 = ""
     @Published var minute = ""
-    @Published var minute1 = ""
     @Published var centerCoordinate = CLLocationCoordinate2D()
-    @Published var centerCoordinate1 = CLLocationCoordinate2D()
     @Published var credits = 0
     @Published var departure = Timestamp()
     @Published var givingPin: Pin?
@@ -28,7 +25,7 @@ class LocationTransfer: ObservableObject {
     @Published var buyer: FBUser?
     @Published var seller: FBUser?
     @Published var ratingSubmitted = false
-    @Published var sellerCanceled = false
+    @Published var showSellerCanceledView = false
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     var publisher: AnyPublisher<Void, Never>! = nil
@@ -148,7 +145,7 @@ class LocationTransfer: ObservableObject {
             } else {
                 if document != nil && document!.exists {
                     let documentData = document!.data()
-                    self.minute1 = documentData?["minute"] as! String
+                    self.minute = documentData?["minute"] as! String
                     self.departure = documentData?["departure"] as! Timestamp
                     print("minute read")
                 } else {
@@ -166,7 +163,6 @@ class LocationTransfer: ObservableObject {
                 if document != nil && document!.exists {
                     let documentData = document!.data()
                     self.vehicle = documentData?["vehicle"] as! String
-                    self.vehicle1 = documentData?["vehicle"] as! String
                     print("Vehicle read")
                 } else {
                     print("vehicle doc doesn't exist or equals nil")
@@ -258,7 +254,7 @@ class LocationTransfer: ObservableObject {
                 }
                 self?.gettingPin = Pin(data: data)
             } else {
-                self?.sellerCanceled = true
+                self?.showSellerCanceledView = true
                 self?.updatePublisher.send()
             }
         })
@@ -269,7 +265,7 @@ class LocationTransfer: ObservableObject {
         }
         self.gettingPin = nil
         self.seller = nil
-        self.sellerCanceled = false
+        self.showSellerCanceledView = false
     }
     func fullCleanUp(completion: @escaping () -> Void) {
         if let listener = gettingPinListener {
@@ -285,7 +281,7 @@ class LocationTransfer: ObservableObject {
             self.cleanUpGettingPin()
         }
         self.seller = nil
-        self.sellerCanceled = false
+        self.showSellerCanceledView = false
         self.givingPin = nil
         self.buyer = nil
         self.locations.removeAll()

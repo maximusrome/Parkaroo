@@ -46,18 +46,14 @@ struct MenuView: View {
                         Text("Log Out")
                     }.alert(isPresented: $logOutClicked) {
                         Alert(title: Text("Are you sure?"), message: Text("If you are currently giving or getting a spot, the spot will automatically be cancelled by logging out."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
-                            self.locationTransfer.fullCleanUp {
-                                FBAuth.logOut { (_) in }
-                            }
-                            self.userInfo.user.credits = 0
-                            self.gGRequestConfirm.moveBox = false
-                            self.gGRequestConfirm.moveBox1 = false
-                            self.gGRequestConfirm.showBox1 = false
-                            self.gGRequestConfirm.showBox2 = false
-                            self.gGRequestConfirm.showBox3 = false
-                            self.gGRequestConfirm.showBox4 = false
-                            self.gGRequestConfirm.showGiveConfirmView = false
-                        }))
+                                                                                                                                                                                                                                                                                self.locationTransfer.fullCleanUp {
+                                                                                                                                                                                                                                                                                    FBAuth.logOut { (_) in }
+                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                self.userInfo.user.credits = 0
+                                                                                                                                                                                                                                                                                self.gGRequestConfirm.showGiveRequestView = false
+                                                                                                                                                                                                                                                                                self.gGRequestConfirm.showGiveConfirmView = false
+                                                                                                                                                                                                                                                                                self.gGRequestConfirm.showGetRequestView = false
+                                                                                                                                                                                                                                                                                self.gGRequestConfirm.showGetConfirmView = false                        }))
                     }
                 }
             } else {

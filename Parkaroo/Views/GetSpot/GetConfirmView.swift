@@ -13,7 +13,6 @@ struct GetConfirmView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var rating = 5
     @State private var showingRefundAlert = false
-    @Binding var presentRatingView: Bool
     @Binding var gettingPinAnnotation: CustomMKPointAnnotation?
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var depart = Int()
@@ -58,15 +57,13 @@ struct GetConfirmView: View {
                     }.alert(isPresented: $showingRefundAlert) {
                         Alert(title: Text("Are you sure?"), message: Text("By cancelling this spot your credit will be refunded but in order to refund your $0.99 service fee you must contact apple."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                             requestRefund()
-                            self.gGRequestConfirm.showBox3 = false
-                            self.gGRequestConfirm.showBox4 = false
+                            self.gGRequestConfirm.showGetRequestView = false
+                            self.gGRequestConfirm.showGetConfirmView = false
                         }))
                     }
                     Button(action: {
-                        self.gGRequestConfirm.showBox3 = false
-                        self.gGRequestConfirm.showBox4 = false
-                        self.gGRequestConfirm.moveBox = false
-                        self.gGRequestConfirm.showingYouGotCreditAlert.toggle()
+                        self.gGRequestConfirm.showGetRequestView = false
+                        self.gGRequestConfirm.showGetConfirmView = false
                         self.gGRequestConfirm.showSellerRatingView = true
                         self.gettingPinAnnotation = nil
                     }) {
@@ -107,10 +104,9 @@ struct GetConfirmView: View {
     }
 }
 struct GetConfirmView_Previews: PreviewProvider {
-    @State static var presentView: Bool = false
     @State static var annotation: CustomMKPointAnnotation? = CustomMKPointAnnotation()
     static var previews: some View {
-        GetConfirmView(presentRatingView: $presentView, gettingPinAnnotation: $annotation)
+        GetConfirmView(gettingPinAnnotation: $annotation)
             .environmentObject(LocationTransfer())
             .environmentObject(GGRequestConfirm())
             .environmentObject(UserInfo())

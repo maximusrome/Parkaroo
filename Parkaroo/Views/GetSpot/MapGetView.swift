@@ -56,7 +56,7 @@ struct MapGetView: UIViewRepresentable {
             }
         }
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            parent.locationTransfer.centerCoordinate1 = mapView.centerCoordinate
+            parent.locationTransfer.centerCoordinate = mapView.centerCoordinate
         }
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             if !(annotation is MKUserLocation) {
@@ -78,17 +78,15 @@ struct MapGetView: UIViewRepresentable {
             }
         }
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            if !self.parent.gGRequestConfirm.showBox4 && !self.parent.gGRequestConfirm.showSellerRatingView && !self.parent.gGRequestConfirm.showBuyerRatingView && !self.parent.locationTransfer.sellerCanceled {
+            if !self.parent.gGRequestConfirm.showGetConfirmView && !self.parent.gGRequestConfirm.showSellerRatingView && !self.parent.gGRequestConfirm.showBuyerRatingView && !self.parent.locationTransfer.showSellerCanceledView {
                 if let annotation = view.annotation as? CustomMKPointAnnotation {
                     self.parent.locationTransfer.readPin(id: annotation.id)
-                    self.parent.gGRequestConfirm.showBox3 = true
+                    self.parent.gGRequestConfirm.showGetRequestView = true
                 }
             }
         }
         func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-            if !self.parent.gGRequestConfirm.moveBox {
-                self.parent.gGRequestConfirm.showBox3 = false
-            }
+            self.parent.gGRequestConfirm.showGetRequestView = false
         }
         fileprivate func centerMapOnCoordinate(coordinate: CLLocationCoordinate2D) {
             let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
