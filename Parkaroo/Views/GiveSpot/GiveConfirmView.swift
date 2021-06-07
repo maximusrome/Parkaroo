@@ -109,21 +109,14 @@ struct GiveConfirmView: View {
         .padding(.horizontal, 50)
         .alert(isPresented: $showCancelAlert, content: {
             Alert(title: Text("Are you sure?"), message: Text("If someone has reserved your spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
-                cleanUp()
+                locationTransfer.deletePin()
+                locationTransfer.minute = ""
                 self.gGRequestConfirm.showGiveConfirmView = false
                 if let buyer = locationTransfer.buyer {
                     NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled their spot")
                 }
             }))
         })
-    }
-    private func cleanUp() {
-        locationTransfer.buyer = nil
-        locationTransfer.seller = nil
-        locationTransfer.givingPin = nil
-        locationTransfer.gettingPin = nil
-        locationTransfer.minute = ""
-        locationTransfer.cleanUpGettingPin()
     }
 }
 struct GiveConfirmView_Previews: PreviewProvider {
