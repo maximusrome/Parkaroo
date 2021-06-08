@@ -45,7 +45,7 @@ struct MenuView: View {
                             .imageScale(.large)
                         Text("Log Out")
                     }.alert(isPresented: $logOutClicked) {
-                        Alert(title: Text("Are you sure?"), message: Text("If you are currently giving or getting a spot, the spot will automatically be cancelled by logging out."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
+                        Alert(title: Text("Are you sure?"), message: Text("If you are currently giving or getting a spot, the spot will automatically be canceled by logging out."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                                                                                                                                                                                                                                                                                 self.locationTransfer.fullCleanUp {
                                                                                                                                                                                                                                                                                     FBAuth.logOut { (_) in }
                                                                                                                                                                                                                                                                                 }

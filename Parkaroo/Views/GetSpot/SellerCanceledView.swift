@@ -2,7 +2,7 @@
 //  SellerCanceledView.swift
 //  Parkaroo
 //
-//  Created by Bernie Cartin on 5/27/21.
+//  Created by max rome on 5/27/21.
 //
 
 import SwiftUI

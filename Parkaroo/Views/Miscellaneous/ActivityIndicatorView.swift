@@ -2,7 +2,7 @@
 //  ActivityIndicatorView.swift
 //  Parkaroo
 //
-//  Created by Bernie Cartin on 5/22/21.
+//  Created by max rome on 5/22/21.
 //
 
 import SwiftUI

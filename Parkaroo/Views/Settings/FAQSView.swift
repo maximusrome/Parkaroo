@@ -34,7 +34,7 @@ struct FAQSView: View {
                     Text("What if the seller leaves the spot before I get there and the spot is gone?")
                         .bold()
                         .font(.title3)
-                    Text("There is a button to completely refund your credit. You will be able to rate the seller. In this instance, we recommend giving the seller a low rating, so others in the future will know that he/she is less reliable than other high rated sellers.\n")
+                    Text("There is a button to refund your credit. You will be able to rate the seller. In this instance, we recommend giving the seller a low rating, so others in the future will know that he/she is less reliable than other high rated sellers.\n")
                 }
             }
         }.padding(.horizontal)

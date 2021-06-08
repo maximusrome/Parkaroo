@@ -129,14 +129,14 @@ struct GetRequestView: View {
             iapManager.purchaseProduct(product: product)
         }
         //UNCOMMENT TO TEST ON SIMULATOR
-        //        userInfo.addCredits(numberOfCredits: -1) { result in
-        //            switch result {
-        //            case .success(_):
-        //                self.completeTransaction()
-        //            case .failure(_):
-        //                print("Error updating credits")
-        //            }
-        //        }
+//                userInfo.addCredits(numberOfCredits: -1) { result in
+//                    switch result {
+//                    case .success(_):
+//                        self.completeTransaction()
+//                    case .failure(_):
+//                        print("Error updating credits")
+//                    }
+//                }
     }
     private func completeTransaction() {
         self.gGRequestConfirm.showGetRequestView = false
