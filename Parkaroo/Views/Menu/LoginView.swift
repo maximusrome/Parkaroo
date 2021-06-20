@@ -89,7 +89,7 @@ struct LoginView: View {
                 }
             }.font(.body)
             .padding()
-            VStack(alignment: .center) {
+            VStack {
                 Button(action: {
                     FBAuth.authenticate(withEmail: self.user.email, password: self.user.password) { (result) in
                         switch result {

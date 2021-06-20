@@ -17,13 +17,16 @@ struct GiveView: View {
         ZStack {
             MapGiveView(annotations: locationTransfer.locations)
                 .edgesIgnoringSafeArea(.all)
-            if locationTransfer.givingPin == nil && !self.gGRequestConfirm.showBuyerRatingView {
+                .disabled(self.gGRequestConfirm.showGiveRequestView)
+            if self.locationTransfer.givingPin == nil && !self.gGRequestConfirm.showBuyerRatingView && !self.gGRequestConfirm.showGiveRequestView {
                 Button(action: {
                     self.gGRequestConfirm.showGiveRequestView = false
+                    self.locationTransfer.minute = ""
                     if self.userInfo.isUserAuthenticated == .signedIn {
                         self.gGRequestConfirm.showGiveRequestView = true
+                        self.locationTransfer.addRefencePin()
                     } else {
-                        self.showingMakeAvaliableSetupAlert.toggle()
+                        self.showingMakeAvaliableSetupAlert = true
                     }
                 }) {
                     Image(systemName: "mappin.and.ellipse")

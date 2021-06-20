@@ -67,7 +67,7 @@ struct GiveConfirmView: View {
                         self.locationTransfer.givingPin = nil
                         self.locationTransfer.locations.removeAll()
                     }) {
-                        Text("\(locationTransfer.givingPin?.ratingSubmitted ?? false ? "Complete Transfer" : "Waiting on Buyer")")
+                        Text("\(locationTransfer.givingPin?.ratingSubmitted ?? false ? "Complete Transfer" : "Awaiting Car Arrival")")
                             .bold()
                             .padding(10)
                             .background(locationTransfer.givingPin?.ratingSubmitted ?? false ? Color("orange1") : Color(white: 0.7))
@@ -98,7 +98,16 @@ struct GiveConfirmView: View {
                         .cornerRadius(50)
                         .padding()
                         .padding(.bottom, 10)
-                }
+                }.alert(isPresented: $showCancelAlert, content: {
+                    Alert(title: Text("Are you sure?"), message: Text("If someone has reserved your spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
+                        locationTransfer.deletePin()
+                        locationTransfer.minute = ""
+                        self.gGRequestConfirm.showGiveConfirmView = false
+                        if let buyer = locationTransfer.buyer {
+                            NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled their spot")
+                        }
+                    }))
+                })
             }
         }.frame(width: 300, height: 300)
         .background(Color("white1"))
@@ -107,16 +116,6 @@ struct GiveConfirmView: View {
         .shadow(radius: 5)
         .padding(.bottom)
         .padding(.horizontal, 50)
-        .alert(isPresented: $showCancelAlert, content: {
-            Alert(title: Text("Are you sure?"), message: Text("If someone has reserved your spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
-                locationTransfer.deletePin()
-                locationTransfer.minute = ""
-                self.gGRequestConfirm.showGiveConfirmView = false
-                if let buyer = locationTransfer.buyer {
-                    NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled their spot")
-                }
-            }))
-        })
     }
 }
 struct GiveConfirmView_Previews: PreviewProvider {

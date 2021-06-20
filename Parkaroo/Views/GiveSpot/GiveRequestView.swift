@@ -58,6 +58,7 @@ struct GiveRequestView: View {
                         UIApplication.shared.endEditing()
                         self.gGRequestConfirm.showGiveRequestView = false
                         self.locationTransfer.minute = ""
+                        self.locationTransfer.locations.removeAll()
                     }){
                         Text("close")
                             .padding(.vertical, 10)
@@ -66,6 +67,7 @@ struct GiveRequestView: View {
                     Button(action: {
                         if abc() {
                             UIApplication.shared.endEditing()
+                            self.locationTransfer.locations.removeFirst()
                             self.locationTransfer.createPin()
                             self.showingMinuteAlert = false
                             self.gGRequestConfirm.showGiveRequestView = false

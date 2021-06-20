@@ -44,6 +44,7 @@ struct RateSellerView: View {
         .padding(.horizontal, 50)
         .alert(isPresented: $showAlertMessage, content: {
             Alert(title: Text("Rating Submitted"), message: Text("Thanks for using Parkaroo."), dismissButton: .default(Text("Done"), action: {
+                self.showAlertMessage = false
                 AppReviewRequest.requestreviewIfNeeded()
             }))
         })
@@ -66,12 +67,7 @@ struct RateSellerView: View {
         }
     }
     private func cleanUp() {
-        locationTransfer.buyer = nil
-        locationTransfer.seller = nil
-        locationTransfer.givingPin = nil
-        locationTransfer.gettingPin = nil
-        locationTransfer.minute = ""
-        locationTransfer.cleanUpGettingPin()
+        self.locationTransfer.cleanUpGettingPin()
         self.rating = 0
     }
 }

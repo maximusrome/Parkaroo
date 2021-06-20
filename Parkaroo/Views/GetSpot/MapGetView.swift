@@ -10,7 +10,6 @@ import SwiftUI
 struct MapGetView: UIViewRepresentable {
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
-    @Binding var gettingPinAnnotation: CustomMKPointAnnotation?
     var annotations1: [CustomMKPointAnnotation]
     let mapView = MKMapView()
     func makeUIView(context: Context) -> MKMapView {
@@ -22,7 +21,7 @@ struct MapGetView: UIViewRepresentable {
     }
     func updateUIView(_ view: MKMapView, context: Context) {
         var extra = 1
-        if let annotation = gettingPinAnnotation {
+        if let annotation = locationTransfer.gettingAnnotation {
             extra = 2
             if view.view(for: annotation) == nil {
                 view.addAnnotation(annotation)

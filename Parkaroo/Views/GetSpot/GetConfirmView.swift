@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct GetConfirmView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
@@ -13,12 +14,9 @@ struct GetConfirmView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var rating = 5
     @State private var showingRefundAlert = false
-    @Binding var gettingPinAnnotation: CustomMKPointAnnotation?
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var depart = Int()
     var body: some View {
-        VStack {
-            Spacer()
             VStack {
                 Text("Spot Reserved")
                     .bold()
@@ -65,7 +63,7 @@ struct GetConfirmView: View {
                         self.gGRequestConfirm.showGetRequestView = false
                         self.gGRequestConfirm.showGetConfirmView = false
                         self.gGRequestConfirm.showSellerRatingView = true
-                        self.gettingPinAnnotation = nil
+                        self.locationTransfer.gettingAnnotation = nil
                     }) {
                         Text("Complete Transfer")
                             .bold()
@@ -73,8 +71,16 @@ struct GetConfirmView: View {
                             .background(Color("orange1"))
                             .cornerRadius(50)
                     }
-                }.padding()
-                .padding(.bottom, 10)
+                }.padding(.top)
+                .padding(.horizontal)
+                HStack {
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Text("when parked in spot")
+                        .font(.footnote)
+                    Spacer()
+                }.padding(.bottom, 25)
             }.frame(width: 300, height: 300)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
@@ -82,14 +88,13 @@ struct GetConfirmView: View {
             .shadow(radius: 5)
             .padding(.bottom)
             .padding(.horizontal, 50)
-        }
     }
     private func requestRefund() {
         let credits = self.userInfo.user.credits + 1
         FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.userInfo.user.uid) { result in
             switch result {
             case .success(_):
-                self.gettingPinAnnotation = nil
+                self.locationTransfer.gettingAnnotation = nil
                 if let seller = locationTransfer.seller {
                     NotificationsService.shared.sendNotification(uid: seller.uid, message: "The buyer has canceled their reservation.")
                 }
@@ -104,12 +109,19 @@ struct GetConfirmView: View {
     }
 }
 struct GetConfirmView_Previews: PreviewProvider {
-    @State static var annotation: CustomMKPointAnnotation? = CustomMKPointAnnotation()
     static var previews: some View {
-        GetConfirmView(gettingPinAnnotation: $annotation)
+        GetConfirmView()
             .environmentObject(LocationTransfer())
             .environmentObject(GGRequestConfirm())
             .environmentObject(UserInfo())
             .previewLayout(.sizeThatFits)
     }
 }
+//                Text("")
+//                    .alert(isPresented: $showingTwoReservedAlert) {
+//                        Alert(title: Text("Error"), message: Text("Another person reserved this spot a little bit before you. Your credit was refunded."), dismissButton: .default(Text("Okay")))
+//                    }
+//            }.onAppear() {
+//                if self.locationTransfer.buyer?.uid != nil && Auth.auth().currentUser?.uid != self.locationTransfer.buyer?.uid {
+//                    self.showingTwoReservedAlert = true
+//                }

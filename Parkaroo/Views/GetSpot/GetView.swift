@@ -13,20 +13,19 @@ struct GetView: View {
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @EnvironmentObject var userInfo: UserInfo
     @EnvironmentObject var iapManager: IAPManager
-    @State var gettingAnnotation: CustomMKPointAnnotation?
     var body: some View {
         ZStack {
-            MapGetView(gettingPinAnnotation: $gettingAnnotation, annotations1: locationTransfer.locations1)
+            MapGetView(annotations1: locationTransfer.locations1)
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 Spacer()
-                GetRequestView(gettingPinAnnotation: $gettingAnnotation)
+                GetRequestView()
                     .offset(y: self.gGRequestConfirm.showGetRequestView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
-                GetConfirmView(gettingPinAnnotation: $gettingAnnotation)
+                GetConfirmView()
                     .offset(y: self.gGRequestConfirm.showGetConfirmView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
@@ -52,7 +51,7 @@ struct GetView: View {
             if locationTransfer.showSellerCanceledView {
                 self.gGRequestConfirm.showGetRequestView = false
                 self.gGRequestConfirm.showGetConfirmView = false
-                self.gettingAnnotation = nil
+                self.locationTransfer.gettingAnnotation = nil
                 self.userInfo.AddOneCredit()
             }
         })

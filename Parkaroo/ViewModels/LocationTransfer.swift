@@ -26,6 +26,7 @@ class LocationTransfer: ObservableObject {
     @Published var seller: FBUser?
     @Published var ratingSubmitted = false
     @Published var showSellerCanceledView = false
+    @Published var gettingAnnotation: CustomMKPointAnnotation?
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     var publisher: AnyPublisher<Void, Never>! = nil
@@ -100,8 +101,6 @@ class LocationTransfer: ObservableObject {
         let userID = Auth.auth().currentUser!.uid
         db.collection("pins").document(userID).delete()
         self.givingPin = nil
-        self.seller = nil
-        self.buyer = nil
         self.locations.removeAll()
     }
     func createCredit() {
@@ -264,7 +263,6 @@ class LocationTransfer: ObservableObject {
             listener.remove()
         }
         self.gettingPin = nil
-        self.seller = nil
         self.showSellerCanceledView = false
     }
     func fullCleanUp(completion: @escaping () -> Void) {
@@ -284,9 +282,12 @@ class LocationTransfer: ObservableObject {
         self.showSellerCanceledView = false
         self.givingPin = nil
         self.buyer = nil
-        self.locations.removeAll()
-        self.locations1.removeAll()
         completion()
+    }
+    func addRefencePin() {
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = self.centerCoordinate
+        self.locations.append(annotation)
     }
 }
 class CustomMKPointAnnotation: MKPointAnnotation {

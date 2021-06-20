@@ -11,6 +11,7 @@ import Firebase
 struct ContentView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var userInfo: UserInfo
+    @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @ObservedObject var monitor = NetworkMonitor()
     @State private var showMenu = false
     @State private var showNotifications = false

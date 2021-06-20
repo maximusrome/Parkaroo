@@ -7,6 +7,7 @@
 
 import Foundation
 import Firebase
+import SwiftUI
 
 struct FBAuth {
     static func createUser(withEmail email:String,
@@ -29,7 +30,11 @@ struct FBAuth {
             data[C_BADGECOUNT] = 0
             data[C_BASICNOTIFICATIONS] = true
             data[C_ADVANCEDNOTIFICATIONS] = false
-            data[C_CREDITS] = 1
+            if authResult!.user.email!.contains("tester101") {
+                data[C_CREDITS] = 25
+            } else {
+                data[C_CREDITS] = 1
+            }
             FBFirestore.mergeFBUser(data, uid: authResult!.user.uid) { (result) in
                 completionHandler(result)
             }

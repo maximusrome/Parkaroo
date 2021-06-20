@@ -14,12 +14,10 @@ struct GetRequestView: View {
     @EnvironmentObject var userInfo: UserInfo
     @EnvironmentObject var iapManager: IAPManager
     @State var rating = 5
-    @State private var showingGoodToGoAlert = false
     @State private var showingReserveSetupAlert = false
     @State private var showingNotEnoughCreditsAlert = false
     @State private var showPurchaseConfirmation = false
     @State private var showActivityIndicator = false
-    @Binding var gettingPinAnnotation: CustomMKPointAnnotation?
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var depart = Int()
     var body: some View {
@@ -45,14 +43,14 @@ struct GetRequestView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        self.gGRequestConfirm.showGetRequestView.toggle()
+                        self.gGRequestConfirm.showGetRequestView = false
                     }) {
                         Text("close")
                             .padding(.vertical, 10)
                             .padding(.horizontal)
                     }
                     Button(action: {
-                        reserveBegin()
+                        reserveSpot()
                     }) {
                         Text("Reserve Spot")
                             .bold()
@@ -62,18 +60,19 @@ struct GetRequestView: View {
                     }.alert(isPresented: $showingReserveSetupAlert) {
                         Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                     }
-                    Text("")
-                        .alert(isPresented: $showingNotEnoughCreditsAlert) {
-                            Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. You can give up your spot to earn a credit or purchase them in the credits page under the menu."), dismissButton: .default(Text("Okay")))
-                        }
-                    Text("")
-                        .alert(isPresented: $showingGoodToGoAlert) {
-                            Alert(title: Text("Reserve"), message: Text("Reserving a spot will cost one credit and a $0.99 service fee."), primaryButton: Alert.Button.default(Text("Close")), secondaryButton: Alert.Button.default(Text("Continue"), action: {
-                                reserveSpot()
-                            }))
-                        }
-                }.padding()
-                .padding(.bottom, 10)
+                }.padding(.top)
+                .padding(.horizontal)
+                HStack {
+                Spacer()
+                Spacer()
+                Spacer()
+                Text("1 credit + $0.99 service fee")
+                    .font(.footnote)
+                    .alert(isPresented: $showingNotEnoughCreditsAlert) {
+                        Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. You can give up your spot to earn a credit or purchase them in the credits page under the menu."), dismissButton: .default(Text("Okay")))
+                    }
+                Spacer()
+                }.padding(.bottom, 25)
             }.frame(width: 300, height: 200)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
@@ -111,32 +110,43 @@ struct GetRequestView: View {
             }
         })
     }
-    private func reserveBegin() {
+    private func reserveSpot() {
+        //UNCOMMENT TO TEST ON SIMULATOR
+        //        userInfo.addCredits(numberOfCredits: -1) { result in
+        //            switch result {
+        //            case .success(_):
+        //                self.completeTransaction()
+        //            case .failure(_):
+        //                print("Error updating credits")
+        //            }
+        //        }
+        //UNCOMMENT TO RUN PRODUCTION VERSION
         if self.userInfo.isUserAuthenticated == .signedIn {
             if self.userInfo.user.credits > 0 {
-                self.showingGoodToGoAlert = true
+                if self.userInfo.user.email.contains("tester101") {
+                    userInfo.addCredits(numberOfCredits: -1) { result in
+                        switch result {
+                        case .success(_):
+                            self.completeTransaction()
+                            print("Credit subtracted")
+                        case .failure(_):
+                            print("Error updating credits")
+                        }
+                    }
+                    print("This is a tester")
+                } else {
+                    if let product = iapManager.transactionProduct {
+                        iapManager.currentPurchasingProduct = product
+                        iapManager.purchaseProduct(product: product)
+                    }
+                    print("This is NOT a tester")
+                }
             } else {
                 self.showingNotEnoughCreditsAlert = true
             }
         } else {
             self.showingReserveSetupAlert = true
         }
-    }
-    private func reserveSpot() {
-        // UNCOMMENT TO RUN PRODUCTION VERSION
-        if let product = iapManager.transactionProduct {
-            iapManager.currentPurchasingProduct = product
-            iapManager.purchaseProduct(product: product)
-        }
-        //UNCOMMENT TO TEST ON SIMULATOR
-//                userInfo.addCredits(numberOfCredits: -1) { result in
-//                    switch result {
-//                    case .success(_):
-//                        self.completeTransaction()
-//                    case .failure(_):
-//                        print("Error updating credits")
-//                    }
-//                }
     }
     private func completeTransaction() {
         self.gGRequestConfirm.showGetRequestView = false
@@ -155,14 +165,13 @@ struct GetRequestView: View {
             annotation.coordinate = location
             annotation.id = locationTransfer.gettingPin?.id
             annotation.type = .reserved
-            self.gettingPinAnnotation = annotation
+            self.locationTransfer.gettingAnnotation = annotation
         }
     }
 }
 struct GetRequestView_Previews: PreviewProvider {
-    @State static var annotation: CustomMKPointAnnotation? = CustomMKPointAnnotation()
     static var previews: some View {
-        GetRequestView(gettingPinAnnotation: $annotation)
+        GetRequestView()
             .previewLayout(.sizeThatFits)
             .environmentObject(GGRequestConfirm())
             .environmentObject(LocationTransfer())

@@ -75,13 +75,8 @@ struct RateBuyerView: View {
         }
     }
     private func cleanUp() {
-        locationTransfer.deletePin()
-        locationTransfer.buyer = nil
-        locationTransfer.seller = nil
-        locationTransfer.givingPin = nil
-        locationTransfer.gettingPin = nil
-        locationTransfer.minute = ""
-        locationTransfer.givingPinListener?.remove()
+        self.locationTransfer.deletePin()
+        self.locationTransfer.givingPinListener?.remove()
         self.rating = 0
     }
 }

@@ -23,6 +23,7 @@ struct SellerCanceledView: View {
                 Button(action: {
                     self.locationTransfer.gettingPin = nil
                     self.locationTransfer.showSellerCanceledView = false
+                    self.gGRequestConfirm.showSellerRatingView = false
                 }) {
                     Text("close")
                         .padding(.vertical, 10)
