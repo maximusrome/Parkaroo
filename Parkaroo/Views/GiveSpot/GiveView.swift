@@ -22,6 +22,7 @@ struct GiveView: View {
                 Button(action: {
                     self.gGRequestConfirm.showGiveRequestView = false
                     self.locationTransfer.minute = ""
+                    self.locationTransfer.giveStreetInfoSelection = "Edit"
                     if self.userInfo.isUserAuthenticated == .signedIn {
                         self.gGRequestConfirm.showGiveRequestView = true
                         self.locationTransfer.addRefencePin()

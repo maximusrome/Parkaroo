@@ -17,7 +17,7 @@ struct RateSellerView: View {
             Text("Rate Seller")
                 .bold()
                 .font(.title)
-                .padding()
+                .padding(.top, 25)
             Spacer()
             RatingView(rating: $rating)
             Spacer()
@@ -32,10 +32,9 @@ struct RateSellerView: View {
                     .padding(10)
                     .background(rating > 0 ? Color("orange1") : Color(white: 0.7))
                     .cornerRadius(50)
-                    .padding()
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 25)
             }.disabled(rating <= 0)
-        }.frame(width: 300, height: 200, alignment: .center)
+        }.frame(width: 300, height: 200)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
         .cornerRadius(30)
@@ -44,7 +43,6 @@ struct RateSellerView: View {
         .padding(.horizontal, 50)
         .alert(isPresented: $showAlertMessage, content: {
             Alert(title: Text("Rating Submitted"), message: Text("Thanks for using Parkaroo."), dismissButton: .default(Text("Done"), action: {
-                self.showAlertMessage = false
                 AppReviewRequest.requestreviewIfNeeded()
             }))
         })
@@ -69,6 +67,9 @@ struct RateSellerView: View {
     private func cleanUp() {
         self.locationTransfer.cleanUpGettingPin()
         self.rating = 0
+        if !self.gGRequestConfirm.showGetRequestView && !self.gGRequestConfirm.showGetConfirmView && !self.gGRequestConfirm.showGiveRequestView && !self.gGRequestConfirm.showGetConfirmView {
+            self.locationTransfer.minute = ""
+        }
     }
 }
 struct RateSellerView_Previews: PreviewProvider {

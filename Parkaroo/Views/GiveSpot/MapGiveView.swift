@@ -60,8 +60,6 @@ struct MapGiveView: UIViewRepresentable {
             }
             else {return nil}
         }
-        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        }
         fileprivate func centerMapOnCoordinate(coordinate: CLLocationCoordinate2D) {
             let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
             parent.mapView.setRegion(viewRegion, animated: true)

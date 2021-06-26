@@ -43,20 +43,21 @@ struct ContentView: View {
                         }
                 }
                 GeometryReader { geometry in
-                    if !showMenu {
+                    if !self.showMenu {
                         MenuView()
                             .frame(width: geometry.size.width/2)
                             .transition(.slide)
                             .offset(x: geometry.size.width, y: 0)
                     }
-                    if showMenu {
+                    if self.showMenu {
                         MenuView()
                             .frame(width: geometry.size.width/2)
                             .transition(.move(edge: .trailing))
                             .offset(x: geometry.size.width/2, y: 0)
+                            .gesture(drag)
                     }
                 }
-                if showOnBoarding {
+                if self.showOnBoarding {
                     FirstLaunchView(isPresenting: $showOnBoarding)
                         .navigationBarHidden(true)
                 }
@@ -134,7 +135,7 @@ struct ContentView: View {
                 hasOnboarded = true
             }
             self.userInfo.configureFirebaseStateDidChange()
-        }.gesture(drag)
+        }
     }
 }
 struct ContentView_Previews: PreviewProvider {

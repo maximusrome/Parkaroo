@@ -7,6 +7,7 @@
 
 import SwiftUI
 import StoreKit
+import Firebase
 
 struct GetRequestView: View {
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
@@ -14,6 +15,7 @@ struct GetRequestView: View {
     @EnvironmentObject var userInfo: UserInfo
     @EnvironmentObject var iapManager: IAPManager
     @State var rating = 5
+    @State private var showingSameUserReserveAlert = false
     @State private var showingReserveSetupAlert = false
     @State private var showingNotEnoughCreditsAlert = false
     @State private var showPurchaseConfirmation = false
@@ -22,47 +24,53 @@ struct GetRequestView: View {
     @State var depart = Int()
     var body: some View {
         VStack {
-            VStack {
-                Text("Departing in: \(depart >= 0 ? String(depart) + " minutes" : "")")
-                    .bold()
-                    .padding()
-                    .padding(.top, 10)
-                    .onReceive(timer, perform: { input in
-                        let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
-                        depart = Int(diff / 60)
-                    })
-                Spacer()
-                HStack {
+            Text("Departing in: \(String(depart)) minutes")
+                .bold()
+                .padding(.top, 25)
+                .onReceive(timer, perform: { input in
+                    let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
+                    depart = Int(diff / 60)
+                })
+            Spacer()
+            Text("Street Info: \(self.locationTransfer.getStreetInfoSelection)")
+                .bold()
+            Spacer()
+            HStack {
+                if self.locationTransfer.seller?.rating != 0 {
                     Text("Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? 0))")
                         .bold()
-                    Image(systemName: "star.fill")
-                        .foregroundColor(Color("orange1"))
-                    Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
-                        .font(.footnote)
+                } else {
+                    Text("Rating: N/A")
+                        .bold()
                 }
-                Spacer()
-                HStack {
-                    Button(action: {
-                        self.gGRequestConfirm.showGetRequestView = false
-                    }) {
-                        Text("close")
-                            .padding(.vertical, 10)
-                            .padding(.horizontal)
-                    }
-                    Button(action: {
-                        reserveSpot()
-                    }) {
-                        Text("Reserve Spot")
-                            .bold()
-                            .padding(10)
-                            .background(Color("orange1"))
-                            .cornerRadius(50)
-                    }.alert(isPresented: $showingReserveSetupAlert) {
-                        Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
-                    }
-                }.padding(.top)
-                .padding(.horizontal)
-                HStack {
+                Image(systemName: "star.fill")
+                    .foregroundColor(Color("orange1"))
+                Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
+                    .font(.footnote)
+            }
+            Spacer()
+            HStack {
+                Button(action: {
+                    self.gGRequestConfirm.showGetRequestView = false
+                }) {
+                    Text("close")
+                        .padding(10)
+                }.alert(isPresented: $showingSameUserReserveAlert) {
+                    Alert(title: Text("You Can't Reserve Your Own Spot"), message: Text(""), dismissButton: .default(Text("Okay")))
+                }
+                Button(action: {
+                    reserveSpot()
+                }) {
+                    Text("Reserve Spot")
+                        .bold()
+                        .padding(10)
+                        .background(Color("orange1"))
+                        .cornerRadius(50)
+                }.alert(isPresented: $showingReserveSetupAlert) {
+                    Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
+                }
+            }
+            HStack {
                 Spacer()
                 Spacer()
                 Spacer()
@@ -72,15 +80,15 @@ struct GetRequestView: View {
                         Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. You can give up your spot to earn a credit or purchase them in the credits page under the menu."), dismissButton: .default(Text("Okay")))
                     }
                 Spacer()
-                }.padding(.bottom, 25)
-            }.frame(width: 300, height: 200)
-            .background(Color("white1"))
-            .foregroundColor(Color("black1"))
-            .cornerRadius(30)
-            .shadow(radius: 5)
-            .padding(.bottom)
-            .padding(.horizontal, 50)
-        }
+            }.padding(.top, 5)
+            .padding(.bottom, 25)
+        }.frame(width: 300, height: 280)
+        .background(Color("white1"))
+        .foregroundColor(Color("black1"))
+        .cornerRadius(30)
+        .shadow(radius: 5)
+        .padding(.bottom)
+        .padding(.horizontal, 50)
         .onChange(of: iapManager.transactionState, perform: { value in
             if iapManager.currentPurchasingProduct?.productIdentifier == "parking.spot" {
                 switch iapManager.transactionState {
@@ -122,27 +130,33 @@ struct GetRequestView: View {
         //        }
         //UNCOMMENT TO RUN PRODUCTION VERSION
         if self.userInfo.isUserAuthenticated == .signedIn {
-            if self.userInfo.user.credits > 0 {
-                if self.userInfo.user.email.contains("tester101") {
-                    userInfo.addCredits(numberOfCredits: -1) { result in
-                        switch result {
-                        case .success(_):
-                            self.completeTransaction()
-                            print("Credit subtracted")
-                        case .failure(_):
-                            print("Error updating credits")
+            if self.locationTransfer.pins.firstIndex(where: { pin in
+                return pin.id != Auth.auth().currentUser?.uid
+            }) != nil {
+                if self.userInfo.user.credits > 0 {
+                    if self.userInfo.user.email.contains("tester101") {
+                        userInfo.addCredits(numberOfCredits: -1) { result in
+                            switch result {
+                            case .success(_):
+                                self.completeTransaction()
+                                print("Credit subtracted")
+                            case .failure(_):
+                                print("Error updating credits")
+                            }
                         }
+                        print("This is a tester")
+                    } else {
+                        if let product = iapManager.transactionProduct {
+                            iapManager.currentPurchasingProduct = product
+                            iapManager.purchaseProduct(product: product)
+                        }
+                        print("This is NOT a tester")
                     }
-                    print("This is a tester")
                 } else {
-                    if let product = iapManager.transactionProduct {
-                        iapManager.currentPurchasingProduct = product
-                        iapManager.purchaseProduct(product: product)
-                    }
-                    print("This is NOT a tester")
+                    self.showingNotEnoughCreditsAlert = true
                 }
             } else {
-                self.showingNotEnoughCreditsAlert = true
+                self.showingSameUserReserveAlert = true
             }
         } else {
             self.showingReserveSetupAlert = true

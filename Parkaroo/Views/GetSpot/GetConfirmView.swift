@@ -21,17 +21,22 @@ struct GetConfirmView: View {
                 Text("Spot Reserved")
                     .bold()
                     .font(.title)
-                    .padding()
+                    .padding(.top, 25)
+                Spacer()
                 Text("Departing in: \(depart >= 0 ? String(depart) : "0") minutes")
                     .bold()
-                    .padding(.bottom, 10)
                     .onReceive(timer, perform: { input in
                         let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
                         depart = Int(diff / 60)
                     })
+                Spacer()
+                Text("Street Info: \(self.locationTransfer.getStreetInfoSelection)")
+                    .bold()
+                Spacer()
                 VStack {
                     Text("Seller: \(self.locationTransfer.seller?.vehicle ?? "")")
-                        .padding(.bottom, 10)
+                        .padding(.bottom)
+                        .autocapitalization(.words)
                     HStack {
                         Text("Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? 0))")
                         Image(systemName: "star.fill")
@@ -50,8 +55,7 @@ struct GetConfirmView: View {
                         self.showingRefundAlert = true
                     }) {
                         Text("cancel")
-                            .padding(.vertical, 10)
-                            .padding(.horizontal)
+                            .padding(10)
                     }.alert(isPresented: $showingRefundAlert) {
                         Alert(title: Text("Are you sure?"), message: Text("By canceling this spot your credit will be refunded but in order to refund your $0.99 service fee you must contact Apple."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                             requestRefund()
@@ -71,8 +75,7 @@ struct GetConfirmView: View {
                             .background(Color("orange1"))
                             .cornerRadius(50)
                     }
-                }.padding(.top)
-                .padding(.horizontal)
+                }
                 HStack {
                     Spacer()
                     Spacer()
@@ -80,8 +83,9 @@ struct GetConfirmView: View {
                     Text("when parked in spot")
                         .font(.footnote)
                     Spacer()
-                }.padding(.bottom, 25)
-            }.frame(width: 300, height: 300)
+                }.padding(.top, 5)
+                .padding(.bottom, 25)
+            }.frame(width: 300, height: 380)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
             .cornerRadius(30)
@@ -110,11 +114,13 @@ struct GetConfirmView: View {
 }
 struct GetConfirmView_Previews: PreviewProvider {
     static var previews: some View {
-        GetConfirmView()
-            .environmentObject(LocationTransfer())
-            .environmentObject(GGRequestConfirm())
-            .environmentObject(UserInfo())
-            .previewLayout(.sizeThatFits)
+        Group {
+            GetConfirmView()
+                .environmentObject(LocationTransfer())
+                .environmentObject(GGRequestConfirm())
+                .environmentObject(UserInfo())
+                .previewLayout(.sizeThatFits)
+        }
     }
 }
 //                Text("")

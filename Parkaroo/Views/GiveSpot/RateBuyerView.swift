@@ -18,8 +18,10 @@ struct RateBuyerView: View {
             Text("Rate Buyer")
                 .bold()
                 .font(.title)
-                .padding()
+                .padding(.top, 25)
+            Spacer()
             RatingView(rating: $rating)
+            Spacer()
             Button(action: {
                 self.gGRequestConfirm.showBuyerRatingView = false
                 updateRating()
@@ -31,10 +33,9 @@ struct RateBuyerView: View {
                     .padding(10)
                     .background(rating > 0 ? Color("orange1") : Color(white: 0.7))
                     .cornerRadius(50)
-                    .padding()
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 25)
             }.disabled(rating <= 0)
-        }.frame(width: 300, height: 200, alignment: .center)
+        }.frame(width: 300, height: 200)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
         .cornerRadius(30)
@@ -78,6 +79,9 @@ struct RateBuyerView: View {
         self.locationTransfer.deletePin()
         self.locationTransfer.givingPinListener?.remove()
         self.rating = 0
+        if !self.gGRequestConfirm.showGetRequestView && !self.gGRequestConfirm.showGetConfirmView && !self.gGRequestConfirm.showGiveRequestView && !self.gGRequestConfirm.showGetConfirmView {
+            self.locationTransfer.minute = ""
+        }
     }
 }
 struct RateBuyerView_Previews: PreviewProvider {

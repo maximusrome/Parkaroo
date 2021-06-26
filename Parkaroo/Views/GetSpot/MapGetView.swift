@@ -80,6 +80,7 @@ struct MapGetView: UIViewRepresentable {
             if !self.parent.gGRequestConfirm.showGetConfirmView && !self.parent.gGRequestConfirm.showSellerRatingView && !self.parent.gGRequestConfirm.showBuyerRatingView && !self.parent.locationTransfer.showSellerCanceledView {
                 if let annotation = view.annotation as? CustomMKPointAnnotation {
                     self.parent.locationTransfer.readPin(id: annotation.id)
+                    self.parent.locationTransfer.readStreetInfo(id: annotation.id)
                     self.parent.gGRequestConfirm.showGetRequestView = true
                 }
             }

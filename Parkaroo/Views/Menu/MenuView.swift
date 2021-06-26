@@ -14,14 +14,19 @@ struct MenuView: View {
     @EnvironmentObject var userInfo : UserInfo
     @State private var logOutClicked = false
     var body: some View {
-        VStack(alignment: .leading, spacing: 60) {
+        VStack(alignment: .leading) {
+            Group {
+                Spacer()
+                Spacer()
+            }
             NavigationLink(destination: CreditsView()) {
                 HStack {
                     Image(systemName: "dollarsign.circle")
                         .imageScale(.large)
                     Text("Credits")
-                }.padding(.top, 125)
+                }
             }
+            Spacer()
             NavigationLink(destination: TutorialView()) {
                 HStack {
                     Image(systemName: "book")
@@ -29,6 +34,7 @@ struct MenuView: View {
                     Text("Tutorial")
                 }
             }
+            Spacer()
             NavigationLink(destination: SettingsView()) {
                 HStack {
                     Image(systemName: "gear")
@@ -36,6 +42,7 @@ struct MenuView: View {
                     Text("Settings")
                 }
             }
+            Spacer()
             if Auth.auth().currentUser?.uid != nil {
                 Button(action: {
                     self.logOutClicked.toggle()
@@ -46,14 +53,16 @@ struct MenuView: View {
                         Text("Log Out")
                     }.alert(isPresented: $logOutClicked) {
                         Alert(title: Text("Are you sure?"), message: Text("If you are currently giving or getting a spot, the spot will automatically be canceled by logging out."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
-                                                                                                                                                                                                                                                                                self.locationTransfer.fullCleanUp {
-                                                                                                                                                                                                                                                                                    FBAuth.logOut { (_) in }
-                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                self.userInfo.user.credits = 0
-                                                                                                                                                                                                                                                                                self.gGRequestConfirm.showGiveRequestView = false
-                                                                                                                                                                                                                                                                                self.gGRequestConfirm.showGiveConfirmView = false
-                                                                                                                                                                                                                                                                                self.gGRequestConfirm.showGetRequestView = false
-                                                                                                                                                                                                                                                                                self.gGRequestConfirm.showGetConfirmView = false                        }))
+                            self.locationTransfer.fullCleanUp {
+                                FBAuth.logOut { (_) in }
+                            }
+                            self.userInfo.user.credits = 0
+                            self.gGRequestConfirm.showGiveRequestView = false
+                            self.gGRequestConfirm.showGiveConfirmView = false
+                            self.gGRequestConfirm.showGetRequestView = false
+                            self.gGRequestConfirm.showGetConfirmView = false
+                            UIApplication.shared.endEditing()
+                        }))
                     }
                 }
             } else {
@@ -64,6 +73,7 @@ struct MenuView: View {
                         Text("Sign Up")
                     }
                 }
+                Spacer()
                 NavigationLink(destination: LoginView()) {
                     HStack {
                         Image(systemName: "person")
@@ -72,7 +82,14 @@ struct MenuView: View {
                     }
                 }
             }
-            Spacer()
+            Group {
+                Spacer()
+                Spacer()
+                Spacer()
+                Spacer()
+                Spacer()
+                Spacer()
+            }
         }.font(.headline)
         .padding(.leading, 30)
         .foregroundColor(Color("black1"))

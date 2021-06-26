@@ -27,6 +27,8 @@ class LocationTransfer: ObservableObject {
     @Published var ratingSubmitted = false
     @Published var showSellerCanceledView = false
     @Published var gettingAnnotation: CustomMKPointAnnotation?
+    @Published var giveStreetInfoSelection: String = "Edit"
+    @Published var getStreetInfoSelection: String = "Edit"
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     var publisher: AnyPublisher<Void, Never>! = nil
@@ -45,6 +47,7 @@ class LocationTransfer: ObservableObject {
             data[C_DEPARTURE] = departureTimeStamp
             data[C_SELLER] = userID
             data[C_RATINGSUBMITTED] = false
+            data[C_STREETINFORMATION] = self.giveStreetInfoSelection
             db.collection(C_PINS).document(userID).setData(data)
             self.givingPin = Pin(data: data)
             self.fetchGivingPin()
@@ -153,18 +156,18 @@ class LocationTransfer: ObservableObject {
             }
         }
     }
-    func readVehicle(uid: String) {
+    func readStreetInfo(id: String) {
         let db = Firestore.firestore()
-        db.collection("users").document(uid).getDocument { (document, error) in
+        db.collection(C_PINS).document(id).getDocument { (document, error) in
             if error != nil {
                 print("There was an error")
             } else {
                 if document != nil && document!.exists {
                     let documentData = document!.data()
-                    self.vehicle = documentData?["vehicle"] as! String
-                    print("Vehicle read")
+                    self.getStreetInfoSelection = documentData?["street_information"] as! String
+                    print("street information read")
                 } else {
-                    print("vehicle doc doesn't exist or equals nil")
+                    print("street information doc doesn't exist or equals nil")
                 }
             }
         }
@@ -181,11 +184,6 @@ class LocationTransfer: ObservableObject {
                 data[C_ID] = queryDocumentSnapshot.documentID
                 return Pin(data: data)
             }
-            if let index = self?.pins.firstIndex(where: { pin in
-                return pin.id == Auth.auth().currentUser?.uid
-            }) {
-                self?.pins.remove(at: index)
-            }
             self?.locations1 = documents.map { queryDocumentSnapshot in
                 let data = queryDocumentSnapshot.data()
                 let latitude = data[C_LATITUDE] as? Double ?? 0.0
@@ -195,11 +193,6 @@ class LocationTransfer: ObservableObject {
                 annotation.id = queryDocumentSnapshot.documentID
                 annotation.type = .normal
                 return annotation
-            }
-            if let index = self?.locations1.firstIndex(where: { annotation in
-                return annotation.id == Auth.auth().currentUser?.uid
-            }) {
-                self?.locations1.remove(at: index)
             }
         }
     }

@@ -15,7 +15,7 @@ struct SellerCanceledView: View {
             Text("Seller Canceled")
                 .bold()
                 .font(.title)
-                .padding()
+                .padding(.top, 25)
             Spacer()
             Text("Your credit has been refunded")
             Spacer()
@@ -26,8 +26,7 @@ struct SellerCanceledView: View {
                     self.gGRequestConfirm.showSellerRatingView = false
                 }) {
                     Text("close")
-                        .padding(.vertical, 10)
-                        .padding(.horizontal)
+                        .padding(10)
                 }
                 Button(action: {
                     self.locationTransfer.gettingPin = nil
@@ -40,8 +39,7 @@ struct SellerCanceledView: View {
                         .background(Color("orange1"))
                         .cornerRadius(50)
                 }
-            }.padding()
-            .padding(.bottom, 10)
+            }.padding(.bottom, 25)
         }.frame(width: 300, height: 200)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
