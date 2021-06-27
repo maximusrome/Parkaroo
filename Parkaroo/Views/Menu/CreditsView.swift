@@ -47,6 +47,10 @@ struct CreditsView: View {
                 }.alert(isPresented: $showSignInAlert, content: {
                     Alert(title: Text("Get Set Up"), message: Text("To buy a credit you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
                 })
+                Text("Or help your neighbor...\nGive a spot to earn a free credit")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .padding()
                 Group {
                     Spacer()
                     HStack {
