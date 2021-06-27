@@ -38,7 +38,7 @@ struct GetConfirmView: View {
                         .padding(.bottom)
                         .autocapitalization(.words)
                     HStack {
-                        Text("Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? 0))")
+                        Text("Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? "N/A"))")
                         Image(systemName: "star.fill")
                             .foregroundColor(Color("orange1"))
                         Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
@@ -57,7 +57,7 @@ struct GetConfirmView: View {
                         Text("cancel")
                             .padding(10)
                     }.alert(isPresented: $showingRefundAlert) {
-                        Alert(title: Text("Are you sure?"), message: Text("By canceling this spot your credit will be refunded but in order to refund your $0.99 service fee you must contact Apple."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
+                        Alert(title: Text("Are you sure?"), message: Text("By canceling this spot your credit will be refunded but in order to request a service token refund please contact us."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                             requestRefund()
                             self.gGRequestConfirm.showGetRequestView = false
                             self.gGRequestConfirm.showGetConfirmView = false
@@ -123,11 +123,3 @@ struct GetConfirmView_Previews: PreviewProvider {
         }
     }
 }
-//                Text("")
-//                    .alert(isPresented: $showingTwoReservedAlert) {
-//                        Alert(title: Text("Error"), message: Text("Another person reserved this spot a little bit before you. Your credit was refunded."), dismissButton: .default(Text("Okay")))
-//                    }
-//            }.onAppear() {
-//                if self.locationTransfer.buyer?.uid != nil && Auth.auth().currentUser?.uid != self.locationTransfer.buyer?.uid {
-//                    self.showingTwoReservedAlert = true
-//                }

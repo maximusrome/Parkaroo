@@ -30,7 +30,7 @@ struct GiveRequestView: View {
         }
     }
     let streetOptions: [String] = [
-        "Thursday Side", "Friday Side", "Meter Side", "N/A"
+        "N/A", "Meter Side", "Friday Side", "Thursday Side"
     ]
     var body: some View {
         VStack {
@@ -52,9 +52,9 @@ struct GiveRequestView: View {
             Picker(selection: $locationTransfer.giveStreetInfoSelection,
                    label:
                     HStack {
-                        Text("Street Info:")
+                        Text("Street Info: ")
                             .bold()
-                        Text(self.locationTransfer.giveStreetInfoSelection)
+                        Text("\(self.locationTransfer.giveStreetInfoSelection)")
                             .bold()
                             .foregroundColor(Color("orange1"))
                     }, content: {

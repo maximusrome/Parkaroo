@@ -10,7 +10,7 @@ import MapKit
 import FirebaseFirestore
 
 struct Pin: Identifiable {
-    let id: String //= UUID().uuidString
+    let id: String
     let longitude: Double
     let latitude: Double
     let status: String

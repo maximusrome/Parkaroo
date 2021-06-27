@@ -9,7 +9,7 @@ import Foundation
 
 let productIDs = [
     "parkaroo.1credit",
-    "parking.spot"
+    "parkaroo.1serviceToken"
 ]
 enum Products: String {
     case Credit1 = "parkaroo.1credit"

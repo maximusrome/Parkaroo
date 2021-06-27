@@ -20,18 +20,16 @@ struct GiveConfirmView: View {
                 .font(.title)
                 .padding(.top, 25)
             Spacer()
-            Text("Departing in: \(String(departureMinutes)) minutes")
+            Text("Departing in: \(departureMinutes >= 0 ? String(departureMinutes) : "0") minutes")
                 .bold()
                 .onReceive(timer, perform: { input in
                     let diff = Date().distance(to: self.locationTransfer.givingPin?.departure.dateValue() ?? Date())
                     departureMinutes = Int(diff / 60)
-                    if departureMinutes < 0 {
-                        if locationTransfer.buyer == nil {
-                            locationTransfer.deletePin()
-                            locationTransfer.minute = ""
-                            locationTransfer.givingPin = nil
-                            self.gGRequestConfirm.showGiveConfirmView = false
-                        }
+                    if locationTransfer.buyer == nil && departureMinutes < 0 {
+                        locationTransfer.deletePin()
+                        locationTransfer.minute = ""
+                        locationTransfer.givingPin = nil
+                        self.gGRequestConfirm.showGiveConfirmView = false
                     }
                 })
             Spacer()
@@ -63,7 +61,7 @@ struct GiveConfirmView: View {
                             Text("cancel")
                                 .padding(10)
                         }.alert(isPresented: $showingSellerCancelAlert, content: {
-                            Alert(title: Text("Are you sure?"), message: Text("If someone has reserved your spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
+                            Alert(title: Text("Are you sure?"), message: Text("Friendly reminder: If someone has reserved your spot they will be asked to rate you."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
                                 locationTransfer.deletePin()
                                 locationTransfer.minute = ""
                                 self.gGRequestConfirm.showGiveConfirmView = false
@@ -108,7 +106,7 @@ struct GiveConfirmView: View {
                         .cornerRadius(50)
                         .padding(.bottom, 25)
                 }.alert(isPresented: $showingSellerCancelAlert, content: {
-                    Alert(title: Text("Are you sure?"), message: Text("If someone has reserved your spot they will be asked to rate you in this interaction."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
+                    Alert(title: Text("Are you sure?"), message: Text("Friendly reminder: If someone has reserved your spot they will be asked to rate you."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
                         locationTransfer.deletePin()
                         locationTransfer.minute = ""
                         self.gGRequestConfirm.showGiveConfirmView = false

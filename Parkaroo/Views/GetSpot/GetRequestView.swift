@@ -18,6 +18,7 @@ struct GetRequestView: View {
     @State private var showingSameUserReserveAlert = false
     @State private var showingReserveSetupAlert = false
     @State private var showingNotEnoughCreditsAlert = false
+    @State private var showingNotEnoughServiceTokensAlert = false
     @State private var showPurchaseConfirmation = false
     @State private var showActivityIndicator = false
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -47,6 +48,8 @@ struct GetRequestView: View {
                     .foregroundColor(Color("orange1"))
                 Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
                     .font(.footnote)
+            }.alert(isPresented: $showingNotEnoughServiceTokensAlert) {
+                Alert(title: Text("Not Enough Service Tokens"), message: Text("You don't have enough service tokens. You can purchase them in the Credits page under the menu."), dismissButton: .default(Text("Okay")))
             }
             Spacer()
             HStack {
@@ -74,10 +77,10 @@ struct GetRequestView: View {
                 Spacer()
                 Spacer()
                 Spacer()
-                Text("1 credit + $0.99 service fee")
+                Text("1 credit + 1 service token")
                     .font(.footnote)
                     .alert(isPresented: $showingNotEnoughCreditsAlert) {
-                        Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. You can give up your spot to earn a credit or purchase them in the credits page under the menu."), dismissButton: .default(Text("Okay")))
+                        Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. You can give up your spot to earn a credit or purchase them in the Credits page under the menu."), dismissButton: .default(Text("Okay")))
                     }
                 Spacer()
             }.padding(.top, 5)
@@ -89,34 +92,6 @@ struct GetRequestView: View {
         .shadow(radius: 5)
         .padding(.bottom)
         .padding(.horizontal, 50)
-        .onChange(of: iapManager.transactionState, perform: { value in
-            if iapManager.currentPurchasingProduct?.productIdentifier == "parking.spot" {
-                switch iapManager.transactionState {
-                case .purchased:
-                    iapManager.showActivityIndicator = false
-                    userInfo.addCredits(numberOfCredits: -1) { result in
-                        switch result {
-                        case .success(_):
-                            iapManager.currentPurchasingProduct = nil
-                            self.completeTransaction()
-                        case .failure(_):
-                            print("Error updating credits")
-                        }
-                    }
-                case .failed:
-                    iapManager.currentPurchasingProduct = nil
-                    print("Error Purchasing")
-                    iapManager.showActivityIndicator = false
-                case .purchasing:
-                    iapManager.showActivityIndicator = true
-                    print("Purchasing...")
-                default:
-                    iapManager.currentPurchasingProduct = nil
-                    print("Other Error")
-                    iapManager.showActivityIndicator = false
-                }
-            }
-        })
     }
     private func reserveSpot() {
         //UNCOMMENT TO TEST ON SIMULATOR
@@ -131,26 +106,29 @@ struct GetRequestView: View {
         //UNCOMMENT TO RUN PRODUCTION VERSION
         if self.userInfo.isUserAuthenticated == .signedIn {
             if self.locationTransfer.pins.firstIndex(where: { pin in
-                return pin.id != Auth.auth().currentUser?.uid
+                return pin.id != Auth.auth().currentUser!.uid
             }) != nil {
                 if self.userInfo.user.credits > 0 {
-                    if self.userInfo.user.email.contains("tester101") {
+                    if self.userInfo.user.serviceTokens > 0 {
                         userInfo.addCredits(numberOfCredits: -1) { result in
                             switch result {
                             case .success(_):
-                                self.completeTransaction()
                                 print("Credit subtracted")
+                                userInfo.addServiceTokens(numberOfServiceTokens: -1) { result in
+                                    switch result {
+                                    case .success(_):
+                                        self.completeTransaction()
+                                        print("Service Token subtracted")
+                                    case .failure(_):
+                                        print("Error updating credits")
+                                    }
+                                }
                             case .failure(_):
                                 print("Error updating credits")
                             }
                         }
-                        print("This is a tester")
                     } else {
-                        if let product = iapManager.transactionProduct {
-                            iapManager.currentPurchasingProduct = product
-                            iapManager.purchaseProduct(product: product)
-                        }
-                        print("This is NOT a tester")
+                        self.showingNotEnoughServiceTokensAlert = true
                     }
                 } else {
                     self.showingNotEnoughCreditsAlert = true
@@ -173,7 +151,6 @@ struct GetRequestView: View {
         if let seller = locationTransfer.seller {
             NotificationsService.shared.sendNotification(uid: seller.uid, message: "Your spot was reserved")
         }
-        // add pin
         if let location = locationTransfer.gettingPin?.location {
             let annotation = CustomMKPointAnnotation()
             annotation.coordinate = location

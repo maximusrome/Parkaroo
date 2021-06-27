@@ -77,7 +77,7 @@ struct MapGetView: UIViewRepresentable {
             }
         }
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            if !self.parent.gGRequestConfirm.showGetConfirmView && !self.parent.gGRequestConfirm.showSellerRatingView && !self.parent.gGRequestConfirm.showBuyerRatingView && !self.parent.locationTransfer.showSellerCanceledView {
+            if !self.parent.gGRequestConfirm.showGetConfirmView && !self.parent.locationTransfer.showSellerCanceledView && !self.parent.gGRequestConfirm.showSellerRatingView {
                 if let annotation = view.annotation as? CustomMKPointAnnotation {
                     self.parent.locationTransfer.readPin(id: annotation.id)
                     self.parent.locationTransfer.readStreetInfo(id: annotation.id)

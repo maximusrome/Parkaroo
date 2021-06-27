@@ -19,6 +19,7 @@ class LocationTransfer: ObservableObject {
     @Published var minute = ""
     @Published var centerCoordinate = CLLocationCoordinate2D()
     @Published var credits = 0
+    @Published var serviceTokens = 0
     @Published var departure = Timestamp()
     @Published var givingPin: Pin?
     @Published var gettingPin: Pin?
@@ -128,6 +129,29 @@ class LocationTransfer: ObservableObject {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser!.uid
         db.collection("users").document(userID).updateData(["credits": self.credits])
+    }
+    func createServiceToken() {
+        let db = Firestore.firestore()
+        let userID = Auth.auth().currentUser!.uid
+        db.collection("users").document(userID).setData(["service_tokens": self.serviceTokens], merge: true)
+    }
+    func readServiceToken() {
+        let db = Firestore.firestore()
+        db.collection("users").getDocuments() { (querySnapshot, err) in
+            if err != nil {
+                print("There was an error")
+            } else {
+                for document in querySnapshot!.documents {
+                    self.serviceTokens = document["service_tokens"] as? Int ?? 0
+                    print("service token read")
+                }
+            }
+        }
+    }
+    func updateServiceToken() {
+        let db = Firestore.firestore()
+        let userID = Auth.auth().currentUser!.uid
+        db.collection("users").document(userID).updateData(["service_token": self.serviceTokens])
     }
     func createMinute() {
         let db = Firestore.firestore()

@@ -57,15 +57,15 @@ extension NotificationsService: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         completionHandler()
     }
-    //    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-    //        Messaging.messaging().appDidReceiveMessage(userInfo)
-    //
-    //        if let messageID = userInfo[gcmMessageIDKey] {
-    //            print("MessageID: \(messageID)")
-    //        }
-    //
-    //        completionHandler(.noData)
-    //    }
+//        func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//            Messaging.messaging().appDidReceiveMessage(userInfo)
+//
+//            if let messageID = userInfo[gcmMessageIDKey] {
+//                print("MessageID: \(messageID)")
+//            }
+//
+//            completionHandler(.noData)
+//        }
     func sendNotification(uid: String, message: String) {
         self.functions.httpsCallable("createNotification").call(["user":uid, "message":message], completion: { (result, error) in
             if let error = error as NSError? {

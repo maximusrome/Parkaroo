@@ -19,22 +19,35 @@ struct GiveView: View {
                 .edgesIgnoringSafeArea(.all)
                 .disabled(self.gGRequestConfirm.showGiveRequestView)
             if self.locationTransfer.givingPin == nil && !self.gGRequestConfirm.showBuyerRatingView && !self.gGRequestConfirm.showGiveRequestView {
-                Button(action: {
-                    self.gGRequestConfirm.showGiveRequestView = false
-                    self.locationTransfer.minute = ""
-                    self.locationTransfer.giveStreetInfoSelection = "Edit"
-                    if self.userInfo.isUserAuthenticated == .signedIn {
-                        self.gGRequestConfirm.showGiveRequestView = true
-                        self.locationTransfer.addRefencePin()
-                    } else {
-                        self.showingMakeAvaliableSetupAlert = true
+                Image(systemName: "mappin.and.ellipse")
+                    .font(.title)
+                    .frame(width: 32.0, height: 32.0)
+                    .foregroundColor(Color("orange1"))
+                    .padding()
+                VStack {
+                    Spacer()
+                    Button(action: {
+                        self.gGRequestConfirm.showGiveRequestView = false
+                        self.locationTransfer.minute = ""
+                        self.locationTransfer.giveStreetInfoSelection = "Edit"
+                        if self.userInfo.isUserAuthenticated == .signedIn {
+                            self.gGRequestConfirm.showGiveRequestView = true
+                            self.locationTransfer.addRefencePin()
+                        } else {
+                            self.showingMakeAvaliableSetupAlert = true
+                        }
+                    }) {
+                        Text("Give Spot")
+                            .bold()
+                            .font(.title)
+                            .frame(width: 300, height: 50)
+                            .background(Color("white1"))
+                            .foregroundColor(Color("orange1"))
+                            .cornerRadius(30)
+                            .shadow(radius: 5)
+                            .padding(.bottom)
+                            .padding(.horizontal, 50)
                     }
-                }) {
-                    Image(systemName: "mappin.and.ellipse")
-                        .font(.title)
-                        .frame(width: 32.0, height: 32.0)
-                        .foregroundColor(Color("orange1"))
-                        .padding()
                 }.disabled(userInfo.isUserAuthenticated == .signedIn && gGRequestConfirm.showGiveRequestView)
                 .alert(isPresented: $showingMakeAvaliableSetupAlert) {
                     Alert(title: Text("Get Set Up"), message: Text("To give a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))

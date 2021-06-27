@@ -16,7 +16,7 @@ class UserInfo: ObservableObject, Equatable {
         case undefined, signedOut, signedIn
     }
     @Published var isUserAuthenticated: FBAuthState = .undefined
-    @Published var user: FBUser = .init(uid: "", vehicle: "", email: "", rating: 0, numberOfRatings: 0, credits: 0, badgeCount: 0, basicNotifications: true, advancedNotifications: false)
+    @Published var user: FBUser = .init(uid: "", vehicle: "", email: "", rating: 0, numberOfRatings: 0, credits: 0, serviceTokens: 0, badgeCount: 0, basicNotifications: true, advancedNotifications: false)
     var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     func configureFirebaseStateDidChange() {
         authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener({ (_, user) in
@@ -72,6 +72,42 @@ class UserInfo: ObservableObject, Equatable {
                 self.user.credits = credits
             case .failure(_):
                 print("Error updating credits")
+            }
+        }
+    }
+    func addServiceTokens(numberOfServiceTokens: Int, completion: @escaping (Result<Bool, Error>) -> ()) {
+        let serviceTokens = self.user.serviceTokens + numberOfServiceTokens
+        FBFirestore.mergeFBUser([C_SERVICETOKENS:serviceTokens], uid: self.user.uid) { result in
+            switch result {
+            case .success(_):
+                self.user.serviceTokens = serviceTokens
+            case .failure(_):
+                print("Some Error")
+            }
+            completion(result)
+        }
+    }
+    func AddOneServiceToken() {
+        var serviceTokens = self.user.serviceTokens
+        serviceTokens += 1
+        FBFirestore.mergeFBUser([C_SERVICETOKENS:serviceTokens], uid: self.user.uid) { result in
+            switch result {
+            case .success(_):
+                self.user.serviceTokens = serviceTokens
+            case .failure(_):
+                print("Error updating service tokens")
+            }
+        }
+    }
+    func RemoveOneServiceToken() {
+        var serviceTokens = self.user.serviceTokens
+        serviceTokens -= 1
+        FBFirestore.mergeFBUser([C_SERVICETOKENS:serviceTokens], uid: self.user.uid) { result in
+            switch result {
+            case .success(_):
+                self.user.serviceTokens = serviceTokens
+            case .failure(_):
+                print("Error updating tokens")
             }
         }
     }

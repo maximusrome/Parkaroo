@@ -57,6 +57,7 @@ struct MenuView: View {
                                 FBAuth.logOut { (_) in }
                             }
                             self.userInfo.user.credits = 0
+                            self.userInfo.user.serviceTokens = 0
                             self.gGRequestConfirm.showGiveRequestView = false
                             self.gGRequestConfirm.showGiveConfirmView = false
                             self.gGRequestConfirm.showGetRequestView = false
