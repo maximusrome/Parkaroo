@@ -13,7 +13,6 @@ class IAPManager: NSObject, ObservableObject, SKProductsRequestDelegate {
     @Published var transactionState: SKPaymentTransactionState?
     var request: SKProductsRequest!
     @Published var creditProduct: SKProduct?
-    @Published var serviceTokenProduct: SKProduct?
     @Published var currentPurchasingProduct: SKProduct?
     @Published var showActivityIndicator = false
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
@@ -24,9 +23,6 @@ class IAPManager: NSObject, ObservableObject, SKProductsRequestDelegate {
                     self.myProducts.append(fetchedProduct)
                     if fetchedProduct.productIdentifier == "parkaroo.1credit" {
                         self.creditProduct = fetchedProduct
-                    }
-                    else if fetchedProduct.productIdentifier == "parkaroo.1serviceToken" {
-                        self.serviceTokenProduct = fetchedProduct
                     }
                 }
             }

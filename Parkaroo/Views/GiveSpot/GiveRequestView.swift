@@ -71,8 +71,6 @@ struct GiveRequestView: View {
             HStack {
                 Text("Your Rating: \(self.userInfo.user.numberOfRatings > 0 ? String(format: "%.2f", self.userInfo.user.rating) : "N/A")")
                     .bold()
-                Image(systemName: "star.fill")
-                    .foregroundColor(Color("orange1"))
                 Text("\(self.userInfo.user.numberOfRatings > 0 ? String(self.userInfo.user.numberOfRatings) : "0") ratings")
                     .font(.footnote)
             }

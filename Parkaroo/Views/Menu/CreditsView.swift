@@ -16,17 +16,16 @@ struct CreditsView: View {
         ZStack {
             VStack {
                 Spacer()
-                HStack {
-                    Text("Your Credits:")
-                        .bold()
-                        .padding(.bottom)
-                    Text("\(String(self.userInfo.user.credits))")
-                        .bold()
-                        .padding(.bottom)
-                }
+                Text("Your Credits")
+                    .bold()
+                    .padding()
+                Text("\(String(self.userInfo.user.credits))")
+                    .bold()
+                    .padding()
+                Spacer()
                 Text("Buy 1 Credit")
                     .bold()
-                    .padding(.bottom)
+                    .padding()
                 Button(action: {
                     if userInfo.isUserAuthenticated == .signedIn {
                         if let product = iapManager.creditProduct {
@@ -44,48 +43,11 @@ struct CreditsView: View {
                         .padding(.vertical, 6)
                         .background(Color("orange1"))
                         .cornerRadius(50)
+                        .padding()
                 }.alert(isPresented: $showSignInAlert, content: {
                     Alert(title: Text("Get Set Up"), message: Text("To buy a credit you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
                 })
-                Text("Or help your neighbor...\nGive a spot to earn a free credit")
-                    .font(.body)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                Group {
-                    Spacer()
-                    HStack {
-                        Text("Your Service Tokens:")
-                            .bold()
-                            .padding(.bottom)
-                        Text("\(String(self.userInfo.user.serviceTokens))")
-                            .bold()
-                            .padding(.bottom)
-                    }
-                    Text("Buy 1 Service Token")
-                        .bold()
-                        .padding(.bottom)
-                    Button(action: {
-                        if userInfo.isUserAuthenticated == .signedIn {
-                            if let product = iapManager.serviceTokenProduct {
-                                iapManager.currentPurchasingProduct = product
-                                iapManager.purchaseProduct(product: product)
-                            } else {
-                                print("error with purchasing service token")
-                            }
-                        } else {
-                            self.showSignInAlert = true
-                        }
-                    }) {
-                        Text("$0.99")
-                            .bold()
-                            .font(.title2)
-                            .padding(.horizontal)
-                            .padding(.vertical, 6)
-                            .background(Color("orange1"))
-                            .cornerRadius(50)
-                    }
-                    Spacer()
-                }
+                Spacer()
             }.font(.title)
             .foregroundColor(Color("black1"))
             .navigationBarTitle("Credits", displayMode: .inline)
@@ -95,33 +57,6 @@ struct CreditsView: View {
                     case .purchased:
                         iapManager.currentPurchasingProduct = nil
                         userInfo.addCredits(numberOfCredits: 1) { result in
-                            switch result {
-                            case .success(_):
-                                print("Successful purchase")
-                                iapManager.showActivityIndicator = false
-                            case .failure(_):
-                                print("Error updating credits")
-                                iapManager.showActivityIndicator = false
-                            }
-                        }
-                    case .failed:
-                        print("Error Purchasing")
-                        iapManager.showActivityIndicator = false
-                        iapManager.currentPurchasingProduct = nil
-                    case .purchasing:
-                        iapManager.showActivityIndicator = true
-                        print("Purchasing...")
-                    default:
-                        print("Other Error")
-                        iapManager.showActivityIndicator = false
-                        iapManager.currentPurchasingProduct = nil
-                    }
-                }
-                if iapManager.currentPurchasingProduct?.productIdentifier == "parkaroo.1serviceToken"  {
-                    switch iapManager.transactionState {
-                    case .purchased:
-                        iapManager.currentPurchasingProduct = nil
-                        userInfo.addServiceTokens(numberOfServiceTokens: 1) { result in
                             switch result {
                             case .success(_):
                                 print("Successful purchase")

@@ -18,7 +18,6 @@ struct GetRequestView: View {
     @State private var showingSameUserReserveAlert = false
     @State private var showingReserveSetupAlert = false
     @State private var showingNotEnoughCreditsAlert = false
-    @State private var showingNotEnoughServiceTokensAlert = false
     @State private var showPurchaseConfirmation = false
     @State private var showActivityIndicator = false
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -38,18 +37,17 @@ struct GetRequestView: View {
             Spacer()
             HStack {
                 if self.locationTransfer.seller?.rating != 0 {
-                    Text("Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? 0))")
+                    Text("Seller Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? 0))")
                         .bold()
                 } else {
-                    Text("Rating: N/A")
+                    Text("Seller Rating: N/A")
                         .bold()
                 }
-                Image(systemName: "star.fill")
-                    .foregroundColor(Color("orange1"))
                 Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
                     .font(.footnote)
-            }.alert(isPresented: $showingNotEnoughServiceTokensAlert) {
-                Alert(title: Text("Not Enough Service Tokens"), message: Text("You don't have enough service tokens. You can purchase them in the Credits page under the menu."), dismissButton: .default(Text("Okay")))
+                    .alert(isPresented: $showingNotEnoughCreditsAlert) {
+                        Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. You can give up your spot to earn a credit or purchase them in the Credits page under the menu."), dismissButton: .default(Text("Okay")))
+                    }
             }
             Spacer()
             HStack {
@@ -72,19 +70,7 @@ struct GetRequestView: View {
                 }.alert(isPresented: $showingReserveSetupAlert) {
                     Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                 }
-            }
-            HStack {
-                Spacer()
-                Spacer()
-                Spacer()
-                Text("1 credit + 1 service token")
-                    .font(.footnote)
-                    .alert(isPresented: $showingNotEnoughCreditsAlert) {
-                        Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. You can give up your spot to earn a credit or purchase them in the Credits page under the menu."), dismissButton: .default(Text("Okay")))
-                    }
-                Spacer()
-            }.padding(.top, 5)
-            .padding(.bottom, 25)
+            }.padding(.bottom, 25)
         }.frame(width: 300, height: 280)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
@@ -105,31 +91,20 @@ struct GetRequestView: View {
         //        }
         //UNCOMMENT TO RUN PRODUCTION VERSION
         if self.userInfo.isUserAuthenticated == .signedIn {
-            if self.locationTransfer.pins.firstIndex(where: { pin in
-                return pin.id != Auth.auth().currentUser!.uid
-            }) != nil {
+            if self.locationTransfer.seller?.uid != Auth.auth().currentUser!.uid {
+//            if self.locationTransfer.pins.firstIndex(where: { pin in
+//                return pin.id != Auth.auth().currentUser!.uid
+//            }) != nil {
                 if self.userInfo.user.credits > 0 {
-                    if self.userInfo.user.serviceTokens > 0 {
                         userInfo.addCredits(numberOfCredits: -1) { result in
                             switch result {
                             case .success(_):
                                 print("Credit subtracted")
-                                userInfo.addServiceTokens(numberOfServiceTokens: -1) { result in
-                                    switch result {
-                                    case .success(_):
-                                        self.completeTransaction()
-                                        print("Service Token subtracted")
-                                    case .failure(_):
-                                        print("Error updating credits")
-                                    }
-                                }
+                                self.completeTransaction()
                             case .failure(_):
                                 print("Error updating credits")
                             }
                         }
-                    } else {
-                        self.showingNotEnoughServiceTokensAlert = true
-                    }
                 } else {
                     self.showingNotEnoughCreditsAlert = true
                 }

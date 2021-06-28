@@ -32,7 +32,7 @@ struct UserViewModel {
         if isVehicleValid() && !containsProfanity() {
             return " "
         } else {
-            return "Enter the color and brand of your car"
+            return "This helps users find your car so you can earn a credit"
         }
     }
     var emailPrompt: String {

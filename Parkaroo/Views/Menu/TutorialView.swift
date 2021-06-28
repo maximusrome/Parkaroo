@@ -24,7 +24,7 @@ struct TutorialView: View {
                     .padding(.vertical)
                 Text("Step 1: Go to the Get Spot tab and click on a pin at your desired parking location.\n")
                 Text("Step 2: If the departure time, street information, and seller rating are to your liking, click Reserve.\n")
-                Text("Step 3: To reserve a spot you will need one credit and one service token. In return, you will be the only one to receive the vehicle's color and brand. The vehicle location will now only be visible to you.\n")
+                Text("Step 3: To reserve a spot you will need one credit. In return, you will be the only one to receive the vehicle's color and brand. The vehicle location will now only be visible to you.\n")
                 Text("Step 4: Once you are in the spot, click Complete Transfer. Finally, rate the seller.")
                 Group {
                     Text("How To Get A Credit")
@@ -40,11 +40,6 @@ struct TutorialView: View {
                     Text("Step 1: Go to the Give Spot tab and move the pin over your car's location and click Give Spot.\n")
                     Text("Step 2: Once you enter your departure time and street information, click Make Available.\n")
                     Text("Step 3: After the buyer clicks Complete Transfer, rate the buyer and you will receive a credit.")
-                    Text("How to Get A Service Token")
-                        .bold()
-                        .font(.title)
-                        .padding(.vertical)
-                    Text("Go to the Credits page under the menu and purchase a service token.")
                     Spacer()
                 }
             }.padding(.horizontal)

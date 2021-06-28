@@ -28,6 +28,12 @@ struct GetConfirmView: View {
                     .onReceive(timer, perform: { input in
                         let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
                         depart = Int(diff / 60)
+                        if locationTransfer.buyer == nil && depart < 0 {
+                            locationTransfer.deletePin()
+                            locationTransfer.minute = ""
+                            locationTransfer.givingPin = nil
+                            self.gGRequestConfirm.showGetRequestView = false
+                        }
                     })
                 Spacer()
                 Text("Street Info: \(self.locationTransfer.getStreetInfoSelection)")
@@ -39,8 +45,6 @@ struct GetConfirmView: View {
                         .autocapitalization(.words)
                     HStack {
                         Text("Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? "N/A"))")
-                        Image(systemName: "star.fill")
-                            .foregroundColor(Color("orange1"))
                         Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
                             .font(.footnote)
                     }
@@ -52,12 +56,14 @@ struct GetConfirmView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        self.showingRefundAlert = true
+                        requestRefund()
+                        self.gGRequestConfirm.showGetRequestView = false
+                        self.gGRequestConfirm.showGetConfirmView = false
                     }) {
                         Text("cancel")
                             .padding(10)
                     }.alert(isPresented: $showingRefundAlert) {
-                        Alert(title: Text("Are you sure?"), message: Text("By canceling this spot your credit will be refunded but in order to request a service token refund please contact us."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
+                        Alert(title: Text("Are you sure?"), message: Text(""), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                             requestRefund()
                             self.gGRequestConfirm.showGetRequestView = false
                             self.gGRequestConfirm.showGetConfirmView = false

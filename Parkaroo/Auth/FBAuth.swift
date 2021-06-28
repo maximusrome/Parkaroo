@@ -29,13 +29,10 @@ struct FBAuth {
             data[C_EMAIL] = authResult!.user.email!
             data[C_BADGECOUNT] = 0
             data[C_BASICNOTIFICATIONS] = true
-            data[C_ADVANCEDNOTIFICATIONS] = false
             if authResult!.user.email!.contains("tester101") {
                 data[C_CREDITS] = 25
-                data[C_SERVICETOKENS] = 100
             } else {
                 data[C_CREDITS] = 1
-                data[C_SERVICETOKENS] = 2
             }
             FBFirestore.mergeFBUser(data, uid: authResult!.user.uid) { (result) in
                 completionHandler(result)

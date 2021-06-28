@@ -104,7 +104,7 @@ struct FirstLaunchView: View {
                         self.isPresenting.toggle()
                         LocationService.shared.checkLocationAuthStatus()
                     }) {
-                        Text("Done")
+                        Text("Get Parking!")
                             .padding(10)
                             .padding(.horizontal, 15)
                             .font(.system(size: 20))

@@ -42,8 +42,6 @@ struct GiveConfirmView: View {
                         .padding(.bottom)
                     HStack {
                         Text("Rating: \(self.locationTransfer.buyer?.numberOfRatings ?? 0 > 0 ? (String(format: "%.2f", self.locationTransfer.buyer?.rating ?? 0)) : "N/A")")
-                        Image(systemName: "star.fill")
-                            .foregroundColor(Color("orange1"))
                         Text("\(self.locationTransfer.buyer?.numberOfRatings ?? 0) ratings")
                             .font(.footnote)
                     }
@@ -61,7 +59,7 @@ struct GiveConfirmView: View {
                             Text("cancel")
                                 .padding(10)
                         }.alert(isPresented: $showingSellerCancelAlert, content: {
-                            Alert(title: Text("Are you sure?"), message: Text("Friendly reminder: If someone has reserved your spot they will be asked to rate you."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
+                            Alert(title: Text("Are you sure?"), message: Text("Friendly reminder: Someone has reserved your spot and will be asked to rate you."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
                                 locationTransfer.deletePin()
                                 locationTransfer.minute = ""
                                 self.gGRequestConfirm.showGiveConfirmView = false
@@ -98,23 +96,17 @@ struct GiveConfirmView: View {
                 )
                 Spacer()
                 Button(action: {
-                    self.showingSellerCancelAlert = true
+                    locationTransfer.deletePin()
+                    locationTransfer.minute = ""
+                    self.gGRequestConfirm.showGiveConfirmView = false
+
                 }) {
                     Text("cancel")
                         .padding(10)
                         .background(Color(white: 0.7))
                         .cornerRadius(50)
                         .padding(.bottom, 25)
-                }.alert(isPresented: $showingSellerCancelAlert, content: {
-                    Alert(title: Text("Are you sure?"), message: Text("Friendly reminder: If someone has reserved your spot they will be asked to rate you."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
-                        locationTransfer.deletePin()
-                        locationTransfer.minute = ""
-                        self.gGRequestConfirm.showGiveConfirmView = false
-                        if let buyer = locationTransfer.buyer {
-                            NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled their spot")
-                        }
-                    }))
-                })
+                }
             }
         }.frame(width: 300, height: 380)
         .background(Color("white1"))

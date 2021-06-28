@@ -29,7 +29,7 @@ struct Board3View: View {
                     .bold()
                     .font(.title)
                     .padding(.bottom)
-                Text("We recommend looking through our tutorial for the best experience. Go to Tutorial under the menu.")
+                Text("View our tutorial for the best experience.")
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
                 Spacer()
