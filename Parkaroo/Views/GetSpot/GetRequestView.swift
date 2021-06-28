@@ -26,7 +26,7 @@ struct GetRequestView: View {
         VStack {
             Text("Departing in: \(String(depart)) minutes")
                 .bold()
-                .padding(.top, 25)
+                .padding(.top, 35)
                 .onReceive(timer, perform: { input in
                     let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
                     depart = Int(diff / 60)
