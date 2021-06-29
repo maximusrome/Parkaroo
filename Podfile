@@ -14,7 +14,6 @@ target 'Parkaroo' do
   pod 'Firebase/Performance'
   pod 'Firebase/Messaging'
   pod 'Firebase/Functions'
-  pod 'Stripe'
 
 end
 

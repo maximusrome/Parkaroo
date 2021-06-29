@@ -393,9 +393,6 @@ PODS:
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
   - Protobuf (3.17.0)
-  - Stripe (21.6.0):
-    - Stripe/Stripe3DS2 (= 21.6.0)
-  - Stripe/Stripe3DS2 (21.6.0)
 
 DEPENDENCIES:
   - Firebase/Analytics
@@ -406,7 +403,6 @@ DEPENDENCIES:
   - Firebase/Messaging
   - Firebase/Performance
   - FirebaseFirestoreSwift
-  - Stripe
 
 SPEC REPOS:
   trunk:
@@ -438,7 +434,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Protobuf
-    - Stripe
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
@@ -469,8 +464,7 @@ SPEC CHECKSUMS:
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
-  Stripe: 6cc7bb348f4b1fad111129f6ee40eb6682deaefb
 
-PODFILE CHECKSUM: c7c9dbd5aa15415083f599e5515d79f6fe44ff62
+PODFILE CHECKSUM: cdc28de65beef3dc7bec7be2e896d4d0691323ea
 
 COCOAPODS: 1.10.1
