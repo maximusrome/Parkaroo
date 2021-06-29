@@ -384,7 +384,7 @@ PODS:
     - BoringSSL-GRPC (= 0.0.7)
     - gRPC-Core/Interface (= 1.28.2)
   - gRPC-Core/Interface (1.28.2)
-  - GTMSessionFetcher/Core (1.5.0)
+  - GTMSessionFetcher/Core (1.6.1)
   - leveldb-library (1.22.1)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
@@ -393,6 +393,9 @@ PODS:
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
   - Protobuf (3.17.0)
+  - Stripe (21.6.0):
+    - Stripe/Stripe3DS2 (= 21.6.0)
+  - Stripe/Stripe3DS2 (21.6.0)
 
 DEPENDENCIES:
   - Firebase/Analytics
@@ -403,6 +406,7 @@ DEPENDENCIES:
   - Firebase/Messaging
   - Firebase/Performance
   - FirebaseFirestoreSwift
+  - Stripe
 
 SPEC REPOS:
   trunk:
@@ -434,6 +438,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Protobuf
+    - Stripe
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
@@ -459,12 +464,13 @@ SPEC CHECKSUMS:
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   "gRPC-C++": 13d8ccef97d5c3c441b7e3c529ef28ebee86fad2
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
-  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
+  GTMSessionFetcher: 36689134877faeb055b27dfa4ccc9ceaa42e029e
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
+  Stripe: 6cc7bb348f4b1fad111129f6ee40eb6682deaefb
 
-PODFILE CHECKSUM: ec6cbccbb09fd60608ee28c5a31d59b0090d8658
+PODFILE CHECKSUM: c7c9dbd5aa15415083f599e5515d79f6fe44ff62
 
 COCOAPODS: 1.10.1

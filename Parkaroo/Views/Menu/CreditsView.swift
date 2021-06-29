@@ -23,66 +23,66 @@ struct CreditsView: View {
                     .bold()
                     .padding()
                 Spacer()
-                Text("Buy 1 Credit")
-                    .bold()
-                    .padding()
-                Button(action: {
-                    if userInfo.isUserAuthenticated == .signedIn {
-                        if let product = iapManager.creditProduct {
-                            iapManager.currentPurchasingProduct = product
-                            iapManager.purchaseProduct(product: product)
-                        }
-                    } else {
-                        self.showSignInAlert = true
-                    }
-                }) {
-                    Text("$9.99")
-                        .bold()
-                        .font(.title2)
-                        .padding(.horizontal)
-                        .padding(.vertical, 6)
-                        .background(Color("orange1"))
-                        .cornerRadius(50)
-                        .padding()
-                }.alert(isPresented: $showSignInAlert, content: {
-                    Alert(title: Text("Get Set Up"), message: Text("To buy a credit you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
-                })
-                Spacer()
+//                Text("Buy 1 Credit")
+//                    .bold()
+//                    .padding()
+//                Button(action: {
+//                    if userInfo.isUserAuthenticated == .signedIn {
+//                        if let product = iapManager.creditProduct {
+//                            iapManager.currentPurchasingProduct = product
+//                            iapManager.purchaseProduct(product: product)
+//                        }
+//                    } else {
+//                        self.showSignInAlert = true
+//                    }
+//                }) {
+//                    Text("$9.99")
+//                        .bold()
+//                        .font(.title2)
+//                        .padding(.horizontal)
+//                        .padding(.vertical, 6)
+//                        .background(Color("orange1"))
+//                        .cornerRadius(50)
+//                        .padding()
+//                }.alert(isPresented: $showSignInAlert, content: {
+//                    Alert(title: Text("Get Set Up"), message: Text("To buy a credit you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
+//                })
+//                Spacer()
             }.font(.title)
             .foregroundColor(Color("black1"))
             .navigationBarTitle("Credits", displayMode: .inline)
-            .onChange(of: iapManager.transactionState, perform: { value in
-                if iapManager.currentPurchasingProduct?.productIdentifier == "parkaroo.1credit"  {
-                    switch iapManager.transactionState {
-                    case .purchased:
-                        iapManager.currentPurchasingProduct = nil
-                        userInfo.addCredits(numberOfCredits: 1) { result in
-                            switch result {
-                            case .success(_):
-                                print("Successful purchase")
-                                iapManager.showActivityIndicator = false
-                            case .failure(_):
-                                print("Error updating credits")
-                                iapManager.showActivityIndicator = false
-                            }
-                        }
-                    case .failed:
-                        print("Error Purchasing")
-                        iapManager.showActivityIndicator = false
-                        iapManager.currentPurchasingProduct = nil
-                    case .purchasing:
-                        iapManager.showActivityIndicator = true
-                        print("Purchasing...")
-                    default:
-                        print("Other Error")
-                        iapManager.showActivityIndicator = false
-                        iapManager.currentPurchasingProduct = nil
-                    }
-                }
-            })
-            if iapManager.showActivityIndicator {
-                ActivityIndicatorView()
-            }
+//            .onChange(of: iapManager.transactionState, perform: { value in
+//                if iapManager.currentPurchasingProduct?.productIdentifier == "parkaroo.1credit"  {
+//                    switch iapManager.transactionState {
+//                    case .purchased:
+//                        iapManager.currentPurchasingProduct = nil
+//                        userInfo.addCredits(numberOfCredits: 1) { result in
+//                            switch result {
+//                            case .success(_):
+//                                print("Successful purchase")
+//                                iapManager.showActivityIndicator = false
+//                            case .failure(_):
+//                                print("Error updating credits")
+//                                iapManager.showActivityIndicator = false
+//                            }
+//                        }
+//                    case .failed:
+//                        print("Error Purchasing")
+//                        iapManager.showActivityIndicator = false
+//                        iapManager.currentPurchasingProduct = nil
+//                    case .purchasing:
+//                        iapManager.showActivityIndicator = true
+//                        print("Purchasing...")
+//                    default:
+//                        print("Other Error")
+//                        iapManager.showActivityIndicator = false
+//                        iapManager.currentPurchasingProduct = nil
+//                    }
+//                }
+//            })
+//            if iapManager.showActivityIndicator {
+//                ActivityIndicatorView()
+//            }
         }
     }
 }
