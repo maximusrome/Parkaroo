@@ -24,6 +24,7 @@ struct GiveView: View {
                     .frame(width: 32.0, height: 32.0)
                     .foregroundColor(Color("orange1"))
                     .padding()
+                    .padding(.bottom)
                 VStack {
                     Spacer()
                     Button(action: {

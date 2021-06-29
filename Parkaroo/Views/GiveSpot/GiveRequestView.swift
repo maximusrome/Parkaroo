@@ -85,7 +85,7 @@ struct GiveRequestView: View {
                     Text("close")
                         .padding(10)
                 }.alert(isPresented: $showingInvalidStreetInfoAlert) {
-                    return Alert(title: Text("Add Street Info"), message: Text(""), dismissButton: .default(Text("Okay")))
+                    return Alert(title: Text("Add Street Info"), dismissButton: .default(Text("Okay")))
                 }
                 Button(action: {
                     if abc() {
@@ -110,7 +110,7 @@ struct GiveRequestView: View {
                         .background(Color("orange1"))
                         .cornerRadius(50)
                 }.alert(isPresented: $showingInvalidDepartureAlert) {
-                    return Alert(title: Text("Add Departure Time"), message: Text(""), dismissButton: .default(Text("Okay")))
+                    return Alert(title: Text("Add Departure Time"), dismissButton: .default(Text("Okay")))
                 }
             }.padding(.bottom, 25)
         }.frame(width: 300, height: 280)

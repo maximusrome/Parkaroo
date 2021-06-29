@@ -57,7 +57,7 @@ struct GetRequestView: View {
                     Text("close")
                         .padding(10)
                 }.alert(isPresented: $showingSameUserReserveAlert) {
-                    Alert(title: Text("You Can't Reserve Your Own Spot"), message: Text(""), dismissButton: .default(Text("Okay")))
+                    Alert(title: Text("You Can't Reserve Your Own Spot"), dismissButton: .default(Text("Okay")))
                 }
                 Button(action: {
                     reserveSpot()
@@ -92,9 +92,6 @@ struct GetRequestView: View {
         //UNCOMMENT TO RUN PRODUCTION VERSION
         if self.userInfo.isUserAuthenticated == .signedIn {
             if self.locationTransfer.seller?.uid != Auth.auth().currentUser!.uid {
-//            if self.locationTransfer.pins.firstIndex(where: { pin in
-//                return pin.id != Auth.auth().currentUser!.uid
-//            }) != nil {
                 if self.userInfo.user.credits > 0 {
                         userInfo.addCredits(numberOfCredits: -1) { result in
                             switch result {

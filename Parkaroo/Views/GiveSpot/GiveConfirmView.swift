@@ -99,7 +99,6 @@ struct GiveConfirmView: View {
                     locationTransfer.deletePin()
                     locationTransfer.minute = ""
                     self.gGRequestConfirm.showGiveConfirmView = false
-
                 }) {
                     Text("cancel")
                         .padding(10)

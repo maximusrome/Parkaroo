@@ -44,7 +44,7 @@ struct GetConfirmView: View {
                         .padding(.bottom)
                         .autocapitalization(.words)
                     HStack {
-                        Text("Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? "N/A"))")
+                        Text("Rating: \(self.locationTransfer.seller?.numberOfRatings ?? 0 > 0 ? (String(format: "%.2f", self.locationTransfer.seller?.rating ?? 0)) : "N/A")")
                         Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
                             .font(.footnote)
                     }
@@ -56,14 +56,12 @@ struct GetConfirmView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        requestRefund()
-                        self.gGRequestConfirm.showGetRequestView = false
-                        self.gGRequestConfirm.showGetConfirmView = false
+                        self.showingRefundAlert = true
                     }) {
                         Text("cancel")
                             .padding(10)
                     }.alert(isPresented: $showingRefundAlert) {
-                        Alert(title: Text("Are you sure?"), message: Text(""), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
+                        Alert(title: Text("Are you sure?"), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                             requestRefund()
                             self.gGRequestConfirm.showGetRequestView = false
                             self.gGRequestConfirm.showGetConfirmView = false
