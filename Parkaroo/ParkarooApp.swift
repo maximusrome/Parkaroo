@@ -9,6 +9,7 @@ import SwiftUI
 import Firebase
 import FirebaseMessaging
 import StoreKit
+import Stripe
 
 @main
 struct ParkarooApp: App {
@@ -50,6 +51,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
         configureNotifications()
+        StripeAPI.defaultPublishableKey = "pk_live_51J7X2vEW9EnruuomxkLBUbuF8nLGas9IVN04uC7vHpdKEAzox4V6gSxVLxXrKZbBugLCdVCRT87d1jX8wkI82v3J00IOWDyfDR"
         //LocationService.shared.requestLocation()
         //NotificationsService.shared.configure()
         return true
