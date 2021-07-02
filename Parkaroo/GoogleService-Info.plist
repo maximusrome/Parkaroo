@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>670544929835-2nedikmt3a6b9g77b776gnmja9q09cnh.apps.googleusercontent.com</string>
+	<string>578270084090-008gvrn2g31jq9htt66mn1i6fhj2tro0.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.670544929835-2nedikmt3a6b9g77b776gnmja9q09cnh</string>
+	<string>com.googleusercontent.apps.578270084090-008gvrn2g31jq9htt66mn1i6fhj2tro0</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC0bMIIhNXaoyYvyGzUJJd-73Lmktd3_Xs</string>
+	<string>AIzaSyCuCgwG9cTwPTM4AgNuzDdZFAuRtCH0qnc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>670544929835</string>
+	<string>578270084090</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>max-rome.Parkaroo</string>
+	<string>org.parkaroo.maxrome</string>
 	<key>PROJECT_ID</key>
-	<string>parkaroo-e921b</string>
+	<string>parkaroo-29d69</string>
 	<key>STORAGE_BUCKET</key>
-	<string>parkaroo-e921b.appspot.com</string>
+	<string>parkaroo-29d69.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:670544929835:ios:9adc33d26eed83abadb66e</string>
-	<key>DATABASE_URL</key>
-	<string>https://parkaroo-e921b.firebaseio.com</string>
+	<string>1:578270084090:ios:e964346575689965d8c243</string>
 </dict>
 </plist>
