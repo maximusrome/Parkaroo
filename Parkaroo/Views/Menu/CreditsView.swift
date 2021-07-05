@@ -35,6 +35,24 @@ struct CreditsView: View {
                         Text("$9.99")
                             .bold()
                             .font(.title2)
+                            .padding(.horizontal)
+                            .padding(.vertical, 6)
+                            .background(Color("orange1"))
+                            .cornerRadius(50)
+                            .padding()
+                    }
+                } else {
+                    Button {
+                        showSignInAlert = true
+                    } label: {
+                        Text("$9.99")
+                            .bold()
+                            .font(.title2)
+                            .padding(.horizontal)
+                            .padding(.vertical, 6)
+                            .background(Color("orange1"))
+                            .cornerRadius(50)
+                            .padding()
                     }
                 }
                 Spacer()
