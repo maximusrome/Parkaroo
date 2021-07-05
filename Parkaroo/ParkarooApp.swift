@@ -52,9 +52,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
         configureNotifications()
-//        StripeAPI.defaultPublishableKey = "pk_live_51J7X2vEW9EnruuomxkLBUbuF8nLGas9IVN04uC7vHpdKEAzox4V6gSxVLxXrKZbBugLCdVCRT87d1jX8wkI82v3J00IOWDyfDR"
+        StripeAPI.defaultPublishableKey = "pk_live_51J7X2vEW9EnruuomxkLBUbuF8nLGas9IVN04uC7vHpdKEAzox4V6gSxVLxXrKZbBugLCdVCRT87d1jX8wkI82v3J00IOWDyfDR"
         // Test Key
-        StripeAPI.defaultPublishableKey = "pk_test_51J7X2vEW9EnruuomqDM0TdptXMw9LoVWJTsOiUSIAkzVCBDl7EmVEWG5mzAXahAbdZHtZYSimNF3Qc2G4S3lbjlo00miS2vVzp"
+//        StripeAPI.defaultPublishableKey = "pk_test_51J7X2vEW9EnruuomqDM0TdptXMw9LoVWJTsOiUSIAkzVCBDl7EmVEWG5mzAXahAbdZHtZYSimNF3Qc2G4S3lbjlo00miS2vVzp"
         //LocationService.shared.requestLocation()
         //NotificationsService.shared.configure()
         return true

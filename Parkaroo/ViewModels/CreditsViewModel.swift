@@ -22,7 +22,10 @@ final class CreditsViewModel: ObservableObject {
     private let functions = Functions.functions()
     
     init() {
-        STPAPIClient.shared.publishableKey = "pk_test_51J7X2vEW9EnruuomqDM0TdptXMw9LoVWJTsOiUSIAkzVCBDl7EmVEWG5mzAXahAbdZHtZYSimNF3Qc2G4S3lbjlo00miS2vVzp"
+        // Test Key
+//        StripeAPI.defaultPublishableKey = "pk_test_51J7X2vEW9EnruuomqDM0TdptXMw9LoVWJTsOiUSIAkzVCBDl7EmVEWG5mzAXahAbdZHtZYSimNF3Qc2G4S3lbjlo00miS2vVzp"
+        // Production Key
+        STPAPIClient.shared.publishableKey = "pk_live_51J7X2vEW9EnruuomxkLBUbuF8nLGas9IVN04uC7vHpdKEAzox4V6gSxVLxXrKZbBugLCdVCRT87d1jX8wkI82v3J00IOWDyfDR"
     }
     
     func preparePaymentSheet() {
