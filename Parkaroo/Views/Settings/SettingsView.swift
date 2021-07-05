@@ -77,6 +77,7 @@ struct SettingsView: View {
         }
     }
 }
+
 struct SettingsCell: View {
     var title : String
     var imgName : String
@@ -93,6 +94,7 @@ struct SettingsCell: View {
         }
     }
 }
+
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()

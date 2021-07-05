@@ -61,6 +61,8 @@
 		21EBF319266BF4DD00102E0F /* FAQSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EBF312266BF4DD00102E0F /* FAQSView.swift */; };
 		CBA83E9126540D3200528C7C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBA83E9026540D3100528C7C /* StoreKit.framework */; };
 		DFC7321F1828D9FE0665BEE5 /* Pods_Parkaroo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F02FC4294FE77D670D0671A /* Pods_Parkaroo.framework */; };
+		F7B89F032690EF6A00FDDAC6 /* CreditsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B89F022690EF6A00FDDAC6 /* CreditsViewModel.swift */; };
+		F7B89F052690F2B900FDDAC6 /* StripePaymentSheetPreparationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B89F042690F2B900FDDAC6 /* StripePaymentSheetPreparationResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,6 +125,8 @@
 		C76BCD290C9AC820E0CEB197 /* Pods-Parkaroo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parkaroo.debug.xcconfig"; path = "Target Support Files/Pods-Parkaroo/Pods-Parkaroo.debug.xcconfig"; sourceTree = "<group>"; };
 		CBA83E9026540D3100528C7C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		D0E8FF601DBC9ABC63E12BFE /* Pods-Parkaroo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parkaroo.release.xcconfig"; path = "Target Support Files/Pods-Parkaroo/Pods-Parkaroo.release.xcconfig"; sourceTree = "<group>"; };
+		F7B89F022690EF6A00FDDAC6 /* CreditsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsViewModel.swift; sourceTree = "<group>"; };
+		F7B89F042690F2B900FDDAC6 /* StripePaymentSheetPreparationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StripePaymentSheetPreparationResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				21EBF2F7266BF17500102E0F /* Pin.swift */,
+				F7B89F042690F2B900FDDAC6 /* StripePaymentSheetPreparationResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -222,6 +227,7 @@
 				21EBF2F9266BF18900102E0F /* GGRegisterConfirm.swift */,
 				21EBF2FB266BF18900102E0F /* LocationTransfer.swift */,
 				21EBF2FA266BF18900102E0F /* UserViewModel.swift */,
+				F7B89F022690EF6A00FDDAC6 /* CreditsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -494,12 +500,14 @@
 				21EBF2AE266BEFC500102E0F /* GetRequestView.swift in Sources */,
 				21EBF319266BF4DD00102E0F /* FAQSView.swift in Sources */,
 				21EBF2AA266BEFC500102E0F /* MapGetView.swift in Sources */,
+				F7B89F052690F2B900FDDAC6 /* StripePaymentSheetPreparationResponse.swift in Sources */,
 				21EBF2B8266BEFE600102E0F /* RateBuyerView.swift in Sources */,
 				21EBF30B266BF46B00102E0F /* WifiView.swift in Sources */,
 				21EBF2B6266BEFE600102E0F /* GiveConfirmView.swift in Sources */,
 				21EBF2FD266BF18900102E0F /* UserViewModel.swift in Sources */,
 				21EBF30A266BF46B00102E0F /* NotificationsSheet.swift in Sources */,
 				21EBF307266BF46B00102E0F /* AppReviewRequest.swift in Sources */,
+				F7B89F032690EF6A00FDDAC6 /* CreditsViewModel.swift in Sources */,
 				21EBF2C2266BF03A00102E0F /* MenuView.swift in Sources */,
 				21EBF315266BF4DD00102E0F /* MailView.swift in Sources */,
 				21EBF2E3266BF12400102E0F /* Constants.swift in Sources */,
