@@ -26,7 +26,6 @@ final class CreditsViewModel: ObservableObject {
     }
     
     func preparePaymentSheet() {
-        functions.useFunctionsEmulator(origin: "http://locahost:5001")
         // MARK: - Fetch the PaymentIntent and Customer information form the backend
         functions.httpsCallable("preparePaymentSheet").call { [self] result, error in
             if let error = error {
