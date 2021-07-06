@@ -105,7 +105,7 @@ exports.preparePaymentSheet = functions.https.onCall(async (data, context) => {
     customer: customerId,
   }, {apiVersion: "2020-08-27"});
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: 999,
+    amount: 899,
     currency: "usd",
     customer: customerId,
   });

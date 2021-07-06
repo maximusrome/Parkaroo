@@ -32,7 +32,7 @@ struct CreditsView: View {
                         paymentSheet: paymentSheet,
                         onCompletion: viewModel.onPaymentCompletion
                     ) {
-                        Text("$9.99")
+                        Text("$8.99")
                             .bold()
                             .font(.title2)
                             .padding(.horizontal)
@@ -45,7 +45,7 @@ struct CreditsView: View {
                     Button {
                         showSignInAlert = true
                     } label: {
-                        Text("$9.99")
+                        Text("$8.99")
                             .bold()
                             .font(.title2)
                             .padding(.horizontal)
