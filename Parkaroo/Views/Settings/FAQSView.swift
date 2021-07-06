@@ -25,7 +25,7 @@ struct FAQSView: View {
                 Text("How do I get a credit?")
                     .bold()
                     .font(.title3)
-                Text("Get a credit by giving up a parking spot. Go to the Tutorial page under the menu and read How to Give A Spot.\n")
+                Text("Get a credit by giving up a parking spot or by purchasing one on the Credits page under the menu.\n")
                 Text("Does this app sell parking spots?")
                     .bold()
                     .font(.title3)

@@ -5,11 +5,13 @@
 //  Created by max rome on 11/22/20.
 //
 
+import Stripe
 import SwiftUI
 import StoreKit
 
 struct CreditsView: View {
     @EnvironmentObject var userInfo: UserInfo
+    @StateObject var viewModel = CreditsViewModel()
     @State private var showSignInAlert = false
     var body: some View {
         ZStack {
@@ -25,30 +27,50 @@ struct CreditsView: View {
                 Text("Buy 1 Credit")
                     .bold()
                     .padding()
-                Button(action: {
-                    if userInfo.isUserAuthenticated == .signedIn {
-                        
-                        //ADD PAYMENT METHODS HERE
-                        
-                    } else {
-                        self.showSignInAlert = true
+                if let paymentSheet = viewModel.paymentSheet {
+                    PaymentSheet.PaymentButton(
+                        paymentSheet: paymentSheet,
+                        onCompletion: viewModel.onPaymentCompletion
+                    ) {
+                        Text("$9.99")
+                            .bold()
+                            .font(.title2)
+                            .padding(.horizontal)
+                            .padding(.vertical, 6)
+                            .background(Color("orange1"))
+                            .cornerRadius(50)
+                            .padding()
                     }
-                }) {
-                    Text("$9.99")
-                        .bold()
-                        .font(.title2)
-                        .padding(.horizontal)
-                        .padding(.vertical, 6)
-                        .background(Color("orange1"))
-                        .cornerRadius(50)
-                        .padding()
-                }.alert(isPresented: $showSignInAlert, content: {
-                    Alert(title: Text("Get Set Up"), message: Text("To buy a credit you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
-                })
+                } else {
+                    Button {
+                        showSignInAlert = true
+                    } label: {
+                        Text("$9.99")
+                            .bold()
+                            .font(.title2)
+                            .padding(.horizontal)
+                            .padding(.vertical, 6)
+                            .background(Color("orange1"))
+                            .cornerRadius(50)
+                            .padding()
+                    }
+                }
                 Spacer()
-            }.font(.title)
+                Text("Or give a spot\nto earn a credit")
+                    .bold()
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                Spacer()
+            }
+            .onAppear {
+                viewModel.preparePaymentSheet()
+            }
+            .font(.title)
             .foregroundColor(Color("black1"))
             .navigationBarTitle("Credits", displayMode: .inline)
+            .alert(isPresented: $showSignInAlert, content: {
+                Alert(title: Text("Get Set Up"), message: Text("To buy a credit you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
+            })
         }
     }
 }
