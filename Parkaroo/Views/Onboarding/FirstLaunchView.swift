@@ -14,7 +14,7 @@ struct FirstLaunchView: View {
     @State private var SlideTwo = false
     @State private var SlideTwoPrevious = false
     @State private var Dots = false
-    @Binding var isPresenting: Bool
+    @State private var showingVideoSheet = false
     var body: some View {
         ZStack {
             Color("white1").edgesIgnoringSafeArea(.all)
@@ -101,17 +101,19 @@ struct FirstLaunchView: View {
                 VStack {
                     Spacer()
                     Button(action: {
-                        self.isPresenting.toggle()
-                        LocationService.shared.checkLocationAuthStatus()
+                        self.showingVideoSheet.toggle()
                     }) {
-                        Text("Get Parking!")
-                            .padding(10)
-                            .padding(.horizontal, 15)
-                            .font(.system(size: 20))
-                            .foregroundColor(Color("black1"))
-                            .background(Color("orange1"))
-                            .cornerRadius(50)
-                    }.padding(.bottom, 15)
+                        HStack {
+                            Image(systemName: "play.fill")
+                            Text("Watch Video")
+                        }.padding(10)
+                        .background(Color("orange1"))
+                        .foregroundColor(Color("black1"))
+                        .cornerRadius(50)
+                        .padding(.bottom)
+                    }.sheet(isPresented: $showingVideoSheet) {
+                        VideoView()
+                    }
                 }.animation(.spring())
                 .offset(x: SlideTwo ? 0 : 500)
             }
@@ -120,6 +122,6 @@ struct FirstLaunchView: View {
 }
 struct FirstLaunchView_Previews: PreviewProvider {
     static var previews: some View {
-        FirstLaunchView(isPresenting: .constant(true))
+        FirstLaunchView()
     }
 }

@@ -14,7 +14,7 @@ struct CharityView: View {
                     .bold()
                     .font(.title)
                     .padding(.vertical)
-                Text("Parkaroo is dedicated to improving your community. In addition to reducing local traffic, we donate a portion of proceeds to charity. Every parking spot you give and receive helps others in need. Parkaroo recently launched in New York City, and we have selected the New York Cares charity to be our partner.\n")
+                Text("Parkaroo is dedicated to improving your community. In addition to reducing local traffic, we donate a portion of proceeds to charity. Parkaroo recently launched in New York City, and we have selected the New York Cares charity to be our partner.\n")
                 Text("New York Cares is a reputable organization that does great work for all New Yorkers. New York Cares organizes food drives, clothing deliveries, tutoring, street clean up, park beautification, and more.\n")
                 HStack {
                     Text("Charity Website:")

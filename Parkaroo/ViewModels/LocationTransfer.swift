@@ -29,6 +29,7 @@ class LocationTransfer: ObservableObject {
     @Published var gettingAnnotation: CustomMKPointAnnotation?
     @Published var giveStreetInfoSelection: String = "Edit"
     @Published var getStreetInfoSelection: String = "Edit"
+    @Published var isPresented = true
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     var publisher: AnyPublisher<Void, Never>! = nil
@@ -104,6 +105,12 @@ class LocationTransfer: ObservableObject {
         let userID = Auth.auth().currentUser!.uid
         db.collection("pins").document(userID).delete()
         self.givingPin = nil
+        self.locations.removeAll()
+    }
+    func deleteSellerPin() {
+        let db = Firestore.firestore()
+        db.collection("pins").document(seller?.uid ?? "").delete()
+        self.gettingPin = nil
         self.locations.removeAll()
     }
     func createCredit() {

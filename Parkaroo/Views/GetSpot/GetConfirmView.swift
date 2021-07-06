@@ -29,9 +29,9 @@ struct GetConfirmView: View {
                         let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
                         depart = Int(diff / 60)
                         if locationTransfer.buyer == nil && depart < 0 {
-                            locationTransfer.deletePin()
+                            locationTransfer.deleteSellerPin()
                             locationTransfer.minute = ""
-                            locationTransfer.givingPin = nil
+                            locationTransfer.gettingPin = nil
                             self.gGRequestConfirm.showGetRequestView = false
                         }
                     })

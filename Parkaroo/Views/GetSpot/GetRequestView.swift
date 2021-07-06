@@ -46,7 +46,7 @@ struct GetRequestView: View {
                 Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
                     .font(.footnote)
                     .alert(isPresented: $showingNotEnoughCreditsAlert) {
-                        Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. Give up your spot to earn a credit."), dismissButton: .default(Text("Okay")))
+                        Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. Give up your spot to earn a credit or purchase a credit in the Credits page under the menu."), dismissButton: .default(Text("Okay")))
                     }
             }
             Spacer()

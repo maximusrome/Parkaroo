@@ -57,8 +57,8 @@ struct ContentView: View {
                             .gesture(drag)
                     }
                 }
-                if self.showOnBoarding {
-                    FirstLaunchView(isPresenting: $showOnBoarding)
+                if self.showOnBoarding && self.locationTransfer.isPresented {
+                    FirstLaunchView()
                         .navigationBarHidden(true)
                 }
                 if !monitor.isConnected {

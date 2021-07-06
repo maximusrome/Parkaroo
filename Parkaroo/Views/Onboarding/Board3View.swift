@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct Board3View: View {
+    @State var showingVideoSheet = false
     var body: some View {
         ZStack {
             VStack {
@@ -29,7 +31,7 @@ struct Board3View: View {
                     .bold()
                     .font(.title)
                     .padding(.bottom)
-                Text("View our tutorial for the best experience.")
+                Text("Watch our 60 second tutorial for the best experience.")
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
                 Spacer()
@@ -42,3 +44,59 @@ struct Board3View_Previews: PreviewProvider {
         Board3View()
     }
 }
+struct VideoView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var locationTransfer: LocationTransfer
+    @State var url = Bundle.main.url(forResource: "IMG_3747", withExtension: "mp4")
+    var body: some View {
+        VStack {
+            VideoPlayer(player: AVPlayer(url: url!)).edgesIgnoringSafeArea(.all)
+            HStack {
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                    self.locationTransfer.isPresented.toggle()
+                    LocationService.shared.checkLocationAuthStatus()
+                }) {
+                    Text("Get Parking!")
+                        .padding(10)
+                        .background(Color("orange1"))
+                        .foregroundColor(Color("black1"))
+                        .cornerRadius(50)
+                        .padding()
+                }
+            }
+        }
+    }
+}
+struct VideoView_Previews: PreviewProvider {
+    static var previews: some View {
+        VideoView()
+            .environmentObject(LocationTransfer())
+    }
+}
+struct VideoTutorialView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @State var url = Bundle.main.url(forResource: "IMG_3747", withExtension: "mp4")
+    var body: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "xmark")
+                        .imageScale(.large)
+                        .foregroundColor(Color("orange1"))
+                        .padding()
+                }
+            }
+            VideoPlayer(player: AVPlayer(url: url!)).edgesIgnoringSafeArea(.all)
+        }
+    }
+}
+struct VideoTutorialView_Previews: PreviewProvider {
+    static var previews: some View {
+        VideoTutorialView()
+    }
+}
+
