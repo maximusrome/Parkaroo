@@ -47,7 +47,7 @@ struct Board3View_Previews: PreviewProvider {
 struct VideoView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var locationTransfer: LocationTransfer
-    @State var url = Bundle.main.url(forResource: "IMG_3747", withExtension: "mp4")
+    @State var url = Bundle.main.url(forResource: "IMG_3792", withExtension: "mp4")
     var body: some View {
         VStack {
             VideoPlayer(player: AVPlayer(url: url!)).edgesIgnoringSafeArea(.all)
@@ -76,7 +76,7 @@ struct VideoView_Previews: PreviewProvider {
 }
 struct VideoTutorialView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var url = Bundle.main.url(forResource: "IMG_3747", withExtension: "mp4")
+    @State var url = Bundle.main.url(forResource: "IMG_3792", withExtension: "mp4")
     var body: some View {
         VStack {
             HStack {
