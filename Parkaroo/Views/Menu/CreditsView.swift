@@ -65,6 +65,18 @@ struct CreditsView: View {
             .onAppear {
                 viewModel.preparePaymentSheet()
             }
+            .onReceive(viewModel.$paymentResult) { result in
+                guard let paymentStatus = result.map({ $0 }) else { return }
+                
+                switch paymentStatus {
+                case .completed:
+                    userInfo.AddOneCredit()
+                case .canceled:
+                    print("Payment was canceled")
+                case .failed(error: let error):
+                    print("Payment failed, reason: \(error)")
+                }
+            }
             .font(.title)
             .foregroundColor(Color("black1"))
             .navigationBarTitle("Credits", displayMode: .inline)
