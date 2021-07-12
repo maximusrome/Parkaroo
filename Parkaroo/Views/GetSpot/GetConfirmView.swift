@@ -77,7 +77,7 @@ struct GetConfirmView: View {
                         .background(Color("orange1"))
                         .cornerRadius(50)
                 }.alert(isPresented: $showingConfirmAlert) {
-                    Alert(title: Text("Are You Parked?"), message: Text("Only complete this transfer when you are successfully parked in the spot."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
+                    Alert(title: Text("Are You Parked?"), message: Text("Complete this transfer when you are successfully parked in the spot."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                         self.gGRequestConfirm.showGetRequestView = false
                         self.gGRequestConfirm.showGetConfirmView = false
                         self.gGRequestConfirm.showSellerRatingView = true
