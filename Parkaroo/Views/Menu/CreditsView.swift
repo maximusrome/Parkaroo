@@ -8,6 +8,7 @@
 import Stripe
 import SwiftUI
 import StoreKit
+import Firebase
 
 struct CreditsView: View {
     @EnvironmentObject var userInfo: UserInfo
@@ -42,9 +43,11 @@ struct CreditsView: View {
                             .padding()
                     }
                 } else {
-                    Button {
-                        showSignInAlert = true
-                    } label: {
+                    Button(action: {
+                        if Auth.auth().currentUser?.uid == nil {
+                            showSignInAlert = true
+                        }
+                    }) {
                         Text("$8.99")
                             .bold()
                             .font(.title2)

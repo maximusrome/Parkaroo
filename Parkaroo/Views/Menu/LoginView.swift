@@ -19,22 +19,16 @@ struct LoginView: View {
     @State private var errString: String?
     @State private var visable1 = false
     @State private var loginClicked = false
-    var loginButtonColor: Color {
-        return user.isLoginComplete && !self.loginClicked ? Color("orange1") : .gray
-    }
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 Text("Email")
                     .bold()
-                    .padding(.top, 40)
                     .font(.title)
+                    .padding(.top, 50)
                 TextField("e.g. johnsmith@gmail.com", text: $user.email)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .autocapitalization(.none)
-                Text(user.emailPrompt)
-                    .foregroundColor(Color("orange1"))
-                    .fixedSize(horizontal: false, vertical: true)
                     .padding(.bottom, 50)
                 Text("Password")
                     .bold()
@@ -61,9 +55,6 @@ struct LoginView: View {
                         }
                     }
                 }
-                Text(user.passwordPrompt)
-                    .foregroundColor(Color("orange1"))
-                    .fixedSize(horizontal: false, vertical: true)
                 HStack {
                     Spacer()
                     Button(action: {
@@ -82,14 +73,11 @@ struct LoginView: View {
                             .underline()
                             .padding(.top, 10)
                             .foregroundColor(Color("orange1"))
-                            .padding(.bottom, 50)
+                            .padding(.bottom, 100)
                     }.alert(isPresented: $showPasswordResetAlert) {
                         Alert(title: Text("Password Reset"), message: Text(self.errString ?? "Password reset email sent successfully. Check your email."), dismissButton: .default(Text("Okay")))
                     }
                 }
-            }.font(.body)
-            .padding()
-            VStack {
                 Button(action: {
                     FBAuth.authenticate(withEmail: self.user.email, password: self.user.password) { (result) in
                         switch result {
@@ -105,17 +93,25 @@ struct LoginView: View {
                         self.loginClicked = false
                     }
                 }) {
-                    Text("Log In")
-                        .bold()
-                        .font(.title)
-                        .padding(.bottom, 5)
-                        .foregroundColor(loginButtonColor)
-                }.disabled(!user.isLoginComplete || self.loginClicked)
+                    HStack {
+                        Spacer()
+                        Text("Login")
+                            .bold()
+                            .font(.title2)
+                            .padding(10)
+                            .padding(.horizontal)
+                            .foregroundColor(Color("black1"))
+                            .background(Color("orange1"))
+                            .cornerRadius(50)
+                        Spacer()
+                    }
+                }.disabled(self.loginClicked)
                 .alert(isPresented: $showLoginAlert) {
-                    Alert(title: Text("Login Error"), message: Text(self.authError?.localizedDescription ?? "Unknown error"), dismissButton: .default(Text("Okay")))
+                    Alert(title: Text("Error"), message: Text(self.authError?.localizedDescription ?? "Unknown error"), dismissButton: .default(Text("Okay")))
                 }
             }
-        }.navigationBarTitle("Login", displayMode: .inline)
+        }.padding()
+        .navigationBarTitle("Login", displayMode: .inline)
     }
 }
 struct loginView_Previews: PreviewProvider {

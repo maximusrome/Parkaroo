@@ -13,7 +13,7 @@ struct UserViewModel {
     var vehicle = ""
     func isVehicleValid() -> Bool {
         let vehicleTest = NSPredicate(format: "SELF MATCHES %@",
-                                      "^([a-zA-Z ]{7,20})$")
+                                      "^([a-zA-Z0-9 ]{7,25})$")
         return vehicleTest.evaluate(with: vehicle)
     }
     func containsProfanity() -> Bool {

@@ -17,21 +17,16 @@ struct SignUpView: View {
     @State private var errorString = ""
     @State private var visable = false
     @State private var signUpClicked = false
-    var signUpButtonColor: Color {
-        return user.isSignUpComplete && !self.signUpClicked ? Color("orange1") : .gray
-    }
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 Text("Vehicle Color and Brand")
                     .bold()
                     .font(.title)
-                    .padding(.top, 40)
+                    .padding(.top, 50)
                 TextField("e.g. Red Honda", text: $user.vehicle)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .autocapitalization(.words)
-                Text(user.vehiclePrompt)
-                    .foregroundColor(Color("orange1"))
                     .padding(.bottom, 50)
                 Text("Email")
                     .bold()
@@ -39,10 +34,6 @@ struct SignUpView: View {
                 TextField("e.g. johnsmith@gmail.com", text: $user.email)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .autocapitalization(.none)
-                    .textCase(.lowercase)
-                Text(user.emailPrompt)
-                    .foregroundColor(Color("orange1"))
-                    .fixedSize(horizontal: false, vertical: true)
                     .padding(.bottom, 50)
                 Text("Password")
                     .bold()
@@ -68,32 +59,46 @@ struct SignUpView: View {
                                 .padding(.trailing, 10)
                         }
                     }
-                }
-                Text(user.passwordPrompt)
-                    .foregroundColor(Color("orange1"))
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.bottom, 50)
+                }.padding(.bottom, 100)
                 Button(action: {
-                    FBAuth.createUser(withEmail: self.user.email, vehicle: self.user.vehicle, password: self.user.password) { (result) in
-                        switch result {
-                        case .failure(let error):
-                            self.errorString = error.localizedDescription
-                            self.showError = true
-                        case .success( _):
-                            self.presentationMode.wrappedValue.dismiss()
+                    if user.isSignUpComplete {
+                        FBAuth.createUser(withEmail: self.user.email, vehicle: self.user.vehicle, password: self.user.password) { (result) in
+                            switch result {
+                            case .failure(let error):
+                                self.errorString = error.localizedDescription
+                                self.showError = true
+                            case .success( _):
+                                self.presentationMode.wrappedValue.dismiss()
+                            }
                         }
-                    }
-                    self.signUpClicked = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        self.signUpClicked = false
+                        self.signUpClicked = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.signUpClicked = false
+                        }
+                    } else {
+                        if !user.isVehicleValid() {
+                            self.errorString = "Please enter a valid vehicle color and brand under 25 characters."
+                        } else if !user.isEmailValid() {
+                            self.errorString = "Please enter a valid email."
+                        } else if !user.isPasswordValid() {
+                            self.errorString = "Please enter a valid password with 6 or more characters containing at least one number."
+                        }
+                        self.showError = true
                     }
                 }) {
-                    Text("Sign Up")
-                        .bold()
-                        .font(.title)
-                        .foregroundColor(signUpButtonColor)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }.disabled(!user.isSignUpComplete || self.signUpClicked)
+                    HStack {
+                        Spacer()
+                        Text("Sign Up")
+                            .bold()
+                            .font(.title2)
+                            .padding(10)
+                            .padding(.horizontal)
+                            .foregroundColor(Color("black1"))
+                            .background(Color("orange1"))
+                            .cornerRadius(50)
+                        Spacer()
+                    }
+                }.disabled(self.signUpClicked)
                 .alert(isPresented: $showError) {
                     Alert(title: Text("Error"), message: Text(self.errorString), dismissButton: .default(Text("Okay")))
                 }

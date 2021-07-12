@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct TutorialView: View {
     @State var showingVideoSheetTutorial = false
@@ -14,6 +15,7 @@ struct TutorialView: View {
             VStack(alignment: .leading) {
                 Button(action: {
                     self.showingVideoSheetTutorial.toggle()
+                    self.vid()
                 }) {
                     HStack {
                         Spacer()
@@ -65,6 +67,9 @@ struct TutorialView: View {
             }.padding(.horizontal)
             .navigationBarTitle("Tutorial", displayMode: .inline)
         }
+    }
+    private func vid() {
+        try! AVAudioSession.sharedInstance().setCategory(.playback)
     }
 }
 struct TutorialView_Previews: PreviewProvider {

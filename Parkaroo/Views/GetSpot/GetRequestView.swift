@@ -93,15 +93,15 @@ struct GetRequestView: View {
         if self.userInfo.isUserAuthenticated == .signedIn {
             if self.locationTransfer.seller?.uid != Auth.auth().currentUser!.uid {
                 if self.userInfo.user.credits > 0 {
-                        userInfo.addCredits(numberOfCredits: -1) { result in
-                            switch result {
-                            case .success(_):
-                                print("Credit subtracted")
-                                self.completeTransaction()
-                            case .failure(_):
-                                print("Error updating credits")
-                            }
+                    userInfo.addCredits(numberOfCredits: -1) { result in
+                        switch result {
+                        case .success(_):
+                            print("Credit subtracted")
+                            self.completeTransaction()
+                        case .failure(_):
+                            print("Error updating credits")
                         }
+                    }
                 } else {
                     self.showingNotEnoughCreditsAlert = true
                 }
@@ -113,6 +113,7 @@ struct GetRequestView: View {
         }
     }
     private func completeTransaction() {
+        Analytics.logEvent("reserve_spot", parameters: ["value" : 1])
         self.gGRequestConfirm.showGetRequestView = false
         self.gGRequestConfirm.showGetConfirmView = true
         let data = [C_BUYER:userInfo.user.uid, C_STATUS: pinStatus.reserved.rawValue]

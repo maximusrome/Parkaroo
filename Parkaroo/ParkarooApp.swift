@@ -58,20 +58,16 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         //NotificationsService.shared.configure()
         return true
     }
-    
     func applicationDidBecomeActive(_ application: UIApplication) {
         LocationService.shared.checkLocationAuthStatus()
     }
-    
     // MARK: Notifications
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
     }
-    
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print(error.localizedDescription)
     }
-    
     func configureNotifications() {
         UNUserNotificationCenter.current().delegate = self
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]

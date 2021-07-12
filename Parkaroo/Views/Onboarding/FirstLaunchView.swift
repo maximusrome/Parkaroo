@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct FirstLaunchView: View {
     @State private var SlideGesture = CGSize.zero
@@ -102,6 +103,7 @@ struct FirstLaunchView: View {
                     Spacer()
                     Button(action: {
                         self.showingVideoSheet.toggle()
+                        self.vid()
                     }) {
                         HStack {
                             Image(systemName: "play.fill")
@@ -118,6 +120,9 @@ struct FirstLaunchView: View {
                 .offset(x: SlideTwo ? 0 : 500)
             }
         }
+    }
+    private func vid() {
+        try! AVAudioSession.sharedInstance().setCategory(.playback)
     }
 }
 struct FirstLaunchView_Previews: PreviewProvider {

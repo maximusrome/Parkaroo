@@ -20,9 +20,16 @@ struct MapGiveView: UIViewRepresentable {
         return mapView
     }
     func updateUIView(_ view: MKMapView, context: Context) {
-        if annotations.count != (view.annotations.count - 1) {
-            view.removeAnnotations(view.annotations)
-            view.addAnnotations(annotations)
+        if (CLLocationManager.authorizationStatus() == .authorizedAlways) || (CLLocationManager.authorizationStatus() == .authorizedWhenInUse) {
+            if annotations.count != (view.annotations.count - 1) {
+                view.removeAnnotations(view.annotations)
+                view.addAnnotations(annotations)
+            }
+        } else {
+            if annotations.count != view.annotations.count {
+                view.removeAnnotations(view.annotations)
+                view.addAnnotations(annotations)
+            }
         }
     }
     func centerMapOnCoordinate() {

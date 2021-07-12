@@ -8,8 +8,8 @@
 import Foundation
 
 enum EmailAuthError: Error {
-    case incorrectPassword
     case invalidEmail
+    case incorrectPassword
     case accoundDoesNotExist
     case unknownError
     case couldNotCreate
@@ -18,12 +18,12 @@ enum EmailAuthError: Error {
 extension EmailAuthError: LocalizedError {
     var errorDescription: String? {
         switch self {
-        case .incorrectPassword:
-            return NSLocalizedString("Incorrect Password for this account", comment: "")
         case .invalidEmail:
-            return NSLocalizedString("Not a valid email address.", comment: "")
+            return NSLocalizedString("Please enter a valid email.", comment: "")
+        case .incorrectPassword:
+            return NSLocalizedString("Incorrect password for this account.", comment: "")
         case .accoundDoesNotExist:
-            return NSLocalizedString("Not a valid email address. This account does not exist.", comment: "")
+            return NSLocalizedString("Please enter a valid email. This account does not exist.", comment: "")
         case .unknownError:
             return NSLocalizedString("Unknown error. Cannot log in.", comment: "")
         case .couldNotCreate:

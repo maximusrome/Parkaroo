@@ -27,9 +27,16 @@ struct MapGetView: UIViewRepresentable {
                 view.addAnnotation(annotation)
             }
         }
-        if annotations1.count != (view.annotations.count - extra) {
-            view.removeAnnotations(view.annotations)
-            view.addAnnotations(annotations1)
+        if (CLLocationManager.authorizationStatus() == .authorizedAlways) || (CLLocationManager.authorizationStatus() == .authorizedWhenInUse) {
+            if annotations1.count != (view.annotations.count - extra) {
+                view.removeAnnotations(view.annotations)
+                view.addAnnotations(annotations1)
+            }
+        } else {
+            if annotations1.count != (view.annotations.count - extra + 1) {
+                view.removeAnnotations(view.annotations)
+                view.addAnnotations(annotations1)
+            }
         }
     }
     func centerMapOnCoordinate() {

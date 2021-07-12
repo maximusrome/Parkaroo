@@ -47,10 +47,11 @@ struct Board3View_Previews: PreviewProvider {
 struct VideoView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var locationTransfer: LocationTransfer
-    @State var url = Bundle.main.url(forResource: "IMG_3792", withExtension: "mp4")
+    let player = AVPlayer(url: Bundle.main.url(forResource: "IMG_3841", withExtension: "mp4")!)
     var body: some View {
         VStack {
-            VideoPlayer(player: AVPlayer(url: url!)).edgesIgnoringSafeArea(.all)
+            VideoPlayer(player: player)
+                .edgesIgnoringSafeArea(.all)
             HStack {
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
@@ -66,6 +67,9 @@ struct VideoView: View {
                 }
             }
         }
+        .onAppear() {
+            player.play()
+        }
     }
 }
 struct VideoView_Previews: PreviewProvider {
@@ -76,7 +80,7 @@ struct VideoView_Previews: PreviewProvider {
 }
 struct VideoTutorialView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var url = Bundle.main.url(forResource: "IMG_3792", withExtension: "mp4")
+    let player = AVPlayer(url: Bundle.main.url(forResource: "IMG_3841", withExtension: "mp4")!)
     var body: some View {
         VStack {
             HStack {
@@ -90,7 +94,10 @@ struct VideoTutorialView: View {
                         .padding()
                 }
             }
-            VideoPlayer(player: AVPlayer(url: url!)).edgesIgnoringSafeArea(.all)
+            VideoPlayer(player: player).edgesIgnoringSafeArea(.all)
+        }
+        .onAppear() {
+            player.play()
         }
     }
 }
