@@ -84,8 +84,10 @@ struct LoginView: View {
                         case .failure(let error):
                             self.authError = error
                             self.showLoginAlert = true
+                            Analytics.logEvent("unsuccessful_login", parameters: nil)
                         case .success( _):
                             self.presentationMode.wrappedValue.dismiss()
+                            Analytics.logEvent("successful_login", parameters: nil)
                         }
                     }
                     self.loginClicked = true

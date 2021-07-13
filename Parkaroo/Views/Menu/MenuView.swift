@@ -62,6 +62,7 @@ struct MenuView: View {
                             self.gGRequestConfirm.showGetRequestView = false
                             self.gGRequestConfirm.showGetConfirmView = false
                             UIApplication.shared.endEditing()
+                            Analytics.logEvent("log_out", parameters: nil)
                         }))
                     }
                 }

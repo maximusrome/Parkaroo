@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct RateBuyerView: View {
     @EnvironmentObject var userInfo: UserInfo
@@ -27,6 +28,7 @@ struct RateBuyerView: View {
                 updateRating()
                 addCredit()
                 cleanUp()
+                Analytics.logEvent("seller_rating_submited", parameters: nil)
             }) {
                 Text("Submit")
                     .bold()

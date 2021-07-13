@@ -7,6 +7,7 @@
 import SwiftUI
 import UIKit
 import MessageUI
+import Firebase
 
 struct SettingsView: View {
     @State private var showContactUs = false
@@ -55,7 +56,7 @@ struct SettingsView: View {
         .navigationBarTitle("Settings", displayMode: .inline)
     }
     func inviteFriends() {
-        print("pressed invite friends")
+        Analytics.logEvent("invite_friends", parameters: nil)
         let url = URL(string: "https://apps.apple.com/us/app/parkaroo/id1560506911")
         let activityView = UIActivityViewController(activityItems: [url!], applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController?.present(activityView, animated: true, completion: nil)

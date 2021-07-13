@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct RateSellerView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
@@ -26,6 +27,7 @@ struct RateSellerView: View {
                 updateRating()
                 locationTransfer.updateGettingPin(data: [C_RATINGSUBMITTED:true])
                 cleanUp()
+                Analytics.logEvent("buyer_rating_submited", parameters: nil)
             }) {
                 Text("Submit")
                     .bold()

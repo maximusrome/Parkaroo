@@ -69,6 +69,7 @@ struct SignUpView: View {
                                 self.showError = true
                             case .success( _):
                                 self.presentationMode.wrappedValue.dismiss()
+                                Analytics.logEvent("successful_sign_up", parameters: nil)
                             }
                         }
                         self.signUpClicked = true
@@ -76,10 +77,17 @@ struct SignUpView: View {
                             self.signUpClicked = false
                         }
                     } else {
+                        Analytics.logEvent("unsuccessful_sign_up", parameters: nil)
                         if !user.isVehicleValid() {
                             self.errorString = "Please enter a valid vehicle color and brand under 25 characters."
+                        } else if user.containsProfanity() {
+                            self.errorString = "Please enter a valid vehicle color and brand without any inappropriate language."
                         } else if !user.isEmailValid() {
-                            self.errorString = "Please enter a valid email."
+                            if user.isEmailNotContainingSpace() {
+                                self.errorString = "Please enter a valid email."
+                            } else {
+                                self.errorString = "Please enter a valid email without any spaces."
+                            }
                         } else if !user.isPasswordValid() {
                             self.errorString = "Please enter a valid password with 6 or more characters containing at least one number."
                         }

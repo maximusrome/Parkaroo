@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct GiveConfirmView: View {
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
@@ -63,6 +64,7 @@ struct GiveConfirmView: View {
                                 locationTransfer.deletePin()
                                 locationTransfer.minute = ""
                                 self.gGRequestConfirm.showGiveConfirmView = false
+                                Analytics.logEvent("seller_canceled", parameters: ["value" : 1])
                                 if let buyer = locationTransfer.buyer {
                                     NotificationsService.shared.sendNotification(uid: buyer.uid, message: "The seller has canceled their spot")
                                 }
@@ -74,6 +76,7 @@ struct GiveConfirmView: View {
                         self.gGRequestConfirm.showBuyerRatingView = true
                         self.locationTransfer.givingPin = nil
                         self.locationTransfer.locations.removeAll()
+                        Analytics.logEvent("seller_complete_transfer", parameters: nil)
                     }) {
                         Text("\(locationTransfer.givingPin?.ratingSubmitted ?? false ? "Complete Transfer" : "Awaiting Car Arrival")")
                             .bold()

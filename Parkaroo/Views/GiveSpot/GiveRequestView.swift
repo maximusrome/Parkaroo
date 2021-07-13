@@ -97,6 +97,7 @@ struct GiveRequestView: View {
                             self.showingInvalidStreetInfoAlert = false
                             self.gGRequestConfirm.showGiveRequestView = false
                             self.gGRequestConfirm.showGiveConfirmView = true
+                            Analytics.logEvent("make_available", parameters: nil)
                         } else {
                             self.showingInvalidStreetInfoAlert = true
                         }

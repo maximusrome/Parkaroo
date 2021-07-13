@@ -78,6 +78,7 @@ struct GetConfirmView: View {
                         .cornerRadius(50)
                 }.alert(isPresented: $showingConfirmAlert) {
                     Alert(title: Text("Are You Parked?"), message: Text("Complete this transfer when you are successfully parked in the spot."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
+                        Analytics.logEvent("buyer_complete_transfer", parameters: nil)
                         self.gGRequestConfirm.showGetRequestView = false
                         self.gGRequestConfirm.showGetConfirmView = false
                         self.gGRequestConfirm.showSellerRatingView = true
@@ -106,6 +107,7 @@ struct GetConfirmView: View {
                 self.locationTransfer.updateGettingPin(data: data)
                 self.locationTransfer.cleanUpGettingPin()
                 self.userInfo.user.credits = credits
+                Analytics.logEvent("buyer_canceled", parameters: ["value" : 1])
             case .failure(_):
                 print("Error Refunding")
             }

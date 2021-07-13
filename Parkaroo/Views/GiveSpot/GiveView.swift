@@ -31,6 +31,7 @@ struct GiveView: View {
                         self.gGRequestConfirm.showGiveRequestView = false
                         self.locationTransfer.minute = ""
                         self.locationTransfer.giveStreetInfoSelection = "Edit"
+                        Analytics.logEvent("give_spot", parameters: nil)
                         if self.userInfo.isUserAuthenticated == .signedIn {
                             self.gGRequestConfirm.showGiveRequestView = true
                             self.locationTransfer.addRefencePin()
