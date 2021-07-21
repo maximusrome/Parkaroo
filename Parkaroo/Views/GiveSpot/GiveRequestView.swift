@@ -20,6 +20,8 @@ struct GiveRequestView: View {
     @State var rating = 5
     @State private var showingInvalidDepartureAlert = false
     @State private var showingInvalidStreetInfoAlert = false
+    @State private var showingShortTimeAlert = false
+    @State private var firstMakeAvailbleClicked = true
     func abc() -> Bool {
         if Int(locationTransfer.minute) != 0 {
             let minuteTest = NSPredicate(format: "SELF MATCHES %@",
@@ -37,7 +39,7 @@ struct GiveRequestView: View {
             HStack {
                 Text("Departing in:")
                     .bold()
-                TextField("10     ", text: $locationTransfer.minute)
+                TextField("30     ", text: $locationTransfer.minute)
                     .onChange(of: self.locationTransfer.minute, perform: { value in
                         if value.count > 3 {
                             self.locationTransfer.minute = String(value.prefix(3))
@@ -73,6 +75,8 @@ struct GiveRequestView: View {
                     .bold()
                 Text("\(self.userInfo.user.numberOfRatings > 0 ? String(self.userInfo.user.numberOfRatings) : "0") ratings")
                     .font(.footnote)
+            }.alert(isPresented: $showingShortTimeAlert) {
+                return Alert(title: Text("Friendly Reminder"), message: Text("We recommend leaving a bit more time so your neighbors can get to your spot."), dismissButton: .default(Text("Okay")))
             }
             Spacer()
             HStack {
@@ -90,14 +94,20 @@ struct GiveRequestView: View {
                 Button(action: {
                     if abc() {
                         if self.locationTransfer.giveStreetInfoSelection != "Edit" {
-                            UIApplication.shared.endEditing()
-                            self.locationTransfer.locations.removeFirst()
-                            self.locationTransfer.createPin()
-                            self.showingInvalidDepartureAlert = false
-                            self.showingInvalidStreetInfoAlert = false
-                            self.gGRequestConfirm.showGiveRequestView = false
-                            self.gGRequestConfirm.showGiveConfirmView = true
-                            Analytics.logEvent("make_available", parameters: nil)
+                            if Int(self.locationTransfer.minute)! > 9 || !self.firstMakeAvailbleClicked {
+                                UIApplication.shared.endEditing()
+                                self.locationTransfer.locations.removeFirst()
+                                self.locationTransfer.createPin()
+                                self.showingInvalidDepartureAlert = false
+                                self.showingInvalidStreetInfoAlert = false
+                                self.gGRequestConfirm.showGiveRequestView = false
+                                self.gGRequestConfirm.showGiveConfirmView = true
+                                self.firstMakeAvailbleClicked = true
+                                Analytics.logEvent("make_available", parameters: nil)
+                            } else {
+                                self.showingShortTimeAlert = true
+                                self.firstMakeAvailbleClicked = false
+                            }
                         } else {
                             self.showingInvalidStreetInfoAlert = true
                         }

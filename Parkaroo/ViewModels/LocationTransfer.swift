@@ -102,8 +102,8 @@ class LocationTransfer: ObservableObject {
     }
     func deletePin() {
         let db = Firestore.firestore()
-        let userID = Auth.auth().currentUser!.uid
-        db.collection("pins").document(userID).delete()
+        let userID = Auth.auth().currentUser?.uid
+        db.collection("pins").document(userID!).delete()
         self.givingPin = nil
         self.locations.removeAll()
     }

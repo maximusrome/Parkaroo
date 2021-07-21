@@ -35,6 +35,18 @@ struct FAQSView: View {
                         .bold()
                         .font(.title3)
                     Text("You will be able to rate the seller. In this instance, we recommend giving the seller a low rating, so others in the future will know that he/she is less reliable than other sellers. In additon, you can always contact us to refund your credit.\n")
+                    Text("How much time should I leave for a person to reserve my spot?")
+                        .bold()
+                        .font(.title3)
+                    Text("We recommend entering a departure time between 15 to 60 minutes. This will give a neighbor plenty of time to get to your spot.\n")
+                    Text("Should I wait for the buyer to arrive?")
+                        .bold()
+                        .font(.title3)
+                    Text("Generally, you will not need to wait because the buyer will already be next to your spot before you are ready to leave. However, if the buyer is late you should wait a few minutes because you get a credit when someone successfully gets your spot.\n")
+                    Text("How can I stay up to date on Parkaroo News?")
+                        .bold()
+                        .font(.title3)
+                    Text("We have a parkaroo instagram, @parkaroonyc, a facebook page, as well as a website where you can subscribe to our email list.\n")
                 }
             }
         }.padding(.horizontal)

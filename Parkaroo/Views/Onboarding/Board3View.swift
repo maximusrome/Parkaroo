@@ -9,7 +9,6 @@ import SwiftUI
 import AVKit
 
 struct Board3View: View {
-    @State var showingVideoSheet = false
     var body: some View {
         ZStack {
             VStack {
@@ -66,8 +65,7 @@ struct VideoView: View {
                         .padding()
                 }
             }
-        }
-        .onAppear() {
+        }.onAppear() {
             player.play()
         }
     }
@@ -95,8 +93,7 @@ struct VideoTutorialView: View {
                 }
             }
             VideoPlayer(player: player).edgesIgnoringSafeArea(.all)
-        }
-        .onAppear() {
+        }.onAppear() {
             player.play()
         }
     }

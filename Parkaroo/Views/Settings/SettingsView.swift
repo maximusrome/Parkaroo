@@ -10,7 +10,6 @@ import MessageUI
 import Firebase
 
 struct SettingsView: View {
-    @State private var showContactUs = false
     @State private var showReportProblem = false
     @State var result: Result<MFMailComposeResult, Error>? = nil
     var body: some View {
@@ -24,6 +23,11 @@ struct SettingsView: View {
                 }) {
                     SettingsCell(title: "Invite Friends", imgName: "person.2")
                 }
+            }
+            Section {
+                NavigationLink(destination: TutorialView()) {
+                    SettingsCell(title: "Tutorial", imgName: "book")
+                }
                 NavigationLink(destination: FAQSView()) {
                     SettingsCell(title: "Frequently Asked Questions", imgName: "info.circle")
                 }
@@ -34,15 +38,6 @@ struct SettingsView: View {
                 }
                 Link(destination: URL(string: "https://parkaroo.org/terms-%26-conditions")!) {
                     SettingsCell(title: "Terms and Conditions", imgName: "doc.text")
-                }
-            }
-            Section {
-                Button(action: {
-                    self.contactUs()
-                }) {
-                    SettingsCell(title: "Contact Us", imgName: "envelope")
-                }.sheet(isPresented: $showContactUs) {
-                    MailView(result: self.$result, newSubject: "Contact Us", newMsgBody: "")
                 }
                 Button(action: {
                     self.reportProblem()
@@ -60,14 +55,6 @@ struct SettingsView: View {
         let url = URL(string: "https://apps.apple.com/us/app/parkaroo/id1560506911")
         let activityView = UIActivityViewController(activityItems: [url!], applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController?.present(activityView, animated: true, completion: nil)
-    }
-    func contactUs() {
-        print("pressed contact us")
-        if MFMailComposeViewController.canSendMail() {
-            self.showContactUs = true
-        } else {
-            print("Error sending mail")
-        }
     }
     func reportProblem() {
         print("pressed report problem")

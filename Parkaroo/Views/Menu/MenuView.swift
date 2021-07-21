@@ -6,6 +6,8 @@
 //
 import SwiftUI
 import Firebase
+import UIKit
+import MessageUI
 
 struct MenuView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -13,6 +15,8 @@ struct MenuView: View {
     @EnvironmentObject var locationTransfer : LocationTransfer
     @EnvironmentObject var userInfo : UserInfo
     @State private var logOutClicked = false
+    @State var result: Result<MFMailComposeResult, Error>? = nil
+    @State private var showContactUs = false
     var body: some View {
         VStack(alignment: .leading) {
             Group {
@@ -27,11 +31,15 @@ struct MenuView: View {
                 }
             }
             Spacer()
-            NavigationLink(destination: TutorialView()) {
+            Button(action: {
+                self.contactUs()
+            }) {
                 HStack {
-                    Image(systemName: "book")
+                    Image(systemName: "envelope")
                         .imageScale(.large)
-                    Text("Tutorial")
+                    Text("Contact Us")
+                }.sheet(isPresented: $showContactUs) {
+                    MailView(result: self.$result, newSubject: "Contact Us", newMsgBody: "")
                 }
             }
             Spacer()
@@ -97,6 +105,14 @@ struct MenuView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color("white1"))
         .edgesIgnoringSafeArea(.all)
+    }
+    func contactUs() {
+        print("pressed contact us")
+        if MFMailComposeViewController.canSendMail() {
+            self.showContactUs = true
+        } else {
+            print("Error sending mail")
+        }
     }
 }
 struct MenuView_Previews: PreviewProvider {

@@ -285,7 +285,6 @@
 			children = (
 				21EBF2BD266BF03A00102E0F /* MenuView.swift */,
 				21EBF2BC266BF03A00102E0F /* CreditsView.swift */,
-				21EBF2BB266BF03A00102E0F /* TutorialView.swift */,
 				21EBF2BE266BF03A00102E0F /* SignUpView.swift */,
 				21EBF2BF266BF03A00102E0F /* LoginView.swift */,
 			);
@@ -297,6 +296,7 @@
 			children = (
 				21EBF311266BF4DD00102E0F /* SettingsView.swift */,
 				21EBF30D266BF4DC00102E0F /* CharityView.swift */,
+				21EBF2BB266BF03A00102E0F /* TutorialView.swift */,
 				21EBF312266BF4DD00102E0F /* FAQSView.swift */,
 				21EBF30E266BF4DC00102E0F /* MailView.swift */,
 			);
@@ -590,7 +590,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
