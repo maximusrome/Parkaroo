@@ -11,6 +11,7 @@ import Firebase
 struct GiveConfirmView: View {
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @EnvironmentObject var locationTransfer: LocationTransfer
+    @EnvironmentObject var userInfo: UserInfo
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var departureMinutes = Int()
     @State var showingSellerCancelAlert = false
@@ -76,6 +77,7 @@ struct GiveConfirmView: View {
                         self.gGRequestConfirm.showBuyerRatingView = true
                         self.locationTransfer.givingPin = nil
                         self.locationTransfer.locations.removeAll()
+                        addCredit()
                         Analytics.logEvent("seller_complete_transfer", parameters: nil)
                     }) {
                         Text("\(locationTransfer.givingPin?.ratingSubmitted ?? false ? "Complete Transfer" : "Awaiting Car Arrival")")
@@ -118,6 +120,18 @@ struct GiveConfirmView: View {
         .padding(.bottom)
         .padding(.horizontal, 50)
     }
+    private func addCredit() {
+        let updateCredits = userInfo.user.credits + 1
+        FBFirestore.mergeFBUser([C_CREDITS:updateCredits], uid: userInfo.user.uid) { result in
+            switch result {
+            case .success(_):
+                print("Credit Added")
+                userInfo.user.credits += 1
+            case .failure(_):
+                print("Error")
+            }
+        }
+    }
 }
 struct GiveConfirmView_Previews: PreviewProvider {
     static var previews: some View {
@@ -125,5 +139,6 @@ struct GiveConfirmView_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
             .environmentObject(GGRequestConfirm())
             .environmentObject(LocationTransfer())
+            .environmentObject(UserInfo())
     }
 }

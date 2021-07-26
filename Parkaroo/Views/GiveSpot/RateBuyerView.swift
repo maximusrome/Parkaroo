@@ -9,7 +9,6 @@ import SwiftUI
 import Firebase
 
 struct RateBuyerView: View {
-    @EnvironmentObject var userInfo: UserInfo
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @State var rating: Int = 0
@@ -26,7 +25,6 @@ struct RateBuyerView: View {
             Button(action: {
                 self.gGRequestConfirm.showBuyerRatingView = false
                 updateRating()
-                addCredit()
                 cleanUp()
                 Analytics.logEvent("seller_rating_submited", parameters: nil)
             }) {
@@ -65,18 +63,6 @@ struct RateBuyerView: View {
             }
         }
     }
-    private func addCredit() {
-        let updateCredits = userInfo.user.credits + 1
-        FBFirestore.mergeFBUser([C_CREDITS:updateCredits], uid: userInfo.user.uid) { result in
-            switch result {
-            case .success(_):
-                print("Credit Added")
-                userInfo.user.credits += 1
-            case .failure(_):
-                print("Error")
-            }
-        }
-    }
     private func cleanUp() {
         self.locationTransfer.deletePin()
         self.locationTransfer.givingPinListener?.remove()
@@ -90,7 +76,6 @@ struct RateBuyerView_Previews: PreviewProvider {
     static var previews: some View {
         RateBuyerView()
             .environmentObject(LocationTransfer())
-            .environmentObject(UserInfo())
             .environmentObject(GGRequestConfirm())
     }
 }
