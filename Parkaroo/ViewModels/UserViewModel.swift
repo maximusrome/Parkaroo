@@ -32,8 +32,12 @@ struct UserViewModel {
         let emailTest = NSPredicate(format: "SELF MATCHES %@", "[^ ]*")
         return emailTest.evaluate(with: email)
     }
+    func isEmailNotContainingUppercase() -> Bool {
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", "[^A-Z]*")
+        return emailTest.evaluate(with: email)
+    }
     var isSignUpComplete: Bool {
-        if !isPasswordValid() || !isEmailValid() || !isVehicleValid() || containsProfanity() || !isEmailNotContainingSpace() {
+        if !isPasswordValid() || !isEmailValid() || !isVehicleValid() || containsProfanity() || !isEmailNotContainingSpace() || !isEmailNotContainingUppercase() {
             return false
         }
         return true

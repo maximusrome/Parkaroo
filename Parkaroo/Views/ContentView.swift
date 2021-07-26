@@ -17,8 +17,7 @@ struct ContentView: View {
     @State private var showNotifications = false
     @State private var showSetUpNotifications = false
     @State var offset : CGFloat = UIScreen.main.bounds.height
-    @State private var showOnBoarding = false
-    @AppStorage("OboardBeenViewed") private var hasOnboarded = false
+    @AppStorage("OboardBeenViewed") var hasOnboarded = false
     var body: some View {
         let drag = DragGesture()
             .onEnded {
@@ -57,7 +56,7 @@ struct ContentView: View {
                             .gesture(drag)
                     }
                 }
-                if self.showOnBoarding && self.locationTransfer.isPresented {
+                if self.locationTransfer.showOnBoarding && self.locationTransfer.isPresented {
                     FirstLaunchView()
                         .navigationBarHidden(true)
                 }
@@ -85,8 +84,16 @@ struct ContentView: View {
                 }.animation(.default)
                 .background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
                                 .onTapGesture {
-                                    self.offset = 0
+                                    self.offset = UIScreen.main.bounds.height
                                 }).edgesIgnoringSafeArea(.bottom)
+                .background((self.showMenu ? Color(UIColor.label).opacity(0.001) : Color.clear)
+                                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                                .offset(x: -UIScreen.main.bounds.width/2)
+                                .onTapGesture {
+                                    withAnimation {
+                                        self.showMenu = false
+                                    }
+                                })
             }.navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -131,7 +138,7 @@ struct ContentView: View {
         })
         .onAppear {
             if !hasOnboarded {
-                showOnBoarding.toggle()
+                self.locationTransfer.showOnBoarding.toggle()
                 hasOnboarded = true
             }
             self.userInfo.configureFirebaseStateDidChange()

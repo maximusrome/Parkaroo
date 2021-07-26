@@ -26,7 +26,7 @@ struct GiveConfirmView: View {
                 .onReceive(timer, perform: { input in
                     let diff = Date().distance(to: self.locationTransfer.givingPin?.departure.dateValue() ?? Date())
                     departureMinutes = Int(diff / 60)
-                    if locationTransfer.buyer == nil && departureMinutes < 0 {
+                    if (locationTransfer.givingPin?.buyer == nil || locationTransfer.givingPin?.buyer == "") && departureMinutes < 0 {
                         locationTransfer.deletePin()
                         locationTransfer.minute = ""
                         locationTransfer.givingPin = nil
@@ -110,7 +110,7 @@ struct GiveConfirmView: View {
                         .padding(.bottom, 25)
                 }
             }
-        }.frame(width: 300, height: 380)
+        }.frame(width: 320, height: 380)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
         .cornerRadius(30)

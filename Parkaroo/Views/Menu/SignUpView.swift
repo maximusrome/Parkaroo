@@ -17,6 +17,7 @@ struct SignUpView: View {
     @State private var errorString = ""
     @State private var visable = false
     @State private var signUpClicked = false
+    @State private var showingLoginView = false
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -70,6 +71,10 @@ struct SignUpView: View {
                             case .success( _):
                                 self.presentationMode.wrappedValue.dismiss()
                                 Analytics.logEvent("successful_sign_up", parameters: nil)
+                                if self.locationTransfer.showOnBoarding && self.locationTransfer.isPresented {
+                                    self.locationTransfer.isPresented = false
+                                    LocationService.shared.checkLocationAuthStatus()
+                                }
                             }
                         }
                         self.signUpClicked = true
@@ -83,10 +88,14 @@ struct SignUpView: View {
                         } else if user.containsProfanity() {
                             self.errorString = "Please enter a valid vehicle color and brand without any inappropriate language."
                         } else if !user.isEmailValid() {
-                            if user.isEmailNotContainingSpace() {
-                                self.errorString = "Please enter a valid email."
-                            } else {
+                            if !user.isEmailNotContainingSpace() && !user.isEmailNotContainingUppercase() {
+                                self.errorString = "Please enter a valid email without any spaces or uppercases."
+                            } else if !user.isEmailNotContainingSpace() && user.isEmailNotContainingUppercase() {
                                 self.errorString = "Please enter a valid email without any spaces."
+                            } else if user.isEmailNotContainingSpace() && !user.isEmailNotContainingUppercase() {
+                                self.errorString = "Please enter a valid email without any uppercases."
+                            } else if user.isEmailNotContainingSpace() && user.isEmailNotContainingUppercase() {
+                                self.errorString = "Please enter a valid email."
                             }
                         } else if !user.isPasswordValid() {
                             self.errorString = "Please enter a valid password with 6 or more characters containing at least one number."
@@ -109,6 +118,20 @@ struct SignUpView: View {
                 }.disabled(self.signUpClicked)
                 .alert(isPresented: $showError) {
                     Alert(title: Text("Error"), message: Text(self.errorString), dismissButton: .default(Text("Okay")))
+                }
+                if self.locationTransfer.showOnBoarding && self.locationTransfer.isPresented {
+                    HStack {
+                        Spacer()
+                        Text("Already have an account?")
+                        Button(action: {
+                            self.showingLoginView = true
+                        }) {
+                            Text("Login")
+                        }.sheet(isPresented: $showingLoginView) {
+                            LoginView()
+                        }
+                        Spacer()
+                    }.padding()
                 }
             }
         }.padding()

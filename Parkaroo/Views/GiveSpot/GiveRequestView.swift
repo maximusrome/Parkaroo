@@ -21,7 +21,7 @@ struct GiveRequestView: View {
     @State private var showingInvalidDepartureAlert = false
     @State private var showingInvalidStreetInfoAlert = false
     @State private var showingShortTimeAlert = false
-    @State private var firstMakeAvailbleClicked = true
+    @State private var firstMakeAvailableClicked = true
     func abc() -> Bool {
         if Int(locationTransfer.minute) != 0 {
             let minuteTest = NSPredicate(format: "SELF MATCHES %@",
@@ -85,6 +85,7 @@ struct GiveRequestView: View {
                     self.gGRequestConfirm.showGiveRequestView = false
                     self.locationTransfer.minute = ""
                     self.locationTransfer.locations.removeAll()
+                    self.firstMakeAvailableClicked = true
                 }){
                     Text("close")
                         .padding(10)
@@ -94,7 +95,7 @@ struct GiveRequestView: View {
                 Button(action: {
                     if abc() {
                         if self.locationTransfer.giveStreetInfoSelection != "Edit" {
-                            if Int(self.locationTransfer.minute)! > 9 || !self.firstMakeAvailbleClicked {
+                            if Int(self.locationTransfer.minute)! > 9 || !self.firstMakeAvailableClicked {
                                 UIApplication.shared.endEditing()
                                 self.locationTransfer.locations.removeFirst()
                                 self.locationTransfer.createPin()
@@ -102,11 +103,11 @@ struct GiveRequestView: View {
                                 self.showingInvalidStreetInfoAlert = false
                                 self.gGRequestConfirm.showGiveRequestView = false
                                 self.gGRequestConfirm.showGiveConfirmView = true
-                                self.firstMakeAvailbleClicked = true
+                                self.firstMakeAvailableClicked = true
                                 Analytics.logEvent("make_available", parameters: nil)
                             } else {
                                 self.showingShortTimeAlert = true
-                                self.firstMakeAvailbleClicked = false
+                                self.firstMakeAvailableClicked = false
                             }
                         } else {
                             self.showingInvalidStreetInfoAlert = true
@@ -124,7 +125,7 @@ struct GiveRequestView: View {
                     return Alert(title: Text("Add Departure Time"), dismissButton: .default(Text("Okay")))
                 }
             }.padding(.bottom, 25)
-        }.frame(width: 300, height: 280)
+        }.frame(width: 320, height: 280)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
         .cornerRadius(30)

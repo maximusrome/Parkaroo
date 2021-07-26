@@ -64,7 +64,7 @@ struct MenuView: View {
                             self.locationTransfer.fullCleanUp {
                                 FBAuth.logOut { (_) in }
                             }
-                            self.userInfo.user.credits = 0
+                            self.userInfo.user.credits = 2
                             self.gGRequestConfirm.showGiveRequestView = false
                             self.gGRequestConfirm.showGiveConfirmView = false
                             self.gGRequestConfirm.showGetRequestView = false

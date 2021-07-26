@@ -9,6 +9,7 @@ import SwiftUI
 import AVKit
 
 struct Board3View: View {
+    let player = AVPlayer(url: Bundle.main.url(forResource: "IMG_3841", withExtension: "MOV")!)
     var body: some View {
         ZStack {
             VStack {
@@ -19,61 +20,22 @@ struct Board3View: View {
                     .edgesIgnoringSafeArea(.all)
             }
             VStack {
-                Spacer()
-                Spacer()
-                Image("onboard3")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .padding(.horizontal, 100)
-                    .padding(.bottom, 50)
-                Text("Tutorial")
+                Text("Watch Tutorial")
                     .bold()
                     .font(.title)
-                    .padding(.bottom)
-                Text("Watch our 60 second tutorial for the best experience.")
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
-                Spacer()
-            }
-        }
-    }
-}
-struct Board3View_Previews: PreviewProvider {
-    static var previews: some View {
-        Board3View()
-    }
-}
-struct VideoView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var locationTransfer: LocationTransfer
-    let player = AVPlayer(url: Bundle.main.url(forResource: "IMG_3841", withExtension: "MOV")!)
-    var body: some View {
-        VStack {
-            VideoPlayer(player: player)
-                .edgesIgnoringSafeArea(.all)
-            HStack {
-                Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                    self.locationTransfer.isPresented.toggle()
-                    LocationService.shared.checkLocationAuthStatus()
-                }) {
-                    Text("Get Parking!")
-                        .padding(10)
-                        .background(Color("orange1"))
-                        .foregroundColor(Color("black1"))
-                        .cornerRadius(50)
-                        .padding()
-                }
+                    .padding()
+                VideoPlayer(player: player)
+                    .edgesIgnoringSafeArea(.all)
+                    .padding(.bottom, 100)
             }
         }.onAppear() {
             player.play()
         }
     }
 }
-struct VideoView_Previews: PreviewProvider {
+struct Board3View_Previews: PreviewProvider {
     static var previews: some View {
-        VideoView()
-            .environmentObject(LocationTransfer())
+        Board3View()
     }
 }
 struct VideoTutorialView: View {

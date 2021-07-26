@@ -27,7 +27,7 @@ struct TutorialView: View {
                     .foregroundColor(Color("black1"))
                     .cornerRadius(50)
                     .padding(.top, 40)
-                    .sheet(isPresented: $showingVideoSheetTutorial) {
+                    .fullScreenCover(isPresented: $showingVideoSheetTutorial) {
                         VideoTutorialView()
                     }
                 }

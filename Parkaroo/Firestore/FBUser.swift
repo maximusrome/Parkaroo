@@ -14,7 +14,7 @@ struct FBUser: Equatable {
     let email: String
     var rating: Float = 0
     var numberOfRatings: Int = 0
-    var credits: Int = 0
+    var credits: Int = 2
     var badgeCount: Int = 0
     var basicNotifications = true
     
@@ -39,7 +39,7 @@ extension FBUser {
         let email = documentData[FBKeys.User.email] as? String ?? ""
         let rating = documentData[C_RATING] as? Float ?? 0
         let numberOfRatings = documentData[C_NUMBEROFRATINGS] as? Int ?? 0
-        let credits = documentData[C_CREDITS] as? Int ?? 0
+        let credits = documentData[C_CREDITS] as? Int ?? 2
         let badgeCount = documentData[C_BADGECOUNT] as? Int ?? 0
         let basicNotifications = documentData[C_BASICNOTIFICATIONS] as? Bool ?? true
         self.init(uid: uid,

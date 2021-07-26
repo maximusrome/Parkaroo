@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2118500626AE2E5C00090A29 /* Board4View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2118500526AE2E5C00090A29 /* Board4View.swift */; };
 		21295F73256B069100AD0E30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21295F72256B069100AD0E30 /* Assets.xcassets */; };
 		21295F76256B069100AD0E30 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21295F75256B069100AD0E30 /* Preview Assets.xcassets */; };
 		2142EA7C268EB7870070BFFD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2142EA7B268EB7860070BFFD /* GoogleService-Info.plist */; };
@@ -67,6 +68,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2118500526AE2E5C00090A29 /* Board4View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board4View.swift; sourceTree = "<group>"; };
 		21295F6B256B069100AD0E30 /* Parkaroo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Parkaroo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21295F72256B069100AD0E30 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21295F75256B069100AD0E30 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 				21EBF2D4266BF0A800102E0F /* Board1View.swift */,
 				21EBF2D3266BF0A800102E0F /* Board2View.swift */,
 				21EBF2D5266BF0A800102E0F /* Board3View.swift */,
+				2118500526AE2E5C00090A29 /* Board4View.swift */,
 				21C146F0269BD7710079BA2D /* IMG_3841.MOV */,
 				21EBF2D2266BF0A800102E0F /* FirstLaunchView.swift */,
 				21EBF2D1266BF0A800102E0F /* LaunchScreen.storyboard */,
@@ -523,6 +526,7 @@
 				21EBF2F6266BF16600102E0F /* FBFireStore.swift in Sources */,
 				21EBF2F4266BF16600102E0F /* FBUser.swift in Sources */,
 				21EBF2C3266BF03A00102E0F /* SignUpView.swift in Sources */,
+				2118500626AE2E5C00090A29 /* Board4View.swift in Sources */,
 				21EBF308266BF46B00102E0F /* ActivityIndicatorView.swift in Sources */,
 				21EBF309266BF46B00102E0F /* RatingView.swift in Sources */,
 				21EBF2AD266BEFC500102E0F /* GetConfirmView.swift in Sources */,
@@ -692,7 +696,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = org.parkaroo.maxrome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -720,7 +724,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = org.parkaroo.maxrome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

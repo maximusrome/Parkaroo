@@ -88,6 +88,11 @@ struct LoginView: View {
                         case .success( _):
                             self.presentationMode.wrappedValue.dismiss()
                             Analytics.logEvent("successful_login", parameters: nil)
+                            if self.locationTransfer.showOnBoarding && self.locationTransfer.isPresented {
+                                self.presentationMode.wrappedValue.dismiss()
+                                self.locationTransfer.isPresented = false
+                                LocationService.shared.checkLocationAuthStatus()
+                            }
                         }
                     }
                     self.loginClicked = true

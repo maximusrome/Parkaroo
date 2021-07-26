@@ -12,7 +12,6 @@ struct GetView: View {
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
     @EnvironmentObject var userInfo: UserInfo
-    @EnvironmentObject var iapManager: IAPManager
     var body: some View {
         ZStack {
             MapGetView(annotations1: locationTransfer.locations1)
@@ -40,9 +39,6 @@ struct GetView: View {
                 SellerCanceledView()
                     .offset(y: self.locationTransfer.showSellerCanceledView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
-            }
-            if iapManager.showActivityIndicator {
-                ActivityIndicatorView()
             }
         }.onAppear() {
             self.locationTransfer.fetchLocations()

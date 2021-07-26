@@ -30,6 +30,7 @@ class LocationTransfer: ObservableObject {
     @Published var giveStreetInfoSelection: String = "Edit"
     @Published var getStreetInfoSelection: String = "Edit"
     @Published var isPresented = true
+    @Published var showOnBoarding = false
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     var publisher: AnyPublisher<Void, Never>! = nil
@@ -103,9 +104,11 @@ class LocationTransfer: ObservableObject {
     func deletePin() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser?.uid
-        db.collection("pins").document(userID!).delete()
-        self.givingPin = nil
-        self.locations.removeAll()
+        if Auth.auth().currentUser?.uid != nil {
+            db.collection("pins").document(userID ?? "").delete()
+            self.givingPin = nil
+            self.locations.removeAll()
+        }
     }
     func deleteSellerPin() {
         let db = Firestore.firestore()
@@ -125,7 +128,7 @@ class LocationTransfer: ObservableObject {
                 print("There was an error")
             } else {
                 for document in querySnapshot!.documents {
-                    self.credits = document["credits"] as? Int ?? 0
+                    self.credits = document["credits"] as? Int ?? 2
                     print("credits read")
                 }
             }

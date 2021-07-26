@@ -71,7 +71,7 @@ struct GetRequestView: View {
                     Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                 }
             }.padding(.bottom, 25)
-        }.frame(width: 300, height: 280)
+        }.frame(width: 320, height: 280)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
         .cornerRadius(30)
@@ -80,16 +80,6 @@ struct GetRequestView: View {
         .padding(.horizontal, 50)
     }
     private func reserveSpot() {
-        //UNCOMMENT TO TEST ON SIMULATOR
-        //        userInfo.addCredits(numberOfCredits: -1) { result in
-        //            switch result {
-        //            case .success(_):
-        //                self.completeTransaction()
-        //            case .failure(_):
-        //                print("Error updating credits")
-        //            }
-        //        }
-        //UNCOMMENT TO RUN PRODUCTION VERSION
         if self.userInfo.isUserAuthenticated == .signedIn {
             if self.locationTransfer.seller?.uid != Auth.auth().currentUser!.uid {
                 if self.userInfo.user.credits > 0 {
@@ -113,7 +103,7 @@ struct GetRequestView: View {
         }
     }
     private func completeTransaction() {
-        Analytics.logEvent("reserve_spot", parameters: ["value" : 1])
+        Analytics.logEvent("reserve_spot", parameters: nil)
         self.gGRequestConfirm.showGetRequestView = false
         self.gGRequestConfirm.showGetConfirmView = true
         let data = [C_BUYER:userInfo.user.uid, C_STATUS: pinStatus.reserved.rawValue]

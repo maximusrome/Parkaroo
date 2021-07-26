@@ -29,7 +29,7 @@ struct GetConfirmView: View {
                 .onReceive(timer, perform: { input in
                     let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
                     depart = Int(diff / 60)
-                    if locationTransfer.buyer == nil && depart < 0 {
+                    if (locationTransfer.gettingPin?.buyer == nil || locationTransfer.gettingPin?.buyer == "") && depart < 0 {
                         locationTransfer.deleteSellerPin()
                         locationTransfer.minute = ""
                         locationTransfer.gettingPin = nil
@@ -86,7 +86,7 @@ struct GetConfirmView: View {
                     }))
                 }
             }.padding(.bottom, 25)
-        }.frame(width: 300, height: 380)
+        }.frame(width: 320, height: 380)
         .background(Color("white1"))
         .foregroundColor(Color("black1"))
         .cornerRadius(30)
@@ -107,7 +107,7 @@ struct GetConfirmView: View {
                 self.locationTransfer.updateGettingPin(data: data)
                 self.locationTransfer.cleanUpGettingPin()
                 self.userInfo.user.credits = credits
-                Analytics.logEvent("buyer_canceled", parameters: ["value" : 1])
+                Analytics.logEvent("buyer_canceled", parameters: nil)
             case .failure(_):
                 print("Error Refunding")
             }
