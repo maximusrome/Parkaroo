@@ -1,81 +1,108 @@
-/* eslint-disable */
-import * as functions from 'firebase-functions';
+import * as functions from "firebase-functions";
 import Stripe from "stripe";
-import * as admin from 'firebase-admin'
-admin.initializeApp()
+import * as admin from "firebase-admin";
+admin.initializeApp();
 
-const db = admin.firestore()
+const db = admin.firestore();
 
 exports.sendNewSpotNotifications = functions.firestore
-.document('pins/{pinId}')
-.onCreate(async (snapshot, context) => {
-    const pinId = context.params.pinId
+    .document("pins/{pinId}")
+    .onCreate(async (snapshot, context) => {
+      const pinId = context.params.pinId;
 
-    return db.collection('users').where('basic_notifications', '==', true).get().then((snap) => {
-        const docs = snap.docs
-
-        docs.forEach(function (doc) {
-            const accountData = doc.data()
-            const user = accountData.uid as string
-            const token = accountData.token as string
-            let badgeCount = accountData.badge_count as number 
-            if (pinId != user) {
-                badgeCount++
-                sendNotification('New parking spot available!', badgeCount, token)
-                updateBadgeCount(user, badgeCount)
-            }
-        })
-    }).catch()
-})
+      // eslint-disable-next-line max-len
+      const querySnapshot = await db.collection("users").where("basic_notifications", "==", true).get();
+      if (!querySnapshot.empty) {
+        console.log(`We got ${querySnapshot.size} users`);
+        for (const userDocument of querySnapshot.docs) {
+          const userData = userDocument.data();
+          const userId = userData.uid as string;
+          const notificationToken = userData.token as string;
+          let badgeCount = userData.badge_count as number;
+          if (pinId != userId && notificationToken) {
+            badgeCount ++;
+            // eslint-disable-next-line max-len
+            await sendN("New parking spot available!", badgeCount, notificationToken);
+            await updateBadgeCount(userId, badgeCount);
+          } else {
+            // eslint-disable-next-line max-len
+            console.log(`Notification token is null or undefined for user with uid: ${userId}`);
+          }
+        }
+      } else {
+        console.log("We didn't get any users to send the notifications");
+      }
+    });
 
 
 exports.createNotification = functions.https
-    .onCall((data, _context) => {
-        const user = data.user
-        const message = data.message
+    .onCall(async (data, _context) => {
+      const user = data.user;
+      const message = data.message;
 
-        const ref = db.collection('users').doc(user)
+      const ref = db.collection("users").doc(user);
 
-       ref.get().then((snap) => {
-            const accountData = snap.data()!
-            const token = accountData.token as string 
-            const basic = accountData.basic_notifications as boolean
-            let badgeCount = accountData.badge_count as number 
-            if (basic == true) {
-                badgeCount++
-                sendNotification(message, badgeCount, token)
-                updateBadgeCount(user, badgeCount)
-            }
-        }).catch()
-})
+      const snap = await ref.get();
+      if (snap.exists) {
+        const accountData = snap.data();
+        if (accountData == null) {
+          // eslint-disable-next-line max-len
+          throw new functions.https.HttpsError("failed-precondition", `Cannot find user with uid: ${user}`);
+        }
+        // Now we are sure there is a value in account data, we get the values
+        const token = accountData.token as string;
+        const basic = accountData.basic_notifications as boolean;
+        let badgeCount = accountData.badge_count as number;
+        if (basic && token) {
+          badgeCount++;
+          await sendN(message, badgeCount, token);
+          await updateBadgeCount(user, badgeCount);
+        } else {
+          // eslint-disable-next-line max-len
+          console.log(`Cannot send notification. Notification token doesn't exists for the user with uid: ${user}`);
+        }
+      }
+    });
 
-function sendNotification(message: string, badgeCount: number, token: string) {
-    let payload = {
-        notification: {
-            body: message
+/**
+ * Send Push Notification using the given APNs token
+ * @param {String} message
+ * @param {number} badgeCount
+ * @param {String} token
+ */
+async function sendN(message: string, badgeCount: number, token: string) {
+  try {
+    const payload = {
+      notification: {
+        body: message,
+      },
+      apns: {
+        payload: {
+          aps: {
+            badge: badgeCount,
+            sound: "default",
+          },
         },
-        apns: {
-            payload: {
-                aps: {
-                    content_available: true,
-                    badge: badgeCount,
-                    sound: 'default'
-                }
-            }
-        },
-        token: token
-    }
-    admin.messaging().send(payload)
-    .then(() => console.log('Notification Sent'))
-    .catch()
+      },
+      token: token,
+    };
+    await admin.messaging().send(payload);
+    console.log("Notification Sent");
+  } catch (error) {
+    console.error(`Something went wrong: ${error}`);
+  }
 }
 
-function updateBadgeCount(uid: string, badgeCount: number) {
-    admin.firestore().collection('users').doc(uid).update({
-        badge_count: badgeCount   
-    })
-    .then(() => console.log('Badge count updated'))
-    .catch(() => 'Error updating badge count')
+/**
+ * Send Push Notification using the given APNs token
+ * @param {String} uid
+ * @param {number} badgeCount
+ */
+async function updateBadgeCount(uid: string, badgeCount: number) {
+  await admin.firestore().collection("users").doc(uid).update({
+    badge_count: badgeCount,
+  });
+  console.log("Badge count updated");
 }
 
 const secretKey = functions.config().stripe.secret;
@@ -89,12 +116,12 @@ exports.preparePaymentSheet = functions.https.onCall(async (data, context) => {
   }
   const auth = context.auth;
   const userEmail = auth?.token.email;
-  if (userEmail === null) {
+  if (userEmail == null) {
     // eslint-disable-next-line max-len
     throw new functions.https.HttpsError("failed-precondition", "The function must be called while authenticated");
   }
   const userId = auth?.token.uid;
-  if (userId === null) {
+  if (userId == null) {
     // eslint-disable-next-line max-len
     throw new functions.https.HttpsError("failed-precondition", "The function must be called while authenticated");
   }

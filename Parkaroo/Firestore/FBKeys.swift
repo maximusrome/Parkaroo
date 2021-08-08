@@ -13,7 +13,7 @@ enum FBKeys {
     }
     enum User {
         static let uid = "uid"
-        static let vehicle = "vehicle"
+        static var vehicle = "vehicle"
         static let email = "email"
     }
 }

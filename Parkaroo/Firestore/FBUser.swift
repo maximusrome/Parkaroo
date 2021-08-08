@@ -10,14 +10,13 @@ import Foundation
 struct FBUser: Equatable {
     // MARK: Public Properties
     let uid: String
-    let vehicle: String
+    var vehicle: String
     let email: String
     var rating: Float = 0
     var numberOfRatings: Int = 0
     var credits: Int = 2
     var badgeCount: Int = 0
     var basicNotifications = true
-    
     // Lifecycle
     init(uid: String, vehicle: String, email: String, rating: Float, numberOfRatings: Int, credits: Int, badgeCount: Int, basicNotifications: Bool) {
         self.uid = uid
@@ -30,7 +29,6 @@ struct FBUser: Equatable {
         self.basicNotifications = basicNotifications
     }
 }
-
 // MARK: - Convenience functions
 extension FBUser {
     init?(documentData: [String : Any]) {
@@ -52,17 +50,14 @@ extension FBUser {
                   basicNotifications: basicNotifications
         )
     }
-    
     static func dataDict(uid: String, vehicle: String, email: String) -> [String: Any] {
         var data: [String: Any] = [
             FBKeys.User.uid: uid,
             FBKeys.User.email: email
         ]
-        
         if !vehicle.isEmpty {
             data[FBKeys.User.vehicle] = vehicle
         }
-        
         return data
     }
 }

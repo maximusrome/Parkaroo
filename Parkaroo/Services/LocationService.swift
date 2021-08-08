@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 
 protocol LocationServiceDelegate {
-    func locationReceived(location: CLLocation)
+    func locationReceived(location: CLLocation, span: CLLocationDistance)
 }
 class LocationService: NSObject, CLLocationManagerDelegate {
     private override init() {
@@ -17,6 +17,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         manager = CLLocationManager()
         manager?.delegate = self
         manager?.desiredAccuracy = kCLLocationAccuracyBest
+        manager?.startUpdatingLocation()
     }
     static let shared = LocationService()
     var manager: CLLocationManager?
@@ -50,11 +51,15 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         self.currentLocation = location
         _ = location.coordinate.latitude
         _ = location.coordinate.longitude
-        self.delegate?.locationReceived(location: location)
+        self.delegate?.locationReceived(location: location, span: 300.0)
     }
     func updateMapLocation() {
         if let location = self.currentLocation {
-            self.delegate?.locationReceived(location: location)
+            if (CLLocationManager.authorizationStatus() == .authorizedAlways) || (CLLocationManager.authorizationStatus() == .authorizedWhenInUse) {
+                self.delegate?.locationReceived(location: location, span: 300.0)
+            } else {
+                self.delegate?.locationReceived(location: location, span: 3000.0)
+            }
         }
     }
     func useDefaultLocation() {
@@ -62,7 +67,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         self.currentLocation = location
         _ = location.coordinate.latitude
         _ = location.coordinate.longitude
-        self.delegate?.locationReceived(location: location)
+        self.delegate?.locationReceived(location: location, span: 3000.0)
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         if let clErr = error as? CLError {
