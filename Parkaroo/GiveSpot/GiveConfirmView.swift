@@ -139,8 +139,8 @@ struct GiveConfirmView: View {
         .padding(.horizontal, 50)
     }
     private func separateHoursAndMinutes() {
-            mins = depart % 60
-            hours = (depart - mins)/60
+        mins = depart % 60
+        hours = (depart - mins)/60
     }
     private func addCredit() {
         let updateCredits = userInfo.user.credits + 1
