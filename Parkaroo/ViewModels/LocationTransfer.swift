@@ -31,8 +31,6 @@ class LocationTransfer: ObservableObject {
     @Published var getStreetInfoSelection: String = "Edit"
     @Published var isPresented = true
     @Published var showOnBoarding = false
-    @Published var stopUpdatingGetLocation = true
-    @Published var stopUpdatingGiveLocation = true
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     var publisher: AnyPublisher<Void, Never>! = nil

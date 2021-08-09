@@ -19,12 +19,7 @@ struct MapGiveView: UIViewRepresentable {
         return mapView
     }
     func updateUIView(_ view: MKMapView, context: Context) {
-        if locationTransfer.stopUpdatingGiveLocation && ((CLLocationManager.authorizationStatus() == .authorizedAlways) || (CLLocationManager.authorizationStatus() == .authorizedWhenInUse)) {
-            LocationService.shared.manager?.stopUpdatingLocation()
-            locationTransfer.stopUpdatingGiveLocation = false
-            print("Give stopped updating location")
-        }
-        if (CLLocationManager.authorizationStatus() == .authorizedAlways) || (CLLocationManager.authorizationStatus() == .authorizedWhenInUse) {
+        if LocationService.shared.locationAuthorized {
             if annotations.count != (view.annotations.count - 1) {
                 view.removeAnnotations(view.annotations)
                 view.addAnnotations(annotations)
@@ -39,7 +34,7 @@ struct MapGiveView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-    class Coordinator: NSObject, MKMapViewDelegate, LocationServiceDelegate {
+    class Coordinator: NSObject, MKMapViewDelegate, LocationServiceDelegate1 {
         func locationReceived(location: CLLocation, span: CLLocationDistance) {
             centerMapOnCoordinate(coordinate: location.coordinate, span: span)
         }
@@ -47,9 +42,9 @@ struct MapGiveView: UIViewRepresentable {
         init(_ parent: MapGiveView) {
             self.parent = parent
             super.init()
-            LocationService.shared.delegate = self
-            if LocationService.shared.currentLocation != nil {
-                LocationService.shared.updateMapLocation()
+            LocationService1.shared.delegate = self
+            if LocationService1.shared.currentLocation != nil {
+                LocationService1.shared.updateMapLocation()
             }
         }
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {

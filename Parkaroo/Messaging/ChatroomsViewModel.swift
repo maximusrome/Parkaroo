@@ -34,8 +34,8 @@ class ChatroomsViewModel: ObservableObject {
     }
     func createChatroom(sellerID: String) {
         if userID != nil {
-            db.collection("chatrooms").document(userID!.uid).setData([
-                                                    "users": [userID!.uid, sellerID]]) { err in
+            db.collection("chatrooms").document().setData([
+                                                            "users": [userID!.uid, sellerID]]) { err in
                 if let err = err {
                     print("error adding document! \(err)")
                 }
@@ -44,23 +44,14 @@ class ChatroomsViewModel: ObservableObject {
     }
     func deleteChatroom() {
         if userID != nil {
-            db.collection("chatrooms").document(userID!.uid).delete() { err in
+            db.collection("chatrooms").whereField("users", arrayContains: userID!.uid).getDocuments() { (querySnapshot, err) in
                 if let err = err {
-                    print("error deleting document! \(err)")
+                    print("Error getting documents: \(err)")
+                } else {
+                    for document in querySnapshot!.documents {
+                        document.reference.delete()
+                    }
                 }
-            }
-        }
-    }
-    func deleteSellerChatroom(sellerID: String) {
-        if userID != nil {
-            db.collection("chatrooms").whereField("users", arrayContains: sellerID).getDocuments() { (querySnapshot, err) in
-              if let err = err {
-                print("Error getting documents: \(err)")
-              } else {
-                for document in querySnapshot!.documents {
-                  document.reference.delete()
-                }
-              }
             }
         }
     }

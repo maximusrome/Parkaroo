@@ -63,26 +63,27 @@ struct ContentView: View {
                 if !monitor.isConnected {
                     WifiView()
                 }
-                if (!self.locationTransfer.showOnBoarding || !self.locationTransfer.isPresented) && (CLLocationManager.authorizationStatus() != .denied) && !self.showMenu {
-                    VStack {
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                LocationService.shared.manager?.startUpdatingLocation()
-                                self.locationTransfer.stopUpdatingGetLocation = true
-                                self.locationTransfer.stopUpdatingGiveLocation = true
-                            }) {
-                                Image(systemName: "location")
-                                    .imageScale(.large)
-                                    .padding(10)
-                                    .foregroundColor(Color("orange1"))
-                                    .background(Color("white1"))
-                                    .cornerRadius(50)
-                                    .shadow(radius: 5)
-                                    .padding(10)
+                if (!self.locationTransfer.showOnBoarding || !self.locationTransfer.isPresented) && !self.showMenu {
+                    if LocationService.shared.locationAuthorized {
+                        VStack {
+                            HStack {
+                                Spacer()
+                                Button(action: {
+                                    LocationService.shared.manager?.startUpdatingLocation()
+                                    LocationService1.shared.manager?.startUpdatingLocation()
+                                }) {
+                                    Image(systemName: "location")
+                                        .imageScale(.large)
+                                        .padding(10)
+                                        .foregroundColor(Color("orange1"))
+                                        .background(Color("white1"))
+                                        .cornerRadius(50)
+                                        .shadow(radius: 5)
+                                        .padding(10)
+                                }
                             }
+                            Spacer()
                         }
-                        Spacer()
                     }
                 }
                 VStack {

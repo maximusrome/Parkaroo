@@ -20,11 +20,6 @@ struct MapGetView: UIViewRepresentable {
         return mapView
     }
     func updateUIView(_ view: MKMapView, context: Context) {
-        if locationTransfer.stopUpdatingGetLocation && ((CLLocationManager.authorizationStatus() == .authorizedAlways) || (CLLocationManager.authorizationStatus() == .authorizedWhenInUse)) {
-            LocationService.shared.manager?.stopUpdatingLocation()
-            locationTransfer.stopUpdatingGetLocation = false
-            print("Get stopped updating location")
-        }
         var extra = 1
         if let annotation = locationTransfer.gettingAnnotation {
             extra = 2
@@ -32,7 +27,7 @@ struct MapGetView: UIViewRepresentable {
                 view.addAnnotation(annotation)
             }
         }
-        if (CLLocationManager.authorizationStatus() == .authorizedAlways) || (CLLocationManager.authorizationStatus() == .authorizedWhenInUse) {
+        if LocationService.shared.locationAuthorized {
             if annotations1.count != (view.annotations.count - extra) {
                 view.removeAnnotations(view.annotations)
                 view.addAnnotations(annotations1)

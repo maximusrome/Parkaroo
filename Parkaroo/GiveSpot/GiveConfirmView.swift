@@ -87,7 +87,7 @@ struct GiveConfirmView: View {
                                 .padding(10)
                         }.alert(isPresented: $showingSellerCancelAlert, content: {
                             Alert(title: Text("Are you sure?"), message: Text("Friendly reminder: Someone has reserved your spot and may be asked to rate you."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
-                                viewModel.deleteSellerChatroom(sellerID: locationTransfer.givingPin!.seller)
+                                viewModel.deleteChatroom()
                                 locationTransfer.deletePin()
                                 locationTransfer.minute = ""
                                 self.gGRequestConfirm.showGiveConfirmView = false
