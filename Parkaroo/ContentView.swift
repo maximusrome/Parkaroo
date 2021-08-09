@@ -63,6 +63,11 @@ struct ContentView: View {
                 if !monitor.isConnected {
                     WifiView()
                 }
+                if self.locationTransfer.forceUpdate {
+                    ForceUpdateView()
+                        .navigationBarHidden(true)
+                        .edgesIgnoringSafeArea(.all)
+                }
                 if (!self.locationTransfer.showOnBoarding || !self.locationTransfer.isPresented) && !self.showMenu {
                     if LocationService.shared.locationAuthorized {
                         VStack {
@@ -163,6 +168,7 @@ struct ContentView: View {
             Alert(title: Text("Get Set Up"), message: Text("To adjust your notifications you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
         })
         .onAppear {
+            self.locationTransfer.checkLastCompatibleVersion()
             if !hasOnboarded {
                 self.locationTransfer.showOnBoarding.toggle()
                 hasOnboarded = true

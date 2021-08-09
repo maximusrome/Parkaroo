@@ -60,18 +60,10 @@ struct GetConfirmView: View {
                     Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
                         .font(.footnote)
                 }.padding(.bottom)
-                Button(action: {
-                    self.messageClicked.toggle()
-                }) {
+                NavigationLink(destination: Messages(chatroom: Chatroom(id: self.viewModel.docID, sellerID: self.locationTransfer.gettingPin?.seller ?? ""))) {
                     Text("Message Driver")
                         .bold()
                         .foregroundColor(Color("orange1"))
-                }.fullScreenCover(isPresented: $messageClicked) {
-                    NavigationView {
-                        ForEach(viewModel.chatrooms) { chatroom in
-                            Messages(chatroom: chatroom)
-                        }
-                    }
                 }
             }.padding()
             .overlay(

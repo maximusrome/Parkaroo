@@ -101,23 +101,18 @@ struct Messages: View {
                 }
             }.padding(.horizontal)
             .padding(.vertical, 5)
-            .navigationBarTitleDisplayMode(.inline)
             .navigationBarTitle("Chatroom")
-            .navigationBarItems(leading:
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image(systemName: "xmark")
-                        .imageScale(.large)
-                        .foregroundColor(Color("orange1"))
-                })
-        }
+        }.onReceive(locationTransfer.updatePublisher, perform: { _ in
+            if locationTransfer.showSellerCanceledView {
+                presentationMode.wrappedValue.dismiss()
+            }
+        })
     }
     private func findReceiver() {
         if self.locationTransfer.givingPin?.buyer != nil {
-            receiver = self.locationTransfer.givingPin!.buyer!
+            receiver = self.locationTransfer.givingPin?.buyer ?? ""
         } else if self.locationTransfer.gettingPin?.seller != nil {
-            receiver = self.locationTransfer.gettingPin!.seller
+            receiver = self.locationTransfer.gettingPin?.seller ?? ""
         } else {
             receiver = ""
         }

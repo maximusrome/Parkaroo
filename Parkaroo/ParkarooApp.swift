@@ -22,6 +22,9 @@ struct ParkarooApp: App {
                 .environmentObject(locationTransfer)
                 .environmentObject(gGRequestConfirm)
                 .environmentObject(userInfo)
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                    self.locationTransfer.checkLastCompatibleVersion()
+                }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     UIApplication.shared.applicationIconBadgeNumber = 0
                     if let uid = Auth.auth().currentUser?.uid {

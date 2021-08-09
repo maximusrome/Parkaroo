@@ -14,6 +14,7 @@ struct Chatroom: Codable, Identifiable {
 }
 class ChatroomsViewModel: ObservableObject {
     @Published var chatrooms = [Chatroom]()
+    @Published var docID = " "
     private let db = Firestore.firestore()
     private let userID = Auth.auth().currentUser
     func fetchData() {
@@ -25,9 +26,9 @@ class ChatroomsViewModel: ObservableObject {
                 }
                 self.chatrooms = documents.map({docSnapshot -> Chatroom in
                     let data = docSnapshot.data()
-                    let docId = docSnapshot.documentID
+                    self.docID = docSnapshot.documentID
                     let sellerID = data["sellerID"] as? String ?? ""
-                    return Chatroom(id: docId, sellerID: sellerID)
+                    return Chatroom(id: self.docID, sellerID: sellerID)
                 })
             })
         }

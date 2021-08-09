@@ -91,13 +91,13 @@ struct GetRequestView: View {
     }
     private func reserveSpot() {
         if self.userInfo.isUserAuthenticated == .signedIn {
-            if self.locationTransfer.seller?.uid != Auth.auth().currentUser!.uid {
+            if self.locationTransfer.seller?.uid != Auth.auth().currentUser?.uid {
                 if self.userInfo.user.credits > 0 {
                     userInfo.addCredits(numberOfCredits: -1) { result in
                         switch result {
                         case .success(_):
                             print("Credit subtracted")
-                            viewModel.createChatroom(sellerID: self.locationTransfer.gettingPin!.seller)
+                            viewModel.createChatroom(sellerID: self.locationTransfer.gettingPin?.seller ?? "")
                             self.completeTransaction()
                         case .failure(_):
                             print("Error updating credits")

@@ -15,6 +15,7 @@
 		212A50E826BB8D040092E462 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A50E726BB8D040092E462 /* Messages.swift */; };
 		216EB39126C05B7D004EE4C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 216EB39026C05B7D004EE4C1 /* GoogleService-Info.plist */; };
 		216F071426BB320D008B3FC7 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216F071326BB320D008B3FC7 /* AccountView.swift */; };
+		2171272926C130060014BB9C /* ForceUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2171272826C130060014BB9C /* ForceUpdateView.swift */; };
 		21C146F1269BD7710079BA2D /* IMG_3841.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 21C146F0269BD7710079BA2D /* IMG_3841.MOV */; };
 		21EBF2A9266BEFC500102E0F /* SellerCanceledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EBF2A3266BEFC400102E0F /* SellerCanceledView.swift */; };
 		21EBF2AA266BEFC500102E0F /* MapGetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EBF2A4266BEFC400102E0F /* MapGetView.swift */; };
@@ -77,6 +78,7 @@
 		212A50E726BB8D040092E462 /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		216EB39026C05B7D004EE4C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		216F071326BB320D008B3FC7 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		2171272826C130060014BB9C /* ForceUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateView.swift; sourceTree = "<group>"; };
 		21C146F0269BD7710079BA2D /* IMG_3841.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = IMG_3841.MOV; sourceTree = "<group>"; };
 		21EBF22C266BECD500102E0F /* Parkaroo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Parkaroo.entitlements; sourceTree = "<group>"; };
 		21EBF2A3266BEFC400102E0F /* SellerCanceledView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellerCanceledView.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				21EBF305266BF46B00102E0F /* NotificationsSheet.swift */,
 				21EBF304266BF46B00102E0F /* RatingView.swift */,
 				21EBF306266BF46B00102E0F /* WifiView.swift */,
+				2171272826C130060014BB9C /* ForceUpdateView.swift */,
 			);
 			path = Miscellaneous;
 			sourceTree = "<group>";
@@ -507,6 +510,7 @@
 				21EBF307266BF46B00102E0F /* AppReviewRequest.swift in Sources */,
 				F700ED1726952CC600061AFF /* CreditsViewModel.swift in Sources */,
 				21EBF2C2266BF03A00102E0F /* MenuView.swift in Sources */,
+				2171272926C130060014BB9C /* ForceUpdateView.swift in Sources */,
 				21EBF315266BF4DD00102E0F /* MailView.swift in Sources */,
 				21EBF2E3266BF12400102E0F /* Constants.swift in Sources */,
 				21EBF314266BF4DD00102E0F /* CharityView.swift in Sources */,
@@ -677,7 +681,7 @@
 				CODE_SIGN_ENTITLEMENTS = Parkaroo/Parkaroo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"Parkaroo/Preview Content\"";
 				DEVELOPMENT_TEAM = VVWUKNQA45;
@@ -688,7 +692,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.parkaroo.maxrome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -706,7 +710,7 @@
 				CODE_SIGN_ENTITLEMENTS = Parkaroo/Parkaroo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Parkaroo/Preview Content\"";
 				DEVELOPMENT_TEAM = VVWUKNQA45;
 				ENABLE_PREVIEWS = YES;
@@ -716,7 +720,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.parkaroo.maxrome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

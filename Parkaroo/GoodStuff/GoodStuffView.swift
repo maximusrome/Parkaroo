@@ -10,6 +10,10 @@ import MessageUI
 import Firebase
 
 struct GoodStuffView: View {
+    @ObservedObject var viewModel = ChatroomsViewModel()
+    init() {
+        viewModel.fetchData()
+    }
     @EnvironmentObject var gGRequestConfirm : GGRequestConfirm
     @EnvironmentObject var locationTransfer : LocationTransfer
     @EnvironmentObject var userInfo : UserInfo
@@ -65,6 +69,7 @@ struct GoodStuffView: View {
                                 self.userInfo.user.rating = 0
                                 self.userInfo.user.numberOfRatings = 0
                                 self.userInfo.user.vehicle = ""
+                                viewModel.deleteChatroom()
                                 self.gGRequestConfirm.showGiveRequestView = false
                                 self.gGRequestConfirm.showGiveConfirmView = false
                                 self.gGRequestConfirm.showGetRequestView = false

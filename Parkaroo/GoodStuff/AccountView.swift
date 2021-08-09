@@ -36,7 +36,7 @@ struct AccountView: View {
                             Alert(title: Text("Get Set Up"), message: Text("To save your vehicle you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                         }
                     HStack {
-                        TextField("e.g. Red Honda", text: self.$userInfo.user.vehicle)
+                        TextField("e.g. Gray Toyota Camry", text: self.$userInfo.user.vehicle)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.words)
                             .font(.body)
@@ -74,7 +74,7 @@ struct AccountView: View {
     }
     private func saveVehicle() {
         let db = Firestore.firestore()
-        let userID = Auth.auth().currentUser!.uid
+        let userID = Auth.auth().currentUser?.uid ?? ""
         db.collection("users").document(userID).updateData(["vehicle": self.userInfo.user.vehicle])
         self.showingSavedAlert.toggle()
         Analytics.logEvent("update_vehicle", parameters: nil)

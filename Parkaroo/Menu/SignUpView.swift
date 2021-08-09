@@ -25,7 +25,7 @@ struct SignUpView: View {
                     .bold()
                     .font(.title)
                     .padding(.top, 50)
-                TextField("e.g. Red Honda", text: $user.vehicle)
+                TextField("e.g. Gray Toyota Camry", text: $user.vehicle)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .autocapitalization(.words)
                     .padding(.bottom, 50)
