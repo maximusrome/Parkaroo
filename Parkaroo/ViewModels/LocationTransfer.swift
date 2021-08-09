@@ -32,12 +32,12 @@ class LocationTransfer: ObservableObject {
     @Published var isPresented = true
     @Published var showOnBoarding = false
     @Published var forceUpdate = false
-    @Published var lastCompatibleVersion = 5.0
+    @Published var lastCompatibleVersion = 1.0
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     var publisher: AnyPublisher<Void, Never>! = nil
     let updatePublisher = PassthroughSubject<Void, Never>()
-    let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! Double
+    let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     
     func createPin() {
         let db = Firestore.firestore()
@@ -254,11 +254,11 @@ class LocationTransfer: ObservableObject {
             } else {
                 if document != nil && document!.exists {
                     let documentData = document!.data()
-                    self.lastCompatibleVersion = documentData?["last_compatible_version"] as? Double ?? 5.0
-                    if self.lastCompatibleVersion <= self.appVersion {
+                    self.lastCompatibleVersion = documentData?["last_compatible_version"] as? Double ?? 1.0
+                    if self.lastCompatibleVersion <= Double(self.appVersion) ?? 5.0 {
                         self.forceUpdate = false
                         print("dont show force update")
-                    } else if self.lastCompatibleVersion > self.appVersion {
+                    } else if self.lastCompatibleVersion > Double(self.appVersion) ?? 5.0 {
                         self.forceUpdate = true
                         print("show force update")
                     } else {
