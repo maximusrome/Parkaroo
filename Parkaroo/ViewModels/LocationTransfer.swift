@@ -11,14 +11,11 @@ import Firebase
 import Combine
 
 class LocationTransfer: ObservableObject {
-    @Published var pin = [Pin]()
     @Published var pins = [Pin]()
     @Published var locations = [MKPointAnnotation]()
     @Published var locations1 = [CustomMKPointAnnotation]()
-    @Published var vehicle = ""
     @Published var minute = ""
     @Published var centerCoordinate = CLLocationCoordinate2D()
-    @Published var credits = 0
     @Published var departure = Timestamp()
     @Published var givingPin: Pin?
     @Published var gettingPin: Pin?
@@ -41,24 +38,24 @@ class LocationTransfer: ObservableObject {
     func createPin() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser?.uid ?? ""
-        if let minuteDouble = Double(self.minute) {
+        if let minuteDouble = Double(minute) {
             let departureTime = Date().addingTimeInterval(60.0 * (minuteDouble + 1))
             let departureTimeStamp = Timestamp(date: departureTime)
             var data = [String:Any]()
             data[C_ID] = userID
-            data[C_LONGITUDE] = self.centerCoordinate.longitude
-            data[C_LATITUDE] = self.centerCoordinate.latitude
+            data[C_LONGITUDE] = centerCoordinate.longitude
+            data[C_LATITUDE] = centerCoordinate.latitude
             data[C_STATUS] = pinStatus.available.rawValue
             data[C_DEPARTURE] = departureTimeStamp
             data[C_SELLER] = userID
             data[C_RATINGSUBMITTED] = false
-            data[C_STREETINFORMATION] = self.giveStreetInfoSelection
+            data[C_STREETINFORMATION] = giveStreetInfoSelection
             db.collection(C_PINS).document(userID).setData(data)
-            self.givingPin = Pin(data: data)
-            self.fetchGivingPin()
+            givingPin = Pin(data: data)
+            fetchGivingPin()
             let annotation = MKPointAnnotation()
-            annotation.coordinate = self.centerCoordinate
-            self.locations.append(annotation)
+            annotation.coordinate = centerCoordinate
+            locations.append(annotation)
         }
     }
     func updateGettingPin(data: [String:Any]) {
@@ -94,7 +91,7 @@ class LocationTransfer: ObservableObject {
         }
     }
     func readSeller() {
-        guard let uid = self.gettingPin?.seller else {return}
+        guard let uid = gettingPin?.seller else {return}
         FBFirestore.retrieveFBUser(uid: uid) { [weak self] result in
             switch result {
             case .failure(let error):
@@ -109,10 +106,16 @@ class LocationTransfer: ObservableObject {
         let userID = Auth.auth().currentUser?.uid
         if Auth.auth().currentUser?.uid != nil {
             db.collection("pins").document(userID ?? "").delete()
-            self.givingPin = nil
-            self.locations.removeAll()
+            givingPin = nil
+            locations.removeAll()
         }
     }
+    func deleteSellerPin() {
+             let db = Firestore.firestore()
+             db.collection("pins").document(seller?.uid ?? "").delete()
+             gettingPin = nil
+             locations.removeAll()
+         }
     func readStreetInfo(id: String) {
         let db = Firestore.firestore()
         db.collection(C_PINS).document(id).getDocument { (document, error) in
@@ -212,8 +215,8 @@ class LocationTransfer: ObservableObject {
         if let listener = gettingPinListener {
             listener.remove()
         }
-        self.gettingPin = nil
-        self.showSellerCanceledView = false
+        gettingPin = nil
+        showSellerCanceledView = false
     }
     func fullCleanUp(completion: @escaping () -> Void) {
         if let listener = gettingPinListener {
@@ -222,22 +225,22 @@ class LocationTransfer: ObservableObject {
         if let listener = givingPinListener {
             listener.remove()
         }
-        self.deletePin()
+        deletePin()
         if gettingPin != nil {
             let data = [C_BUYER:"", C_STATUS: pinStatus.available.rawValue]
-            self.updateGettingPin(data: data)
-            self.cleanUpGettingPin()
+            updateGettingPin(data: data)
+            cleanUpGettingPin()
         }
-        self.seller = nil
-        self.showSellerCanceledView = false
-        self.givingPin = nil
-        self.buyer = nil
+        seller = nil
+        showSellerCanceledView = false
+        givingPin = nil
+        buyer = nil
         completion()
     }
     func addRefencePin() {
         let annotation = MKPointAnnotation()
-        annotation.coordinate = self.centerCoordinate
-        self.locations.append(annotation)
+        annotation.coordinate = centerCoordinate
+        locations.append(annotation)
     }
     func checkLastCompatibleVersion() {
         let db = Firestore.firestore()

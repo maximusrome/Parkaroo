@@ -34,7 +34,7 @@ struct LoginView: View {
                     .bold()
                     .font(.title)
                 ZStack {
-                    if self.visable1 {
+                    if visable1 {
                         TextField("e.g. Parkaroo21", text: $user.password)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.none)
@@ -46,9 +46,9 @@ struct LoginView: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            self.visable1.toggle()
+                            visable1.toggle()
                         }) {
-                            Image(systemName: self.visable1 ? "eye.fill" : "eye.slash.fill")
+                            Image(systemName: visable1 ? "eye.fill" : "eye.slash.fill")
                                 .foregroundColor(Color(.gray))
                                 .font(.title2)
                                 .padding(.trailing, 5)
@@ -58,14 +58,14 @@ struct LoginView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        FBAuth.resetPassword(email: self.user.email) { (result) in
+                        FBAuth.resetPassword(email: user.email) { (result) in
                             switch result {
                             case .failure(let error):
-                                self.errString = error.localizedDescription
+                                errString = error.localizedDescription
                             case .success( _):
                                 break
                             }
-                            self.showPasswordResetAlert = true
+                            showPasswordResetAlert = true
                         }
                     }) {
                         Text("Reset Password")
@@ -75,29 +75,29 @@ struct LoginView: View {
                             .foregroundColor(Color("orange1"))
                             .padding(.bottom, 100)
                     }.alert(isPresented: $showPasswordResetAlert) {
-                        Alert(title: Text("Password Reset"), message: Text(self.errString ?? "Password reset email sent successfully. Check your email."), dismissButton: .default(Text("Okay")))
+                        Alert(title: Text("Password Reset"), message: Text(errString ?? "Password reset email sent successfully. Check your email."), dismissButton: .default(Text("Okay")))
                     }
                 }
                 Button(action: {
-                    FBAuth.authenticate(withEmail: self.user.email, password: self.user.password) { (result) in
+                    FBAuth.authenticate(withEmail: user.email, password: user.password) { (result) in
                         switch result {
                         case .failure(let error):
-                            self.authError = error
-                            self.showLoginAlert = true
+                            authError = error
+                            showLoginAlert = true
                             Analytics.logEvent("unsuccessful_login", parameters: nil)
                         case .success( _):
-                            self.presentationMode.wrappedValue.dismiss()
+                            presentationMode.wrappedValue.dismiss()
                             Analytics.logEvent("successful_login", parameters: nil)
-                            if self.locationTransfer.showOnBoarding && self.locationTransfer.isPresented {
-                                self.presentationMode.wrappedValue.dismiss()
-                                self.locationTransfer.isPresented = false
+                            if locationTransfer.showOnBoarding && locationTransfer.isPresented {
+                                presentationMode.wrappedValue.dismiss()
+                                locationTransfer.isPresented = false
                                 LocationService.shared.checkLocationAuthStatus()
                             }
                         }
                     }
-                    self.loginClicked = true
+                    loginClicked = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        self.loginClicked = false
+                        loginClicked = false
                     }
                 }) {
                     HStack {
@@ -112,9 +112,9 @@ struct LoginView: View {
                             .cornerRadius(50)
                         Spacer()
                     }
-                }.disabled(self.loginClicked)
+                }.disabled(loginClicked)
                 .alert(isPresented: $showLoginAlert) {
-                    Alert(title: Text("Error"), message: Text(self.authError?.localizedDescription ?? "Unknown error"), dismissButton: .default(Text("Okay")))
+                    Alert(title: Text("Error"), message: Text(authError?.localizedDescription ?? "Unknown error"), dismissButton: .default(Text("Okay")))
                 }
             }
         }.padding()

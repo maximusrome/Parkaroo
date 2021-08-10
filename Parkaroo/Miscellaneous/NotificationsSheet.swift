@@ -11,15 +11,15 @@ struct NotificationsSheet : View {
     @EnvironmentObject var userInfo: UserInfo
     var body : some View {
         VStack {
-            Toggle(isOn: self.$userInfo.user.basicNotifications, label: {
+            Toggle(isOn: $userInfo.user.basicNotifications, label: {
                 Text("Notifications")
                     .bold()
                     .font(.title2)
             })
             .padding(.horizontal)
             .padding(.bottom)
-            .onChange(of: self.userInfo.user.basicNotifications, perform: { value in
-                FBFirestore.mergeFBUser([C_BASICNOTIFICATIONS:value], uid: self.userInfo.user.uid) { result in
+            .onChange(of: userInfo.user.basicNotifications, perform: { value in
+                FBFirestore.mergeFBUser([C_BASICNOTIFICATIONS:value], uid: userInfo.user.uid) { result in
                 }
             })
             Text("Receive notifications when spots are made available. Helpful when looking for parking.\n")

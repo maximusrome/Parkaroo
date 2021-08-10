@@ -92,7 +92,7 @@ struct GiveRequestView: View {
                     HStack {
                         Text("Street Info: ")
                             .bold()
-                        Text("\(self.locationTransfer.giveStreetInfoSelection)")
+                        Text("\(locationTransfer.giveStreetInfoSelection)")
                             .bold()
                             .foregroundColor(Color("orange1"))
                     }, content: {
@@ -107,9 +107,9 @@ struct GiveRequestView: View {
                 }
             Spacer()
             HStack {
-                Text("Your Rating: \(self.userInfo.user.numberOfRatings > 0 ? String(format: "%.2f", self.userInfo.user.rating) : "N/A")")
+                Text("Your Rating: \(userInfo.user.numberOfRatings > 0 ? String(format: "%.2f", userInfo.user.rating) : "N/A")")
                     .bold()
-                Text("\(self.userInfo.user.numberOfRatings > 0 ? String(self.userInfo.user.numberOfRatings) : "0") ratings")
+                Text("\(userInfo.user.numberOfRatings > 0 ? String(userInfo.user.numberOfRatings) : "0") ratings")
                     .font(.footnote)
             }.alert(isPresented: $showingShortTimeAlert) {
                 return Alert(title: Text("Friendly Reminder"), message: Text("We recommend leaving a bit more time so your neighbors can get to your spot."), dismissButton: .default(Text("Okay")))
@@ -118,12 +118,12 @@ struct GiveRequestView: View {
             HStack {
                 Button(action: {
                     UIApplication.shared.endEditing()
-                    self.gGRequestConfirm.showGiveRequestView = false
-                    self.locationTransfer.minute = ""
+                    gGRequestConfirm.showGiveRequestView = false
+                    locationTransfer.minute = ""
                     mins = ""
                     hours = ""
-                    self.locationTransfer.locations.removeAll()
-                    self.firstMakeAvailableClicked = true
+                    locationTransfer.locations.removeAll()
+                    firstMakeAvailableClicked = true
                 }){
                     Text("close")
                         .padding(10)
@@ -133,28 +133,28 @@ struct GiveRequestView: View {
                 Button(action: {
                     if atLeastOneTimeValidation() {
                         addMinutesAndHours()
-                        if self.locationTransfer.giveStreetInfoSelection != "Edit" {
-                            if (hours == "" || Int(hours) == 0) && (mins == "" || Int(mins)! < 10) && self.firstMakeAvailableClicked {
-                                self.showingShortTimeAlert = true
-                                self.firstMakeAvailableClicked = false
+                        if locationTransfer.giveStreetInfoSelection != "Edit" {
+                            if (hours == "" || Int(hours) == 0) && (mins == "" || Int(mins)! < 10) && firstMakeAvailableClicked {
+                                showingShortTimeAlert = true
+                                firstMakeAvailableClicked = false
                             } else {
                                 UIApplication.shared.endEditing()
-                                self.locationTransfer.locations.removeFirst()
-                                self.locationTransfer.createPin()
-                                self.showingInvalidDepartureAlert = false
-                                self.showingInvalidStreetInfoAlert = false
-                                self.gGRequestConfirm.showGiveRequestView = false
-                                self.gGRequestConfirm.showGiveConfirmView = true
-                                self.firstMakeAvailableClicked = true
+                                locationTransfer.locations.removeFirst()
+                                locationTransfer.createPin()
+                                showingInvalidDepartureAlert = false
+                                showingInvalidStreetInfoAlert = false
+                                gGRequestConfirm.showGiveRequestView = false
+                                gGRequestConfirm.showGiveConfirmView = true
+                                firstMakeAvailableClicked = true
                                 mins = ""
                                 hours = ""
                                 Analytics.logEvent("make_available", parameters: nil)
                             }
                         } else {
-                            self.showingInvalidStreetInfoAlert = true
+                            showingInvalidStreetInfoAlert = true
                         }
                     } else {
-                        self.showingInvalidDepartureAlert = true
+                        showingInvalidDepartureAlert = true
                     }
                 }) {
                     Text("Make Available")
@@ -177,7 +177,7 @@ struct GiveRequestView: View {
     private func addMinutesAndHours() {
         var totalMinutes: Int
         totalMinutes = ((Int(hours) ?? 0) * 60) + (Int(mins) ?? 0)
-        self.locationTransfer.minute = String(totalMinutes)
+        locationTransfer.minute = String(totalMinutes)
     }
 }
 extension UIApplication {

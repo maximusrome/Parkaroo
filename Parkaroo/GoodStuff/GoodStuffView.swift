@@ -44,31 +44,31 @@ struct GoodStuffView: View {
             }
             Section {
                 Button(action: {
-                    self.reportProblem()
+                    reportProblem()
                 }) {
                     GoodStuffCell(title: "Report Problem", imgName: "exclamationmark.triangle")
                 }.sheet(isPresented: $showReportProblem) {
-                    MailView(result: self.$result, newSubject: "Report Problem", newMsgBody: "")
+                    MailView(result: $result, newSubject: "Report Problem", newMsgBody: "")
                 }
                 if Auth.auth().currentUser?.uid != nil {
                     Section {
                         Button(action: {
-                            self.logOutClicked.toggle()
+                            logOutClicked.toggle()
                         }) {
                             GoodStuffCell(title: "Log Out", imgName: "arrow.right.circle")
                         }.alert(isPresented: $logOutClicked) {
                             Alert(title: Text("Are you sure?"), message: Text("If you are currently giving or getting a spot, the spot will automatically be canceled by logging out."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
-                                self.locationTransfer.fullCleanUp {
+                                locationTransfer.fullCleanUp {
                                     FBAuth.logOut { (_) in }
                                 }
-                                self.userInfo.user.credits = 2
-                                self.userInfo.user.rating = 0
-                                self.userInfo.user.numberOfRatings = 0
-                                self.userInfo.user.vehicle = ""
-                                self.gGRequestConfirm.showGiveRequestView = false
-                                self.gGRequestConfirm.showGiveConfirmView = false
-                                self.gGRequestConfirm.showGetRequestView = false
-                                self.gGRequestConfirm.showGetConfirmView = false
+                                userInfo.user.credits = 2
+                                userInfo.user.rating = 0
+                                userInfo.user.numberOfRatings = 0
+                                userInfo.user.vehicle = ""
+                                gGRequestConfirm.showGiveRequestView = false
+                                gGRequestConfirm.showGiveConfirmView = false
+                                gGRequestConfirm.showGetRequestView = false
+                                gGRequestConfirm.showGetConfirmView = false
                                 UIApplication.shared.endEditing()
                                 Analytics.logEvent("log_out", parameters: nil)
                             }))
@@ -82,7 +82,7 @@ struct GoodStuffView: View {
     func reportProblem() {
         print("pressed report problem")
         if MFMailComposeViewController.canSendMail() {
-            self.showReportProblem = true
+            showReportProblem = true
         } else {
             print("Error sending mail")
         }

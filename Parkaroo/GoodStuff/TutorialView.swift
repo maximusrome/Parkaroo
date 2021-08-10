@@ -15,8 +15,8 @@ struct TutorialView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 Button(action: {
-                    self.showingVideoSheetTutorial.toggle()
-                    self.vid()
+                    showingVideoSheetTutorial.toggle()
+                    vid()
                     Analytics.logEvent("watch_video_from_tutorial", parameters: nil)
                 }) {
                     HStack {

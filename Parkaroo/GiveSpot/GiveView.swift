@@ -17,8 +17,8 @@ struct GiveView: View {
         ZStack {
             MapGiveView(annotations: locationTransfer.locations)
                 .edgesIgnoringSafeArea(.all)
-                .disabled(self.gGRequestConfirm.showGiveRequestView)
-            if self.locationTransfer.givingPin == nil && !self.gGRequestConfirm.showBuyerRatingView && !self.gGRequestConfirm.showGiveRequestView {
+                .disabled(gGRequestConfirm.showGiveRequestView)
+            if locationTransfer.givingPin == nil && !gGRequestConfirm.showBuyerRatingView && !gGRequestConfirm.showGiveRequestView {
                 Image(systemName: "mappin.and.ellipse")
                     .font(.title)
                     .frame(width: 32.0, height: 32.0)
@@ -28,15 +28,15 @@ struct GiveView: View {
                 VStack {
                     Spacer()
                     Button(action: {
-                        self.gGRequestConfirm.showGiveRequestView = false
-                        self.locationTransfer.minute = ""
-                        self.locationTransfer.giveStreetInfoSelection = "Edit"
+                        gGRequestConfirm.showGiveRequestView = false
+                        locationTransfer.minute = ""
+                        locationTransfer.giveStreetInfoSelection = "Edit"
                         Analytics.logEvent("give_spot", parameters: nil)
-                        if self.userInfo.isUserAuthenticated == .signedIn {
-                            self.gGRequestConfirm.showGiveRequestView = true
-                            self.locationTransfer.addRefencePin()
+                        if userInfo.isUserAuthenticated == .signedIn {
+                            gGRequestConfirm.showGiveRequestView = true
+                            locationTransfer.addRefencePin()
                         } else {
-                            self.showingMakeAvaliableSetUpAlert = true
+                            showingMakeAvaliableSetUpAlert = true
                         }
                     }) {
                         Text("Give Spot")
@@ -58,19 +58,19 @@ struct GiveView: View {
             VStack {
                 Spacer()
                 GiveRequestView()
-                    .offset(y: self.gGRequestConfirm.showGiveRequestView ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: gGRequestConfirm.showGiveRequestView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
                 GiveConfirmView()
-                    .offset(y: self.gGRequestConfirm.showGiveConfirmView ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: gGRequestConfirm.showGiveConfirmView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
                 RateBuyerView()
-                    .offset(y: self.gGRequestConfirm.showBuyerRatingView ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: gGRequestConfirm.showBuyerRatingView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
         }.onAppear() {
@@ -80,7 +80,7 @@ struct GiveView: View {
                 case .failure(let error):
                     print(error.localizedDescription)
                 case .success(let user):
-                    self.userInfo.user = user
+                    userInfo.user = user
                 }
             }
         }

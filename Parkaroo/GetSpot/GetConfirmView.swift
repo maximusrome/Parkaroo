@@ -34,27 +34,33 @@ struct GetConfirmView: View {
             Text("Departing in: \(hours > 0 ? String(hours) + " hr" : "") \(mins > 0 ? String(mins) + " min" : hours != 0 ? "" : "0 min")")
                 .bold()
                 .onReceive(timer, perform: { input in
-                    let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
+                    let diff = Date().distance(to: locationTransfer.gettingPin?.departure.dateValue() ?? Date())
                     depart = Int(diff / 60)
                     separateHoursAndMinutes()
+                    if (locationTransfer.gettingPin?.buyer == nil || locationTransfer.gettingPin?.buyer == "") && (hours == 0 && mins < 0) {
+                        locationTransfer.deleteSellerPin()
+                        locationTransfer.cleanUpGettingPin()
+                        locationTransfer.minute = ""
+                        gGRequestConfirm.showGetRequestView = false
+                    }
                 })
             Spacer()
-            Text("Street Info: \(self.locationTransfer.getStreetInfoSelection)")
+            Text("Street Info: \(locationTransfer.getStreetInfoSelection)")
                 .bold()
             Spacer()
             VStack {
                 HStack {
                     Text("Seller: ")
-                    Text("\(self.locationTransfer.seller?.vehicle ?? "")")
+                    Text("\(locationTransfer.seller?.vehicle ?? "")")
                         .autocapitalization(.words)
                         .multilineTextAlignment(.center)
                 }.padding(.bottom)
                 HStack {
-                    Text("Rating: \(self.locationTransfer.seller?.numberOfRatings ?? 0 > 0 ? (String(format: "%.2f", self.locationTransfer.seller?.rating ?? 0)) : "N/A")")
-                    Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
+                    Text("Rating: \(locationTransfer.seller?.numberOfRatings ?? 0 > 0 ? (String(format: "%.2f", locationTransfer.seller?.rating ?? 0)) : "N/A")")
+                    Text("\(locationTransfer.seller?.numberOfRatings ?? 0) ratings")
                         .font(.footnote)
                 }.padding(.bottom)
-                NavigationLink(destination: Messages(chatroom: Chatroom(id: self.viewModel.docID, sellerID: self.locationTransfer.gettingPin?.seller ?? ""))) {
+                NavigationLink(destination: Messages(chatroom: Chatroom(id: viewModel.docID, sellerID: locationTransfer.gettingPin?.seller ?? ""))) {
                     Text("Message Driver")
                         .bold()
                         .foregroundColor(Color("orange1"))
@@ -68,7 +74,7 @@ struct GetConfirmView: View {
             Spacer()
             HStack {
                 Button(action: {
-                    self.showingRefundAlert = true
+                    showingRefundAlert = true
                 }) {
                     Text("cancel")
                         .padding(10)
@@ -76,12 +82,12 @@ struct GetConfirmView: View {
                     Alert(title: Text("Are you sure?"), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                         requestRefund()
                         viewModel.deleteChatroom()
-                        self.gGRequestConfirm.showGetRequestView = false
-                        self.gGRequestConfirm.showGetConfirmView = false
+                        gGRequestConfirm.showGetRequestView = false
+                        gGRequestConfirm.showGetConfirmView = false
                     }))
                 }
                 Button(action: {
-                    self.showingConfirmAlert = true
+                    showingConfirmAlert = true
                 }) {
                     Text("Complete Transfer")
                         .bold()
@@ -91,10 +97,10 @@ struct GetConfirmView: View {
                 }.alert(isPresented: $showingConfirmAlert) {
                     Alert(title: Text("Are You Parked?"), message: Text("Complete this transfer when you are successfully parked in the spot."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                         Analytics.logEvent("buyer_complete_transfer", parameters: nil)
-                        self.gGRequestConfirm.showGetRequestView = false
-                        self.gGRequestConfirm.showGetConfirmView = false
-                        self.gGRequestConfirm.showSellerRatingView = true
-                        self.locationTransfer.gettingAnnotation = nil
+                        gGRequestConfirm.showGetRequestView = false
+                        gGRequestConfirm.showGetConfirmView = false
+                        gGRequestConfirm.showSellerRatingView = true
+                        locationTransfer.gettingAnnotation = nil
                     }))
                 }
             }.padding(.bottom, 25)
@@ -111,18 +117,18 @@ struct GetConfirmView: View {
         hours = (depart - mins)/60
     }
     private func requestRefund() {
-        let credits = self.userInfo.user.credits + 1
-        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.userInfo.user.uid) { result in
+        let credits = userInfo.user.credits + 1
+        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: userInfo.user.uid) { result in
             switch result {
             case .success(_):
-                self.locationTransfer.gettingAnnotation = nil
+                locationTransfer.gettingAnnotation = nil
                 if let seller = locationTransfer.seller {
                     NotificationsService.shared.sendN(uid: seller.uid, message: "The buyer has canceled their reservation.")
                 }
                 let data = [C_BUYER:"", C_STATUS: pinStatus.available.rawValue]
-                self.locationTransfer.updateGettingPin(data: data)
-                self.locationTransfer.cleanUpGettingPin()
-                self.userInfo.user.credits = credits
+                locationTransfer.updateGettingPin(data: data)
+                locationTransfer.cleanUpGettingPin()
+                userInfo.user.credits = credits
                 Analytics.logEvent("buyer_canceled", parameters: nil)
             case .failure(_):
                 print("Error Refunding")

@@ -46,7 +46,7 @@ struct VideoTutorialView: View {
             HStack {
                 Spacer()
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
+                    presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "xmark")
                         .imageScale(.large)

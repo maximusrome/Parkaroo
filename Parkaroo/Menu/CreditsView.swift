@@ -21,7 +21,7 @@ struct CreditsView: View {
                 Text("Your Credits")
                     .bold()
                     .padding()
-                Text("\(self.userInfo.user.credits)")
+                Text("\(userInfo.user.credits)")
                     .bold()
                     .padding()
                 Spacer()

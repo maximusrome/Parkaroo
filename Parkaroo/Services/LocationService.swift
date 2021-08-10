@@ -45,27 +45,27 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {return}
-        self.currentLocation = location
+        currentLocation = location
         _ = location.coordinate.latitude
         _ = location.coordinate.longitude
-        self.delegate?.locationReceived(location: location, span: 300.0)
+        delegate?.locationReceived(location: location, span: 300.0)
         self.manager?.stopUpdatingLocation()
     }
     func updateMapLocation() {
-        if let location = self.currentLocation {
+        if let location = currentLocation {
             if locationAuthorized {
-                self.delegate?.locationReceived(location: location, span: 300.0)
+                delegate?.locationReceived(location: location, span: 300.0)
             } else {
-                self.delegate?.locationReceived(location: location, span: 3000.0)
+                delegate?.locationReceived(location: location, span: 3000.0)
             }
         }
     }
     func useDefaultLocation() {
         let location = CLLocation(latitude: 40.7812, longitude: -73.9665)
-        self.currentLocation = location
+        currentLocation = location
         _ = location.coordinate.latitude
         _ = location.coordinate.longitude
-        self.delegate?.locationReceived(location: location, span: 3000.0)
+        delegate?.locationReceived(location: location, span: 3000.0)
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         if let clErr = error as? CLError {
@@ -84,17 +84,17 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
         case .authorizedAlways, .authorizedWhenInUse:
-            self.locationAuthorized = true
-            self.locationNotDetermined = false
-            self.locationDenied = false
+            locationAuthorized = true
+            locationNotDetermined = false
+            locationDenied = false
         case .notDetermined:
-            self.locationNotDetermined = true
-            self.locationAuthorized = false
-            self.locationDenied = false
+            locationNotDetermined = true
+            locationAuthorized = false
+            locationDenied = false
         case .denied:
-            self.locationDenied = true
-            self.locationNotDetermined = false
-            self.locationAuthorized = false
+            locationDenied = true
+            locationNotDetermined = false
+            locationAuthorized = false
         default:
             break
         }
@@ -124,27 +124,27 @@ class LocationService1: NSObject, CLLocationManagerDelegate {
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {return}
-        self.currentLocation = location
+        currentLocation = location
         _ = location.coordinate.latitude
         _ = location.coordinate.longitude
-        self.delegate?.locationReceived(location: location, span: 300.0)
+        delegate?.locationReceived(location: location, span: 300.0)
         self.manager?.stopUpdatingLocation()
     }
     func updateMapLocation() {
-        if let location = self.currentLocation {
+        if let location = currentLocation {
             if LocationService.shared.locationAuthorized {
-                self.delegate?.locationReceived(location: location, span: 300.0)
+                delegate?.locationReceived(location: location, span: 300.0)
             } else {
-                self.delegate?.locationReceived(location: location, span: 3000.0)
+                delegate?.locationReceived(location: location, span: 3000.0)
             }
         }
     }
     func useDefaultLocation() {
         let location = CLLocation(latitude: 40.7812, longitude: -73.9665)
-        self.currentLocation = location
+        currentLocation = location
         _ = location.coordinate.latitude
         _ = location.coordinate.longitude
-        self.delegate?.locationReceived(location: location, span: 3000.0)
+        delegate?.locationReceived(location: location, span: 3000.0)
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         if let clErr = error as? CLError {

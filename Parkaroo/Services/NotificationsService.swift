@@ -67,7 +67,7 @@ extension NotificationsService: UNUserNotificationCenterDelegate {
 //            completionHandler(.noData)
 //        }
     func sendN(uid: String, message: String) {
-        self.functions.httpsCallable("createNotification").call(["user":uid, "message":message], completion: { (result, error) in
+        functions.httpsCallable("createNotification").call(["user":uid, "message":message], completion: { (result, error) in
             if let error = error as NSError? {
                 if error.domain == FunctionsErrorDomain {
                     let message = error.localizedDescription

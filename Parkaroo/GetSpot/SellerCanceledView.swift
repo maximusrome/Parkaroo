@@ -21,17 +21,17 @@ struct SellerCanceledView: View {
             Spacer()
             HStack {
                 Button(action: {
-                    self.locationTransfer.gettingPin = nil
-                    self.locationTransfer.showSellerCanceledView = false
-                    self.gGRequestConfirm.showSellerRatingView = false
+                    locationTransfer.gettingPin = nil
+                    locationTransfer.showSellerCanceledView = false
+                    gGRequestConfirm.showSellerRatingView = false
                 }) {
                     Text("close")
                         .padding(10)
                 }
                 Button(action: {
-                    self.locationTransfer.gettingPin = nil
-                    self.locationTransfer.showSellerCanceledView = false
-                    self.gGRequestConfirm.showSellerRatingView = true
+                    locationTransfer.gettingPin = nil
+                    locationTransfer.showSellerCanceledView = false
+                    gGRequestConfirm.showSellerRatingView = true
                 }) {
                     Text("Rate Seller")
                         .bold()

@@ -19,36 +19,36 @@ struct GetView: View {
             VStack {
                 Spacer()
                 GetRequestView()
-                    .offset(y: self.gGRequestConfirm.showGetRequestView ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: gGRequestConfirm.showGetRequestView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
                 GetConfirmView()
-                    .offset(y: self.gGRequestConfirm.showGetConfirmView ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: gGRequestConfirm.showGetConfirmView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
                 RateSellerView()
-                    .offset(y: self.gGRequestConfirm.showSellerRatingView && !self.locationTransfer.showSellerCanceledView ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: gGRequestConfirm.showSellerRatingView && !locationTransfer.showSellerCanceledView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
             VStack {
                 Spacer()
                 SellerCanceledView()
-                    .offset(y: self.locationTransfer.showSellerCanceledView ? 0 : UIScreen.main.bounds.height)
+                    .offset(y: locationTransfer.showSellerCanceledView ? 0 : UIScreen.main.bounds.height)
                     .animation(.default)
             }
         }.onAppear() {
-            self.locationTransfer.fetchLocations()
+            locationTransfer.fetchLocations()
         }
         .onReceive(locationTransfer.updatePublisher, perform: { _ in
             if locationTransfer.showSellerCanceledView {
-                self.gGRequestConfirm.showGetRequestView = false
-                self.gGRequestConfirm.showGetConfirmView = false
-                self.locationTransfer.gettingAnnotation = nil
-                self.userInfo.AddOneCredit()
+                gGRequestConfirm.showGetRequestView = false
+                gGRequestConfirm.showGetConfirmView = false
+                locationTransfer.gettingAnnotation = nil
+                userInfo.AddOneCredit()
             }
         })
     }

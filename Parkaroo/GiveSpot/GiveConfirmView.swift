@@ -24,7 +24,7 @@ struct GiveConfirmView: View {
     @State private var messageClicked = false
     var body: some View {
         VStack {
-            Text("Spot \(self.locationTransfer.givingPin?.status.capitalized ?? "")")
+            Text("Spot \(locationTransfer.givingPin?.status.capitalized ?? "")")
                 .bold()
                 .font(.title)
                 .padding(.top, 25)
@@ -32,18 +32,18 @@ struct GiveConfirmView: View {
             Text("Departing in: \(hours > 0 ? String(hours) + " hr" : "") \(mins > 0 ? String(mins) + " min" : hours != 0 ? "" : "0 min")")
                 .bold()
                 .onReceive(timer, perform: { input in
-                    let diff = Date().distance(to: self.locationTransfer.givingPin?.departure.dateValue() ?? Date())
+                    let diff = Date().distance(to: locationTransfer.givingPin?.departure.dateValue() ?? Date())
                     depart = Int(diff / 60)
                     separateHoursAndMinutes()
                     if (locationTransfer.givingPin?.buyer == nil || locationTransfer.givingPin?.buyer == "") && (hours == 0 && mins < 0) {
                         locationTransfer.deletePin()
                         locationTransfer.minute = ""
                         locationTransfer.givingPin = nil
-                        self.gGRequestConfirm.showGiveConfirmView = false
+                        gGRequestConfirm.showGiveConfirmView = false
                     }
                 })
             Spacer()
-            Text("Street Info: \(self.locationTransfer.giveStreetInfoSelection)")
+            Text("Street Info: \(locationTransfer.giveStreetInfoSelection)")
                 .bold()
             Spacer()
             if let buyer = locationTransfer.buyer {
@@ -55,11 +55,11 @@ struct GiveConfirmView: View {
                             .multilineTextAlignment(.center)
                     }.padding(.bottom)
                     HStack {
-                        Text("Rating: \(self.locationTransfer.buyer?.numberOfRatings ?? 0 > 0 ? (String(format: "%.2f", self.locationTransfer.buyer?.rating ?? 0)) : "N/A")")
-                        Text("\(self.locationTransfer.buyer?.numberOfRatings ?? 0) ratings")
+                        Text("Rating: \(locationTransfer.buyer?.numberOfRatings ?? 0 > 0 ? (String(format: "%.2f", locationTransfer.buyer?.rating ?? 0)) : "N/A")")
+                        Text("\(locationTransfer.buyer?.numberOfRatings ?? 0) ratings")
                             .font(.footnote)
                     }.padding(.bottom)
-                    NavigationLink(destination: Messages(chatroom: Chatroom(id: self.viewModel.docID, sellerID: self.locationTransfer.givingPin?.seller ?? ""))) {
+                    NavigationLink(destination: Messages(chatroom: Chatroom(id: viewModel.docID, sellerID: locationTransfer.givingPin?.seller ?? ""))) {
                         Text("Message Driver")
                             .bold()
                             .foregroundColor(Color("orange1"))
@@ -73,7 +73,7 @@ struct GiveConfirmView: View {
                 HStack {
                     if !(locationTransfer.givingPin?.ratingSubmitted ?? false) {
                         Button(action: {
-                            self.showingSellerCancelAlert = true
+                            showingSellerCancelAlert = true
                         }) {
                             Text("cancel")
                                 .padding(10)
@@ -82,7 +82,7 @@ struct GiveConfirmView: View {
                                 viewModel.deleteChatroom()
                                 locationTransfer.deletePin()
                                 locationTransfer.minute = ""
-                                self.gGRequestConfirm.showGiveConfirmView = false
+                                gGRequestConfirm.showGiveConfirmView = false
                                 Analytics.logEvent("seller_canceled", parameters: nil)
                                 if let buyer = locationTransfer.buyer {
                                     NotificationsService.shared.sendN(uid: buyer.uid, message: "The seller has canceled their spot")
@@ -91,10 +91,10 @@ struct GiveConfirmView: View {
                         })
                     }
                     Button(action: {
-                        self.gGRequestConfirm.showGiveConfirmView = false
-                        self.gGRequestConfirm.showBuyerRatingView = true
-                        self.locationTransfer.givingPin = nil
-                        self.locationTransfer.locations.removeAll()
+                        gGRequestConfirm.showGiveConfirmView = false
+                        gGRequestConfirm.showBuyerRatingView = true
+                        locationTransfer.givingPin = nil
+                        locationTransfer.locations.removeAll()
                         addCredit()
                         Analytics.logEvent("seller_complete_transfer", parameters: nil)
                     }) {
@@ -121,7 +121,7 @@ struct GiveConfirmView: View {
                 Button(action: {
                     locationTransfer.deletePin()
                     locationTransfer.minute = ""
-                    self.gGRequestConfirm.showGiveConfirmView = false
+                    gGRequestConfirm.showGiveConfirmView = false
                 }) {
                     Text("cancel")
                         .padding(10)

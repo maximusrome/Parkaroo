@@ -78,17 +78,17 @@ struct MapGetView: UIViewRepresentable {
             }
         }
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            if !self.parent.gGRequestConfirm.showGetConfirmView && !self.parent.locationTransfer.showSellerCanceledView && !self.parent.gGRequestConfirm.showSellerRatingView {
+            if !parent.gGRequestConfirm.showGetConfirmView && !parent.locationTransfer.showSellerCanceledView && !parent.gGRequestConfirm.showSellerRatingView {
                 if let annotation = view.annotation as? CustomMKPointAnnotation {
-                    self.parent.locationTransfer.readPin(id: annotation.id)
-                    self.parent.locationTransfer.readStreetInfo(id: annotation.id)
-                    self.parent.gGRequestConfirm.showGetRequestView = true
+                    parent.locationTransfer.readPin(id: annotation.id)
+                    parent.locationTransfer.readStreetInfo(id: annotation.id)
+                    parent.gGRequestConfirm.showGetRequestView = true
                     Analytics.logEvent("pin_read", parameters: nil)
                 }
             }
         }
         func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-            self.parent.gGRequestConfirm.showGetRequestView = false
+            parent.gGRequestConfirm.showGetRequestView = false
         }
         fileprivate func centerMapOnCoordinate(coordinate: CLLocationCoordinate2D, span: CLLocationDistance) {
             let viewRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: span, longitudinalMeters: span)

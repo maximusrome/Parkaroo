@@ -81,7 +81,7 @@ struct Messages: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Button(action: {
                     if containsProfanityMessage() {
-                        self.showingInappropriateAlert = true
+                        showingInappropriateAlert = true
                     } else {
                         findReceiver()
                         let date = Date()
@@ -96,7 +96,8 @@ struct Messages: View {
                     Image(systemName: "paperplane")
                         .imageScale(.large)
                         .foregroundColor(Color("orange1"))
-                }.alert(isPresented: $showingInappropriateAlert) {
+                }.disabled(messageField == "")
+                .alert(isPresented: $showingInappropriateAlert) {
                     Alert(title: Text("Inappropriate"), dismissButton: .default(Text("Okay")))
                 }
             }.padding(.horizontal)
@@ -109,10 +110,10 @@ struct Messages: View {
         })
     }
     private func findReceiver() {
-        if self.locationTransfer.givingPin?.buyer != nil {
-            receiver = self.locationTransfer.givingPin?.buyer ?? ""
-        } else if self.locationTransfer.gettingPin?.seller != nil {
-            receiver = self.locationTransfer.gettingPin?.seller ?? ""
+        if locationTransfer.givingPin?.buyer != nil {
+            receiver = locationTransfer.givingPin?.buyer ?? ""
+        } else if locationTransfer.gettingPin?.seller != nil {
+            receiver = locationTransfer.gettingPin?.seller ?? ""
         } else {
             receiver = ""
         }

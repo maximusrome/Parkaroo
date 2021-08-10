@@ -19,15 +19,15 @@ struct AccountView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 80) {
-                Text("Credits: \(self.userInfo.user.credits)")
+                Text("Credits: \(userInfo.user.credits)")
                     .bold()
                     .padding(.top)
                     .alert(isPresented: $showingSavedAlert) {
                         Alert(title: Text("Saved"), dismissButton: .default(Text("Done")))
                     }
-                Text("Rating: \(self.userInfo.user.numberOfRatings > 0 ? String(format: "%.2f", self.userInfo.user.rating) : "N/A")")
+                Text("Rating: \(userInfo.user.numberOfRatings > 0 ? String(format: "%.2f", userInfo.user.rating) : "N/A")")
                     .bold()
-                Text("Number of Ratings: \(self.userInfo.user.numberOfRatings > 0 ? String(self.userInfo.user.numberOfRatings) : "0")")
+                Text("Number of Ratings: \(userInfo.user.numberOfRatings > 0 ? String(userInfo.user.numberOfRatings) : "0")")
                     .bold()
                 VStack(alignment: .leading) {
                     Text("Vehicle:")
@@ -36,24 +36,24 @@ struct AccountView: View {
                             Alert(title: Text("Get Set Up"), message: Text("To save your vehicle you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                         }
                     HStack {
-                        TextField("e.g. Gray Toyota Camry", text: self.$userInfo.user.vehicle)
+                        TextField("e.g. Gray Toyota Camry", text: $userInfo.user.vehicle)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.words)
                             .font(.body)
                         Button(action: {
                             if Auth.auth().currentUser?.uid != nil {
                                 if isVehicleComplete1 {
-                                    self.saveVehicle()
+                                    saveVehicle()
                                 } else {
                                     if !isVehicleValid1() {
-                                        self.errorString = "Please enter a valid vehicle under 35 characters."
+                                        errorString = "Please enter a valid vehicle under 35 characters."
                                     } else if containsProfanity1() {
-                                        self.errorString = "Please enter a valid vehicle without any inappropriate language."
+                                        errorString = "Please enter a valid vehicle without any inappropriate language."
                                     }
-                                    self.showError.toggle()
+                                    showError.toggle()
                                 }
                             } else {
-                                self.showingSetUpAlert.toggle()
+                                showingSetUpAlert.toggle()
                             }
                         }) {
                             Text("Save")
@@ -75,8 +75,8 @@ struct AccountView: View {
     private func saveVehicle() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser?.uid ?? ""
-        db.collection("users").document(userID).updateData(["vehicle": self.userInfo.user.vehicle])
-        self.showingSavedAlert.toggle()
+        db.collection("users").document(userID).updateData(["vehicle": userInfo.user.vehicle])
+        showingSavedAlert.toggle()
         Analytics.logEvent("update_vehicle", parameters: nil)
     }
     private func isVehicleValid1() -> Bool {

@@ -40,7 +40,7 @@ struct SignUpView: View {
                     .bold()
                     .font(.title)
                 ZStack {
-                    if self.visable {
+                    if visable {
                         TextField("e.g. Parkaroo21", text: $user.password)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.none)
@@ -52,9 +52,9 @@ struct SignUpView: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            self.visable.toggle()
+                            visable.toggle()
                         }) {
-                            Image(systemName: self.visable ? "eye.fill" : "eye.slash.fill")
+                            Image(systemName: visable ? "eye.fill" : "eye.slash.fill")
                                 .foregroundColor(Color(.gray))
                                 .font(.title2)
                                 .padding(.trailing, 10)
@@ -63,44 +63,44 @@ struct SignUpView: View {
                 }.padding(.bottom, 100)
                 Button(action: {
                     if user.isSignUpComplete {
-                        FBAuth.createUser(withEmail: self.user.email, vehicle: self.user.vehicle, password: self.user.password) { (result) in
+                        FBAuth.createUser(withEmail: user.email, vehicle: user.vehicle, password: user.password) { (result) in
                             switch result {
                             case .failure(let error):
-                                self.errorString = error.localizedDescription
-                                self.showError = true
+                                errorString = error.localizedDescription
+                                showError = true
                             case .success( _):
-                                self.presentationMode.wrappedValue.dismiss()
+                                presentationMode.wrappedValue.dismiss()
                                 Analytics.logEvent("successful_sign_up", parameters: nil)
-                                if self.locationTransfer.showOnBoarding && self.locationTransfer.isPresented {
-                                    self.locationTransfer.isPresented = false
+                                if locationTransfer.showOnBoarding && locationTransfer.isPresented {
+                                    locationTransfer.isPresented = false
                                     LocationService.shared.checkLocationAuthStatus()
                                 }
                             }
                         }
-                        self.signUpClicked = true
+                        signUpClicked = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            self.signUpClicked = false
+                            signUpClicked = false
                         }
                     } else {
                         Analytics.logEvent("unsuccessful_sign_up", parameters: nil)
                         if !user.isVehicleValid() {
-                            self.errorString = "Please enter a valid vehicle under 35 characters."
+                            errorString = "Please enter a valid vehicle under 35 characters."
                         } else if user.containsProfanity() {
-                            self.errorString = "Please enter a valid vehicle without any inappropriate language."
+                            errorString = "Please enter a valid vehicle without any inappropriate language."
                         } else if !user.isEmailValid() {
                             if !user.isEmailNotContainingSpace() && !user.isEmailNotContainingUppercase() {
-                                self.errorString = "Please enter a valid email without any spaces or uppercases."
+                                errorString = "Please enter a valid email without any spaces or uppercases."
                             } else if !user.isEmailNotContainingSpace() && user.isEmailNotContainingUppercase() {
-                                self.errorString = "Please enter a valid email without any spaces."
+                                errorString = "Please enter a valid email without any spaces."
                             } else if user.isEmailNotContainingSpace() && !user.isEmailNotContainingUppercase() {
-                                self.errorString = "Please enter a valid email without any uppercases."
+                                errorString = "Please enter a valid email without any uppercases."
                             } else if user.isEmailNotContainingSpace() && user.isEmailNotContainingUppercase() {
-                                self.errorString = "Please enter a valid email."
+                                errorString = "Please enter a valid email."
                             }
                         } else if !user.isPasswordValid() {
-                            self.errorString = "Please enter a valid password with 6 or more characters containing at least one number."
+                            errorString = "Please enter a valid password with 6 or more characters containing at least one number."
                         }
-                        self.showError = true
+                        showError = true
                     }
                 }) {
                     HStack {
@@ -115,16 +115,16 @@ struct SignUpView: View {
                             .cornerRadius(50)
                         Spacer()
                     }
-                }.disabled(self.signUpClicked)
+                }.disabled(signUpClicked)
                 .alert(isPresented: $showError) {
-                    Alert(title: Text("Error"), message: Text(self.errorString), dismissButton: .default(Text("Okay")))
+                    Alert(title: Text("Error"), message: Text(errorString), dismissButton: .default(Text("Okay")))
                 }
-                if self.locationTransfer.showOnBoarding && self.locationTransfer.isPresented {
+                if locationTransfer.showOnBoarding && locationTransfer.isPresented {
                     HStack {
                         Spacer()
                         Text("Already have an account?")
                         Button(action: {
-                            self.showingLoginView = true
+                            showingLoginView = true
                         }) {
                             Text("Login")
                         }.sheet(isPresented: $showingLoginView) {

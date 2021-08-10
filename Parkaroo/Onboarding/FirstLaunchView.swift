@@ -27,15 +27,15 @@ struct FirstLaunchView: View {
                 .animation(.spring())
                 .gesture(
                     DragGesture().onChanged { value in
-                        self.SlideGesture = value.translation
+                        SlideGesture = value.translation
                     }
                     .onEnded { value in
-                        if self.SlideGesture.width < -5 {
-                            self.SlideOne = true
-                            self.Dots = true
-                            self.SlideOnePrevious = false
+                        if SlideGesture.width < -5 {
+                            SlideOne = true
+                            Dots = true
+                            SlideOnePrevious = false
                         }
-                        self.SlideGesture = .zero
+                        SlideGesture = .zero
                     })
             ZStack {
                 VStack {
@@ -58,20 +58,20 @@ struct FirstLaunchView: View {
                 .animation(.spring())
                 .gesture(
                     DragGesture().onChanged { value in
-                        self.SlideGesture = value.translation
+                        SlideGesture = value.translation
                     }
                     .onEnded { value in
-                        if self.SlideGesture.width < -5 {
-                            self.SlideOne = true
-                            self.SlideTwo = true
-                            self.Dots = false
+                        if SlideGesture.width < -5 {
+                            SlideOne = true
+                            SlideTwo = true
+                            Dots = false
                         }
-                        if self.SlideGesture.width > 5 {
-                            self.SlideOnePrevious = true
-                            self.SlideOne = false
-                            self.Dots = false
+                        if SlideGesture.width > 5 {
+                            SlideOnePrevious = true
+                            SlideOne = false
+                            Dots = false
                         }
-                        self.SlideGesture = .zero
+                        SlideGesture = .zero
                     })
             ZStack {
                 VStack {
@@ -93,21 +93,21 @@ struct FirstLaunchView: View {
                 .animation(.spring())
                 .gesture(
                     DragGesture().onChanged { value in
-                        self.SlideGesture = value.translation
+                        SlideGesture = value.translation
                     }
                     .onEnded { value in
-                        if self.SlideGesture.width < -5 {
-                            self.SlideOne = true
-                            self.SlideTwo = true
-                            self.SlideThree = true
-                            self.Dots = false
+                        if SlideGesture.width < -5 {
+                            SlideOne = true
+                            SlideTwo = true
+                            SlideThree = true
+                            Dots = false
                         }
-                        if self.SlideGesture.width > 5 {
-                            self.SlideTwo = false
-                            self.SlideTwoPrevious = true
-                            self.Dots = true
+                        if SlideGesture.width > 5 {
+                            SlideTwo = false
+                            SlideTwoPrevious = true
+                            Dots = true
                         }
-                        self.SlideGesture = .zero
+                        SlideGesture = .zero
                     })
             ZStack {
                 VStack {
@@ -128,15 +128,15 @@ struct FirstLaunchView: View {
                 .animation(.spring())
                 .gesture(
                     DragGesture().onChanged { value in
-                        self.SlideGesture = value.translation
+                        SlideGesture = value.translation
                     }
                     .onEnded { value in
-                        if self.SlideGesture.width > 5 {
-                            self.SlideThree = false
-                            self.SlideThreePrevious = true
-                            self.Dots = true
+                        if SlideGesture.width > 5 {
+                            SlideThree = false
+                            SlideThreePrevious = true
+                            Dots = true
                         }
-                        self.SlideGesture = .zero
+                        SlideGesture = .zero
                     })
         }.onAppear() {
             try! AVAudioSession.sharedInstance().setCategory(.playback)

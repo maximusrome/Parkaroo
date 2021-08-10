@@ -28,7 +28,7 @@ struct RateSellerView: View {
             Spacer()
             Button(action: {
                 viewModel.deleteChatroom()
-                self.gGRequestConfirm.showSellerRatingView = false
+                gGRequestConfirm.showSellerRatingView = false
                 updateRating()
                 locationTransfer.updateGettingPin(data: [C_RATINGSUBMITTED:true])
                 cleanUp()
@@ -65,17 +65,17 @@ struct RateSellerView: View {
         FBFirestore.mergeFBUser(data, uid: uid) { result in
             switch result {
             case .success(_):
-                self.showAlertMessage = true
+                showAlertMessage = true
             case .failure(_):
                 print("Error")
             }
         }
     }
     private func cleanUp() {
-        self.locationTransfer.cleanUpGettingPin()
-        self.rating = 0
-        if !self.gGRequestConfirm.showGetRequestView && !self.gGRequestConfirm.showGetConfirmView && !self.gGRequestConfirm.showGiveRequestView && !self.gGRequestConfirm.showGetConfirmView {
-            self.locationTransfer.minute = ""
+        locationTransfer.cleanUpGettingPin()
+        rating = 0
+        if !gGRequestConfirm.showGetRequestView && !gGRequestConfirm.showGetConfirmView && !gGRequestConfirm.showGiveRequestView && !gGRequestConfirm.showGetConfirmView {
+            locationTransfer.minute = ""
         }
     }
 }

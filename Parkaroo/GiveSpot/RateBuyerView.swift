@@ -23,7 +23,7 @@ struct RateBuyerView: View {
             RatingView(rating: $rating)
             Spacer()
             Button(action: {
-                self.gGRequestConfirm.showBuyerRatingView = false
+                gGRequestConfirm.showBuyerRatingView = false
                 updateRating()
                 cleanUp()
                 Analytics.logEvent("seller_rating_submited", parameters: nil)
@@ -57,18 +57,18 @@ struct RateBuyerView: View {
         FBFirestore.mergeFBUser(data, uid: uid) { result in
             switch result {
             case .success(_):
-                self.showAlertMessage = true
+                showAlertMessage = true
             case .failure(_):
                 print("Error")
             }
         }
     }
     private func cleanUp() {
-        self.locationTransfer.deletePin()
-        self.locationTransfer.givingPinListener?.remove()
-        self.rating = 0
-        if !self.gGRequestConfirm.showGetRequestView && !self.gGRequestConfirm.showGetConfirmView && !self.gGRequestConfirm.showGiveRequestView && !self.gGRequestConfirm.showGetConfirmView {
-            self.locationTransfer.minute = ""
+        locationTransfer.deletePin()
+        locationTransfer.givingPinListener?.remove()
+        rating = 0
+        if !gGRequestConfirm.showGetRequestView && !gGRequestConfirm.showGetConfirmView && !gGRequestConfirm.showGiveRequestView && !gGRequestConfirm.showGetConfirmView {
+            locationTransfer.minute = ""
         }
     }
 }

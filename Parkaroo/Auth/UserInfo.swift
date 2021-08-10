@@ -40,8 +40,8 @@ class UserInfo: ObservableObject, Equatable {
         }
     }
     func addCredits(numberOfCredits: Int, completion: @escaping (Result<Bool, Error>) -> ()) {
-        let credits = self.user.credits + numberOfCredits
-        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.user.uid) { result in
+        let credits = user.credits + numberOfCredits
+        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: user.uid) { result in
             switch result {
             case .success(_):
                 self.user.credits = credits
@@ -52,9 +52,9 @@ class UserInfo: ObservableObject, Equatable {
         }
     }
     func AddOneCredit() {
-        var credits = self.user.credits
+        var credits = user.credits
         credits += 1
-        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.user.uid) { result in
+        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: user.uid) { result in
             switch result {
             case .success(_):
                 self.user.credits = credits
@@ -64,9 +64,9 @@ class UserInfo: ObservableObject, Equatable {
         }
     }
     func RemoveOneCredit() {
-        var credits = self.user.credits
+        var credits = user.credits
         credits -= 1
-        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: self.user.uid) { result in
+        FBFirestore.mergeFBUser([C_CREDITS:credits], uid: user.uid) { result in
             switch result {
             case .success(_):
                 self.user.credits = credits

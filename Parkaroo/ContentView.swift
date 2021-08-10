@@ -23,7 +23,7 @@ struct ContentView: View {
             .onEnded {
                 if $0.translation.width < 250 {
                     withAnimation {
-                        self.showMenu = false
+                        showMenu = false
                     }
                 }
             }
@@ -42,13 +42,13 @@ struct ContentView: View {
                         }
                 }
                 GeometryReader { geometry in
-                    if !self.showMenu {
+                    if !showMenu {
                         MenuView()
                             .frame(width: geometry.size.width/2)
                             .transition(.slide)
                             .offset(x: geometry.size.width, y: 0)
                     }
-                    if self.showMenu {
+                    if showMenu {
                         MenuView()
                             .frame(width: geometry.size.width/2)
                             .transition(.move(edge: .trailing))
@@ -56,19 +56,19 @@ struct ContentView: View {
                             .gesture(drag)
                     }
                 }
-                if self.locationTransfer.showOnBoarding && self.locationTransfer.isPresented {
+                if locationTransfer.showOnBoarding && locationTransfer.isPresented {
                     FirstLaunchView()
                         .navigationBarHidden(true)
                 }
                 if !monitor.isConnected {
                     WifiView()
                 }
-                if self.locationTransfer.forceUpdate {
+                if locationTransfer.forceUpdate {
                     ForceUpdateView()
                         .navigationBarHidden(true)
                         .edgesIgnoringSafeArea(.all)
                 }
-                if (!self.locationTransfer.showOnBoarding || !self.locationTransfer.isPresented) && !self.showMenu {
+                if (!locationTransfer.showOnBoarding || !locationTransfer.isPresented) && !showMenu {
                     if LocationService.shared.locationAuthorized {
                         VStack {
                             HStack {
@@ -93,36 +93,36 @@ struct ContentView: View {
                 }
                 VStack {
                     Spacer()
-                    if self.offset < 100 {
+                    if offset < 100 {
                         NotificationsSheet()
-                            .offset(y: self.offset)
+                            .offset(y: offset)
                             .transition(AnyTransition.move(edge: .bottom))
                             .gesture(DragGesture()
                                         .onChanged({ (value) in
                                             if value.translation.height > 0 {
-                                                self.offset = value.location.y
+                                                offset = value.location.y
                                             }
                                         })
                                         .onEnded({ (value) in
-                                            if self.offset > 100 {
-                                                self.offset = UIScreen.main.bounds.height
+                                            if offset > 100 {
+                                                offset = UIScreen.main.bounds.height
                                             } else {
-                                                self.offset = 0
+                                                offset = 0
                                             }
                                         })
                             )
                     }
                 }.animation(.default)
-                .background((self.offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
+                .background((offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
                                 .onTapGesture {
-                                    self.offset = UIScreen.main.bounds.height
+                                    offset = UIScreen.main.bounds.height
                                 }).edgesIgnoringSafeArea(.bottom)
-                .background((self.showMenu ? Color(UIColor.label).opacity(0.001) : Color.clear)
+                .background((showMenu ? Color(UIColor.label).opacity(0.001) : Color.clear)
                                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                                 .offset(x: -UIScreen.main.bounds.width/2)
                                 .onTapGesture {
                                     withAnimation {
-                                        self.showMenu = false
+                                        showMenu = false
                                     }
                                 })
             }.navigationBarTitleDisplayMode(.inline)
@@ -136,18 +136,18 @@ struct ContentView: View {
             }.navigationBarItems(leading:
                                     Button(action: {
                                         if Auth.auth().currentUser?.uid != nil {
-                                            if self.offset == UIScreen.main.bounds.height {
-                                                self.showNotifications = true
+                                            if offset == UIScreen.main.bounds.height {
+                                                showNotifications = true
                                             } else {
-                                                self.showNotifications = false
+                                                showNotifications = false
                                             }
-                                            if self.showNotifications {
+                                            if showNotifications {
                                                 offset = 0
                                             } else {
-                                                self.offset = UIScreen.main.bounds.height
+                                                offset = UIScreen.main.bounds.height
                                             }
                                         } else {
-                                            self.showSetUpNotifications.toggle()
+                                            showSetUpNotifications.toggle()
                                         }
                                     }) {
                                         Image(systemName: "bell")
@@ -156,10 +156,10 @@ struct ContentView: View {
                                     }, trailing:
                                         Button(action: {
                                             withAnimation {
-                                                self.showMenu.toggle()
+                                                showMenu.toggle()
                                             }
                                         }) {
-                                            Image(systemName: self.showMenu ? "xmark" : "line.horizontal.3")
+                                            Image(systemName: showMenu ? "xmark" : "line.horizontal.3")
                                                 .imageScale(.large)
                                                 .frame(width: 50, height: 50, alignment: .trailing)
                                         })
@@ -168,12 +168,12 @@ struct ContentView: View {
             Alert(title: Text("Get Set Up"), message: Text("To adjust your notifications you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
         })
         .onAppear {
-            self.locationTransfer.checkLastCompatibleVersion()
+            locationTransfer.checkLastCompatibleVersion()
             if !hasOnboarded {
-                self.locationTransfer.showOnBoarding.toggle()
+                locationTransfer.showOnBoarding.toggle()
                 hasOnboarded = true
             }
-            self.userInfo.configureFirebaseStateDidChange()
+            userInfo.configureFirebaseStateDidChange()
         }
     }
 }

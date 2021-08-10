@@ -33,23 +33,23 @@ struct GetRequestView: View {
                 .bold()
                 .padding(.top, 35)
                 .onReceive(timer, perform: { input in
-                    let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
+                    let diff = Date().distance(to: locationTransfer.gettingPin?.departure.dateValue() ?? Date())
                     depart = Int(diff / 60)
                     separateHoursAndMinutes()
                 })
             Spacer()
-            Text("Street Info: \(self.locationTransfer.getStreetInfoSelection)")
+            Text("Street Info: \(locationTransfer.getStreetInfoSelection)")
                 .bold()
             Spacer()
             HStack {
-                if self.locationTransfer.seller?.rating != 0 {
-                    Text("Seller Rating: \(String(format: "%.2f", self.locationTransfer.seller?.rating ?? 0))")
+                if locationTransfer.seller?.rating != 0 {
+                    Text("Seller Rating: \(String(format: "%.2f", locationTransfer.seller?.rating ?? 0))")
                         .bold()
                 } else {
                     Text("Seller Rating: N/A")
                         .bold()
                 }
-                Text("\(self.locationTransfer.seller?.numberOfRatings ?? 0) ratings")
+                Text("\(locationTransfer.seller?.numberOfRatings ?? 0) ratings")
                     .font(.footnote)
                     .alert(isPresented: $showingNotEnoughCreditsAlert) {
                         Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. Give up your spot to earn a credit or purchase a credit in the Credits page under the menu."), dismissButton: .default(Text("Okay")))
@@ -58,7 +58,7 @@ struct GetRequestView: View {
             Spacer()
             HStack {
                 Button(action: {
-                    self.gGRequestConfirm.showGetRequestView = false
+                    gGRequestConfirm.showGetRequestView = false
                 }) {
                     Text("close")
                         .padding(10)
@@ -90,37 +90,37 @@ struct GetRequestView: View {
         hours = (depart - mins)/60
     }
     private func reserveSpot() {
-        if self.userInfo.isUserAuthenticated == .signedIn {
-            if self.locationTransfer.seller?.uid != Auth.auth().currentUser?.uid {
-                if self.userInfo.user.credits > 0 {
+        if userInfo.isUserAuthenticated == .signedIn {
+            if locationTransfer.seller?.uid != Auth.auth().currentUser?.uid {
+                if userInfo.user.credits > 0 {
                     userInfo.addCredits(numberOfCredits: -1) { result in
                         switch result {
                         case .success(_):
                             print("Credit subtracted")
-                            viewModel.createChatroom(sellerID: self.locationTransfer.gettingPin?.seller ?? "")
-                            self.completeTransaction()
+                            viewModel.createChatroom(sellerID: locationTransfer.gettingPin?.seller ?? "")
+                            completeTransaction()
                         case .failure(_):
                             print("Error updating credits")
                         }
                     }
                 } else {
-                    self.showingNotEnoughCreditsAlert = true
+                    showingNotEnoughCreditsAlert = true
                 }
             } else {
-                self.showingSameUserReserveAlert = true
+                showingSameUserReserveAlert = true
             }
         } else {
-            self.showingReserveSetupAlert = true
+            showingReserveSetupAlert = true
         }
     }
     private func completeTransaction() {
         Analytics.logEvent("reserve_spot", parameters: nil)
-        self.gGRequestConfirm.showGetRequestView = false
-        self.gGRequestConfirm.showGetConfirmView = true
+        gGRequestConfirm.showGetRequestView = false
+        gGRequestConfirm.showGetConfirmView = true
         let data = [C_BUYER:userInfo.user.uid, C_STATUS: pinStatus.reserved.rawValue]
-        self.locationTransfer.updateGettingPin(data: data)
-        if let id = self.locationTransfer.gettingPin?.id {
-            self.locationTransfer.fetchGettingPin(id: id)
+        locationTransfer.updateGettingPin(data: data)
+        if let id = locationTransfer.gettingPin?.id {
+            locationTransfer.fetchGettingPin(id: id)
         }
         if let seller = locationTransfer.seller {
             NotificationsService.shared.sendN(uid: seller.uid, message: "Your spot was reserved")
@@ -130,7 +130,7 @@ struct GetRequestView: View {
             annotation.coordinate = location
             annotation.id = locationTransfer.gettingPin?.id
             annotation.type = .reserved
-            self.locationTransfer.gettingAnnotation = annotation
+            locationTransfer.gettingAnnotation = annotation
         }
     }
 }

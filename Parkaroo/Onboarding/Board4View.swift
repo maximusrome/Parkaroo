@@ -30,7 +30,7 @@ struct Board4View: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            self.locationTransfer.isPresented = false
+                            locationTransfer.isPresented = false
                             Analytics.logEvent("next", parameters: nil)
                             LocationService.shared.checkLocationAuthStatus()
                         }) {

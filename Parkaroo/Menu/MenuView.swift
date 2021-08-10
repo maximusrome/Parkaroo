@@ -26,19 +26,19 @@ struct MenuView: View {
             }
             Spacer()
             Button(action: {
-                self.contactUs()
+                contactUs()
             }) {
                 HStack {
                     Image(systemName: "envelope")
                         .imageScale(.large)
                     Text("Contact Us")
                 }.sheet(isPresented: $showContactUs) {
-                    MailView(result: self.$result, newSubject: "Contact Us", newMsgBody: "")
+                    MailView(result: $result, newSubject: "Contact Us", newMsgBody: "")
                 }
             }
             Spacer()
             Button(action: {
-                self.inviteFriends()
+                inviteFriends()
             }) {
                 Image(systemName: "person.2")
                     .imageScale(.large)
@@ -87,7 +87,7 @@ struct MenuView: View {
     func contactUs() {
         print("pressed contact us")
         if MFMailComposeViewController.canSendMail() {
-            self.showContactUs = true
+            showContactUs = true
         } else {
             print("Error sending mail")
         }
