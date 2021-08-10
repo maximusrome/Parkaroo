@@ -113,12 +113,6 @@ class LocationTransfer: ObservableObject {
             self.locations.removeAll()
         }
     }
-    func deleteSellerPin() {
-        let db = Firestore.firestore()
-        db.collection("pins").document(seller?.uid ?? "").delete()
-        self.gettingPin = nil
-        self.locations.removeAll()
-    }
     func readStreetInfo(id: String) {
         let db = Firestore.firestore()
         db.collection(C_PINS).document(id).getDocument { (document, error) in

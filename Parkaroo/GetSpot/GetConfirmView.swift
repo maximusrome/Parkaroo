@@ -37,12 +37,6 @@ struct GetConfirmView: View {
                     let diff = Date().distance(to: self.locationTransfer.gettingPin?.departure.dateValue() ?? Date())
                     depart = Int(diff / 60)
                     separateHoursAndMinutes()
-                    if (locationTransfer.gettingPin?.buyer == nil || locationTransfer.gettingPin?.buyer == "") && (hours == 0 && mins < 0) {
-                        locationTransfer.deleteSellerPin()
-                        locationTransfer.minute = ""
-                        locationTransfer.gettingPin = nil
-                        self.gGRequestConfirm.showGetRequestView = false
-                    }
                 })
             Spacer()
             Text("Street Info: \(self.locationTransfer.getStreetInfoSelection)")
