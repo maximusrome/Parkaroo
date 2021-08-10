@@ -38,7 +38,6 @@ class LocationTransfer: ObservableObject {
     var publisher: AnyPublisher<Void, Never>! = nil
     let updatePublisher = PassthroughSubject<Void, Never>()
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-    
     func createPin() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser?.uid ?? ""
@@ -254,7 +253,7 @@ class LocationTransfer: ObservableObject {
             } else {
                 if document != nil && document!.exists {
                     let documentData = document!.data()
-                    self.lastCompatibleVersion = documentData?["last_compatible_version"] as? Double ?? 1.0
+                    self.lastCompatibleVersion = documentData?["last_compatible_version"] as! Double
                     if self.lastCompatibleVersion <= Double(self.appVersion) ?? 5.0 {
                         self.forceUpdate = false
                         print("dont show force update")
