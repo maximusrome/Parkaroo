@@ -50,7 +50,7 @@ struct GetConfirmView: View {
             Spacer()
             VStack {
                 HStack {
-                    Text("Seller: ")
+                    Text("Seller:")
                     Text("\(locationTransfer.seller?.vehicle ?? "")")
                         .autocapitalization(.words)
                         .multilineTextAlignment(.center)

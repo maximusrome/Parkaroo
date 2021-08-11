@@ -13,10 +13,10 @@
 		212A50DB26BB8C2A0092E462 /* ChatroomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A50DA26BB8C2A0092E462 /* ChatroomsViewModel.swift */; };
 		212A50DD26BB8C4F0092E462 /* MessagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A50DC26BB8C4F0092E462 /* MessagesViewModel.swift */; };
 		212A50E826BB8D040092E462 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212A50E726BB8D040092E462 /* Messages.swift */; };
+		212AAC1326C3749E0011B020 /* IMG_3841.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 212AAC1226C3749D0011B020 /* IMG_3841.MOV */; };
 		216EB39126C05B7D004EE4C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 216EB39026C05B7D004EE4C1 /* GoogleService-Info.plist */; };
 		216F071426BB320D008B3FC7 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216F071326BB320D008B3FC7 /* AccountView.swift */; };
 		2171272926C130060014BB9C /* ForceUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2171272826C130060014BB9C /* ForceUpdateView.swift */; };
-		21C146F1269BD7710079BA2D /* IMG_3841.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 21C146F0269BD7710079BA2D /* IMG_3841.MOV */; };
 		21EBF2A9266BEFC500102E0F /* SellerCanceledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EBF2A3266BEFC400102E0F /* SellerCanceledView.swift */; };
 		21EBF2AA266BEFC500102E0F /* MapGetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EBF2A4266BEFC400102E0F /* MapGetView.swift */; };
 		21EBF2AB266BEFC500102E0F /* GetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21EBF2A5266BEFC400102E0F /* GetView.swift */; };
@@ -76,10 +76,10 @@
 		212A50DA26BB8C2A0092E462 /* ChatroomsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatroomsViewModel.swift; sourceTree = "<group>"; };
 		212A50DC26BB8C4F0092E462 /* MessagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewModel.swift; sourceTree = "<group>"; };
 		212A50E726BB8D040092E462 /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		212AAC1226C3749D0011B020 /* IMG_3841.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = IMG_3841.MOV; sourceTree = "<group>"; };
 		216EB39026C05B7D004EE4C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		216F071326BB320D008B3FC7 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		2171272826C130060014BB9C /* ForceUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateView.swift; sourceTree = "<group>"; };
-		21C146F0269BD7710079BA2D /* IMG_3841.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = IMG_3841.MOV; sourceTree = "<group>"; };
 		21EBF22C266BECD500102E0F /* Parkaroo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Parkaroo.entitlements; sourceTree = "<group>"; };
 		21EBF2A3266BEFC400102E0F /* SellerCanceledView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellerCanceledView.swift; sourceTree = "<group>"; };
 		21EBF2A4266BEFC400102E0F /* MapGetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapGetView.swift; sourceTree = "<group>"; };
@@ -307,7 +307,7 @@
 				21EBF2D3266BF0A800102E0F /* Board2View.swift */,
 				21EBF2D5266BF0A800102E0F /* Board3View.swift */,
 				2118500526AE2E5C00090A29 /* Board4View.swift */,
-				21C146F0269BD7710079BA2D /* IMG_3841.MOV */,
+				212AAC1226C3749D0011B020 /* IMG_3841.MOV */,
 				21EBF2D2266BF0A800102E0F /* FirstLaunchView.swift */,
 				21EBF2D1266BF0A800102E0F /* LaunchScreen.storyboard */,
 			);
@@ -423,7 +423,7 @@
 			files = (
 				21EBF2D6266BF0A800102E0F /* LaunchScreen.storyboard in Resources */,
 				21295F76256B069100AD0E30 /* Preview Assets.xcassets in Resources */,
-				21C146F1269BD7710079BA2D /* IMG_3841.MOV in Resources */,
+				212AAC1326C3749E0011B020 /* IMG_3841.MOV in Resources */,
 				21295F73256B069100AD0E30 /* Assets.xcassets in Resources */,
 				216EB39126C05B7D004EE4C1 /* GoogleService-Info.plist in Resources */,
 			);

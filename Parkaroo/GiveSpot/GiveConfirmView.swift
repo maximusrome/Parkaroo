@@ -49,7 +49,7 @@ struct GiveConfirmView: View {
             if let buyer = locationTransfer.buyer {
                 VStack {
                     HStack {
-                        Text("Buyer: ")
+                        Text("Buyer:")
                         Text("\(buyer.vehicle)")
                             .autocapitalization(.words)
                             .multilineTextAlignment(.center)

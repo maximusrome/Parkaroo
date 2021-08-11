@@ -95,7 +95,7 @@ struct Messages: View {
                 }) {
                     Image(systemName: "paperplane")
                         .imageScale(.large)
-                        .foregroundColor(Color("orange1"))
+                        .foregroundColor(messageField == "" ? Color.gray : Color("orange1"))
                 }.disabled(messageField == "")
                 .alert(isPresented: $showingInappropriateAlert) {
                     Alert(title: Text("Inappropriate"), dismissButton: .default(Text("Okay")))
