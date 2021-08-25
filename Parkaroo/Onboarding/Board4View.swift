@@ -34,7 +34,7 @@ struct Board4View: View {
                             Analytics.logEvent("next", parameters: nil)
                             LocationService.shared.checkLocationAuthStatus()
                         }) {
-                            Text("Next")
+                            Text("Later")
                                 .foregroundColor(Color("orange1"))
                                 .padding()
                         }

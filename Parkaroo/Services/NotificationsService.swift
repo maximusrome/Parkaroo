@@ -18,12 +18,25 @@ class NotificationsService: NSObject, UIApplicationDelegate {
     var window: UIWindow?
     let gcmMessageIDKey = "gcm.message_id"
     lazy var functions = Functions.functions()
+    var notificationStatusAuthorized = false
     func configure() {
         UNUserNotificationCenter.current().delegate = self
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { _, _ in }
         UIApplication.shared.registerForRemoteNotifications()
         Messaging.messaging().delegate = self
+    }
+    let currentNotification = UNUserNotificationCenter.current()
+    func getNotificationStatus(completion: @escaping () -> Void) {
+        currentNotification.getNotificationSettings(completionHandler: { (settings) in
+            if settings.authorizationStatus == .authorized {
+                self.notificationStatusAuthorized = true
+                completion()
+            } else {
+                self.notificationStatusAuthorized = false
+                completion()
+            }
+        })
     }
 }
 extension NotificationsService: MessagingDelegate {

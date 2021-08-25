@@ -14,8 +14,9 @@ struct MapGiveView: UIViewRepresentable {
     let mapView = MKMapView()
     func makeUIView(context: Context) -> MKMapView {
         mapView.delegate = context.coordinator
-        mapView.isRotateEnabled = false
         mapView.showsUserLocation = true
+        mapView.isRotateEnabled = false
+        mapView.isPitchEnabled = false
         return mapView
     }
     func updateUIView(_ view: MKMapView, context: Context) {

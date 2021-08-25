@@ -17,6 +17,7 @@ struct MapGetView: UIViewRepresentable {
         mapView.delegate = context.coordinator
         mapView.showsUserLocation = true
         mapView.isRotateEnabled = false
+        mapView.isPitchEnabled = false
         return mapView
     }
     func updateUIView(_ view: MKMapView, context: Context) {
@@ -65,6 +66,8 @@ struct MapGetView: UIViewRepresentable {
                     view.glyphImage = UIImage(named: "launch1")
                     view.glyphTintColor = UIColor(named: "gray2")
                     view.markerTintColor = UIColor(named: "orange1")
+                    view.clusteringIdentifier = nil
+                    view.displayPriority = .required
                     return view
                 } else {
                     return nil

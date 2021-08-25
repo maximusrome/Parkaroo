@@ -45,9 +45,9 @@ struct TutorialView: View {
                         .bold()
                         .font(.title)
                         .padding(.vertical)
-                    Text("Step 1: Go to the Get Spot tab and click on a pin at your desired parking location.\n")
+                    Text("Step 1: Go to the Get Spot tab and select a pin at your desired parking location.\n")
                     Text("Step 2: If the departure time, street information, and seller rating are to your liking, click Reserve.\n")
-                    Text("Step 3: To reserve a spot you will need one credit. In return, you will be the only one to receive the vehicle information. The vehicle location will now only be visible to you.\n")
+                    Text("Step 3: To reserve a spot you will need one credit. In return, you will be the only one to receive the vehicle information and the vehicle location will now only be visible to you.\n")
                     Text("Step 4: Once you are in the spot, click Complete Transfer. Finally, rate the seller.")
                 }
                 Group {

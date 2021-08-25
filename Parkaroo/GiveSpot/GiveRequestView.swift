@@ -90,11 +90,12 @@ struct GiveRequestView: View {
             Picker(selection: $locationTransfer.giveStreetInfoSelection,
                    label:
                     HStack {
-                        Text("Street Info: ")
+                        Text("Street Info:")
                             .bold()
                         Text("\(locationTransfer.giveStreetInfoSelection)")
                             .bold()
                             .foregroundColor(Color("orange1"))
+                            .multilineTextAlignment(.center)
                     }, content: {
                         ForEach(streetOptions, id: \.self) { option in
                             Text(option)

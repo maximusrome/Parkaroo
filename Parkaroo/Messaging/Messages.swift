@@ -102,7 +102,7 @@ struct Messages: View {
                 }
             }.padding(.horizontal)
             .padding(.vertical, 5)
-            .navigationBarTitle("Chatroom")
+            .navigationBarTitle("Messages")
         }.onReceive(locationTransfer.updatePublisher, perform: { _ in
             if locationTransfer.showSellerCanceledView {
                 presentationMode.wrappedValue.dismiss()

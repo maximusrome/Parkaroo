@@ -29,7 +29,7 @@ struct GetRequestView: View {
     @State private var mins = Int()
     var body: some View {
         VStack {
-            Text("Departing in: \(hours > 0 ? String(hours) + " hr" : "") \((mins > 0 || hours == 0) ? String(mins) + " min" : "")")
+            Text("Departing in: \(hours > 0 ? String(hours) + " hr" : "") \((mins > 0 || hours <= 0) ? String(mins) + " min" : "")")
                 .bold()
                 .padding(.top, 35)
                 .onReceive(timer, perform: { input in
@@ -38,8 +38,13 @@ struct GetRequestView: View {
                     separateHoursAndMinutes()
                 })
             Spacer()
-            Text("Street Info: \(locationTransfer.getStreetInfoSelection)")
-                .bold()
+            HStack {
+                Text("Street Info:")
+                    .bold()
+                Text("\(locationTransfer.getStreetInfoSelection)")
+                    .bold()
+                    .multilineTextAlignment(.center)
+            }
             Spacer()
             HStack {
                 if locationTransfer.seller?.rating != 0 {

@@ -29,13 +29,13 @@ struct GiveConfirmView: View {
                 .font(.title)
                 .padding(.top, 25)
             Spacer()
-            Text("Departing in: \(hours > 0 ? String(hours) + " hr" : "") \(mins > 0 ? String(mins) + " min" : hours != 0 ? "" : "0 min")")
+            Text("Departing in: \(hours > 0 ? String(hours) + " hr" : "") \(mins > 0 ? String(mins) + " min" : hours > 0 ? "" : "0 min")")
                 .bold()
                 .onReceive(timer, perform: { input in
                     let diff = Date().distance(to: locationTransfer.givingPin?.departure.dateValue() ?? Date())
                     depart = Int(diff / 60)
                     separateHoursAndMinutes()
-                    if (locationTransfer.givingPin?.buyer == nil || locationTransfer.givingPin?.buyer == "") && (hours == 0 && mins < 0) {
+                    if (locationTransfer.givingPin?.buyer == nil || locationTransfer.givingPin?.buyer == "") && (hours <= 0 && mins < 0) {
                         locationTransfer.deletePin()
                         locationTransfer.minute = ""
                         locationTransfer.givingPin = nil
@@ -43,8 +43,13 @@ struct GiveConfirmView: View {
                     }
                 })
             Spacer()
-            Text("Street Info: \(locationTransfer.giveStreetInfoSelection)")
-                .bold()
+            HStack {
+                Text("Street Info:")
+                    .bold()
+                Text("\(locationTransfer.giveStreetInfoSelection)")
+                    .bold()
+                    .multilineTextAlignment(.center)
+            }
             Spacer()
             if let buyer = locationTransfer.buyer {
                 VStack {
@@ -71,39 +76,28 @@ struct GiveConfirmView: View {
                 )
                 Spacer()
                 HStack {
-                    if !(locationTransfer.givingPin?.ratingSubmitted ?? false) {
-                        Button(action: {
-                            showingSellerCancelAlert = true
-                        }) {
-                            Text("cancel")
-                                .padding(10)
-                        }.alert(isPresented: $showingSellerCancelAlert, content: {
-                            Alert(title: Text("Are you sure?"), message: Text("Friendly reminder: Someone has reserved your spot and may be asked to rate you."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
-                                viewModel.deleteChatroom()
-                                locationTransfer.deletePin()
-                                locationTransfer.minute = ""
-                                gGRequestConfirm.showGiveConfirmView = false
-                                Analytics.logEvent("seller_canceled", parameters: nil)
-                                if let buyer = locationTransfer.buyer {
-                                    NotificationsService.shared.sendN(uid: buyer.uid, message: "The seller has canceled their spot")
-                                }
-                            }))
-                        })
-                    }
                     Button(action: {
-                        gGRequestConfirm.showGiveConfirmView = false
-                        gGRequestConfirm.showBuyerRatingView = true
-                        locationTransfer.givingPin = nil
-                        locationTransfer.locations.removeAll()
-                        addCredit()
-                        Analytics.logEvent("seller_complete_transfer", parameters: nil)
+                        showingSellerCancelAlert = true
                     }) {
-                        Text("\(locationTransfer.givingPin?.ratingSubmitted ?? false ? "Complete Transfer" : "Awaiting Car Arrival")")
-                            .bold()
+                        Text("cancel")
                             .padding(10)
-                            .background(locationTransfer.givingPin?.ratingSubmitted ?? false ? Color("orange1") : Color(white: 0.7))
-                            .cornerRadius(50)
-                    }.disabled(!(locationTransfer.givingPin?.ratingSubmitted ?? false))
+                    }.alert(isPresented: $showingSellerCancelAlert, content: {
+                        Alert(title: Text("Are you sure?"), message: Text("Friendly reminder: Someone has reserved your spot and may be asked to rate you."), primaryButton: .cancel(Text("No")), secondaryButton: .default(Text("Yes"), action: {
+                            viewModel.deleteChatroom()
+                            locationTransfer.deletePin()
+                            locationTransfer.minute = ""
+                            gGRequestConfirm.showGiveConfirmView = false
+                            Analytics.logEvent("seller_canceled", parameters: nil)
+                            if let buyer = locationTransfer.buyer {
+                                NotificationsService.shared.sendN(uid: buyer.uid, message: "The seller has canceled their spot")
+                            }
+                        }))
+                    })
+                    Text("Awaiting Car Arrival")
+                        .bold()
+                        .padding(10)
+                        .background(Color(white: 0.7))
+                        .cornerRadius(50)
                 }.padding(.bottom, 25)
             } else {
                 VStack {
@@ -137,6 +131,16 @@ struct GiveConfirmView: View {
         .shadow(radius: 5)
         .padding(.bottom)
         .padding(.horizontal, 50)
+        .onChange(of: locationTransfer.givingPin?.ratingSubmitted ?? false, perform: { _ in
+            if gGRequestConfirm.showGiveConfirmView && (locationTransfer.givingPin?.ratingSubmitted ?? false) {
+                gGRequestConfirm.showGiveConfirmView = false
+                gGRequestConfirm.showBuyerRatingView = true
+                locationTransfer.givingPin = nil
+                locationTransfer.locations.removeAll()
+                addCredit()
+                Analytics.logEvent("seller_complete_transfer", parameters: nil)
+            }
+        })
     }
     private func separateHoursAndMinutes() {
         mins = depart % 60

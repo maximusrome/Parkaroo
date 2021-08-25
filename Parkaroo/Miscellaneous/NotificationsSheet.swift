@@ -23,7 +23,6 @@ struct NotificationsSheet : View {
                 }
             })
             Text("Receive notifications when spots are made available. Helpful when looking for parking.\n")
-            Text("Disclaimer: Make sure your notifications are enabled for Parkaroo in your Settings app.")
         }.padding(.bottom, (UIApplication.shared.windows.last?.safeAreaInsets.bottom)! + 100)
         .padding(.horizontal)
         .padding(.top, 25)

@@ -33,6 +33,9 @@ struct RateSellerView: View {
                 locationTransfer.updateGettingPin(data: [C_RATINGSUBMITTED:true])
                 cleanUp()
                 Analytics.logEvent("buyer_rating_submited", parameters: nil)
+                if let seller = locationTransfer.seller {
+                    NotificationsService.shared.sendN(uid: seller.uid, message: "The buyer completed the transfer. Rate the buyer to earn your credit.")
+                }
             }) {
                 Text("Submit")
                     .bold()

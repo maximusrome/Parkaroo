@@ -16,6 +16,8 @@ struct ContentView: View {
     @State private var showMenu = false
     @State private var showNotifications = false
     @State private var showSetUpNotifications = false
+    @State private var showNotificationsSettings = false
+    @State private var showLocationSettings = false
     @State var offset : CGFloat = UIScreen.main.bounds.height
     @AppStorage("OboardBeenViewed") var hasOnboarded = false
     var body: some View {
@@ -69,26 +71,32 @@ struct ContentView: View {
                         .edgesIgnoringSafeArea(.all)
                 }
                 if (!locationTransfer.showOnBoarding || !locationTransfer.isPresented) && !showMenu {
-                    if LocationService.shared.locationAuthorized {
-                        VStack {
-                            HStack {
-                                Spacer()
-                                Button(action: {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                if LocationService.shared.locationAuthorized {
                                     LocationService.shared.manager?.startUpdatingLocation()
                                     LocationService1.shared.manager?.startUpdatingLocation()
-                                }) {
-                                    Image(systemName: "location")
-                                        .imageScale(.large)
-                                        .padding(10)
-                                        .foregroundColor(Color("orange1"))
-                                        .background(Color("white1"))
-                                        .cornerRadius(50)
-                                        .shadow(radius: 5)
-                                        .padding(10)
+                                } else {
+                                    showLocationSettings.toggle()
                                 }
-                            }
-                            Spacer()
+                            }) {
+                                Image(systemName: "location")
+                                    .imageScale(.large)
+                                    .padding(10)
+                                    .foregroundColor(Color("orange1"))
+                                    .background(Color("white1"))
+                                    .cornerRadius(50)
+                                    .shadow(radius: 5)
+                                    .padding(10)
+                            }.alert(isPresented: $showLocationSettings, content: {
+                                Alert(title: Text("Enable Current Location"), message: Text("To see your current location you must enable location services in your settings app."), primaryButton: Alert.Button.default(Text("cancel")), secondaryButton: Alert.Button.default(Text("Okay"), action: {
+                                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                }))
+                            })
                         }
+                        Spacer()
                     }
                 }
                 VStack {
@@ -125,6 +133,12 @@ struct ContentView: View {
                                         showMenu = false
                                     }
                                 })
+                .alert(isPresented: $showNotificationsSettings, content: {
+                    Alert(title: Text("Enable Notifications"), message: Text("To adjust your notifications you must enable them in your settings app."), primaryButton: Alert.Button.default(Text("cancel")), secondaryButton: Alert.Button.default(Text("Okay"), action: {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    }))
+                })
+
             }.navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -136,15 +150,21 @@ struct ContentView: View {
             }.navigationBarItems(leading:
                                     Button(action: {
                                         if Auth.auth().currentUser?.uid != nil {
-                                            if offset == UIScreen.main.bounds.height {
-                                                showNotifications = true
-                                            } else {
-                                                showNotifications = false
-                                            }
-                                            if showNotifications {
-                                                offset = 0
-                                            } else {
-                                                offset = UIScreen.main.bounds.height
+                                            NotificationsService.shared.getNotificationStatus {
+                                                if NotificationsService.shared.notificationStatusAuthorized {
+                                                    if offset == UIScreen.main.bounds.height {
+                                                        showNotifications = true
+                                                    } else {
+                                                        showNotifications = false
+                                                    }
+                                                    if showNotifications {
+                                                        offset = 0
+                                                    } else {
+                                                        offset = UIScreen.main.bounds.height
+                                                    }
+                                                } else {
+                                                    showNotificationsSettings.toggle()
+                                                }
                                             }
                                         } else {
                                             showSetUpNotifications.toggle()
@@ -167,7 +187,7 @@ struct ContentView: View {
         .alert(isPresented: $showSetUpNotifications, content: {
             Alert(title: Text("Get Set Up"), message: Text("To adjust your notifications you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
         })
-        .onAppear {
+        .onAppear() {
             locationTransfer.checkLastCompatibleVersion()
             if !hasOnboarded {
                 locationTransfer.showOnBoarding.toggle()

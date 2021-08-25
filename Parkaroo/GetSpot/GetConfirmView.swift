@@ -18,6 +18,7 @@ struct GetConfirmView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var rating = 5
     @State private var showingRefundAlert = false
+    @State private var showingCancelOptionAlert = false
     @State private var showingConfirmAlert = false
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var depart = Int()
@@ -31,13 +32,13 @@ struct GetConfirmView: View {
                 .font(.title)
                 .padding(.top, 25)
             Spacer()
-            Text("Departing in: \(hours > 0 ? String(hours) + " hr" : "") \(mins > 0 ? String(mins) + " min" : hours != 0 ? "" : "0 min")")
+            Text("Departing in: \(hours > 0 ? String(hours) + " hr" : "") \(mins > 0 ? String(mins) + " min" : hours > 0 ? "" : "0 min")")
                 .bold()
                 .onReceive(timer, perform: { input in
                     let diff = Date().distance(to: locationTransfer.gettingPin?.departure.dateValue() ?? Date())
                     depart = Int(diff / 60)
                     separateHoursAndMinutes()
-                    if (locationTransfer.gettingPin?.buyer == nil || locationTransfer.gettingPin?.buyer == "") && (hours == 0 && mins < 0) {
+                    if (locationTransfer.gettingPin?.buyer == nil || locationTransfer.gettingPin?.buyer == "") && (hours <= 0 && mins < 0) {
                         locationTransfer.deleteSellerPin()
                         locationTransfer.cleanUpGettingPin()
                         locationTransfer.minute = ""
@@ -45,8 +46,13 @@ struct GetConfirmView: View {
                     }
                 })
             Spacer()
-            Text("Street Info: \(locationTransfer.getStreetInfoSelection)")
-                .bold()
+            HStack {
+                Text("Street Info:")
+                    .bold()
+                Text("\(locationTransfer.getStreetInfoSelection)")
+                    .bold()
+                    .multilineTextAlignment(.center)
+            }
             Spacer()
             VStack {
                 HStack {
@@ -64,6 +70,18 @@ struct GetConfirmView: View {
                     Text("Message Driver")
                         .bold()
                         .foregroundColor(Color("orange1"))
+                }.alert(isPresented: $showingCancelOptionAlert) {
+                    Alert(title: Text("Tell Us Why"), primaryButton: Alert.Button.default(Text("Seller did not show up"), action: {
+                        requestRefund()
+                        viewModel.deleteChatroom()
+                        gGRequestConfirm.showGetRequestView = false
+                        gGRequestConfirm.showGetConfirmView = false
+                    }), secondaryButton: Alert.Button.default(Text("I changed my mind"), action: {
+                        cancelNoRefund()
+                        viewModel.deleteChatroom()
+                        gGRequestConfirm.showGetRequestView = false
+                        gGRequestConfirm.showGetConfirmView = false
+                    }))
                 }
             }.padding()
             .overlay(
@@ -79,11 +97,10 @@ struct GetConfirmView: View {
                     Text("cancel")
                         .padding(10)
                 }.alert(isPresented: $showingRefundAlert) {
-                    Alert(title: Text("Are you sure?"), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
-                        requestRefund()
-                        viewModel.deleteChatroom()
-                        gGRequestConfirm.showGetRequestView = false
-                        gGRequestConfirm.showGetConfirmView = false
+                    Alert(title: Text("Are You Sure?"), message: Text("Canceling may result in credit loss"), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            showingCancelOptionAlert = true
+                        }
                     }))
                 }
                 Button(action: {
@@ -94,6 +111,7 @@ struct GetConfirmView: View {
                         .padding(10)
                         .background(Color("orange1"))
                         .cornerRadius(50)
+                        .multilineTextAlignment(.center)
                 }.alert(isPresented: $showingConfirmAlert) {
                     Alert(title: Text("Are You Parked?"), message: Text("Complete this transfer when you are successfully parked in the spot."), primaryButton: Alert.Button.default(Text("No")), secondaryButton: Alert.Button.default(Text("Yes"), action: {
                         Analytics.logEvent("buyer_complete_transfer", parameters: nil)
@@ -134,6 +152,16 @@ struct GetConfirmView: View {
                 print("Error Refunding")
             }
         }
+    }
+    private func cancelNoRefund() {
+        locationTransfer.gettingAnnotation = nil
+        if let seller = locationTransfer.seller {
+            NotificationsService.shared.sendN(uid: seller.uid, message: "The buyer has canceled their reservation.")
+        }
+        let data = [C_BUYER:"", C_STATUS: pinStatus.available.rawValue]
+        locationTransfer.updateGettingPin(data: data)
+        locationTransfer.cleanUpGettingPin()
+        Analytics.logEvent("buyer_canceled", parameters: nil)
     }
 }
 struct GetConfirmView_Previews: PreviewProvider {
