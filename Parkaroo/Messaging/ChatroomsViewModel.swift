@@ -36,11 +36,11 @@ class ChatroomsViewModel: ObservableObject {
     func createChatroom(sellerID: String) {
         if userID != nil {
             db.collection("chatrooms").document().setData([
-                                                            "users": [userID!.uid, sellerID]]) { err in
-                if let err = err {
-                    print("error adding document! \(err)")
+                "users": [userID!.uid, sellerID]]) { err in
+                    if let err = err {
+                        print("error adding document! \(err)")
+                    }
                 }
-            }
         }
     }
     func deleteChatroom() {

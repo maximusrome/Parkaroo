@@ -18,8 +18,24 @@ struct ContentView: View {
     @State private var showSetUpNotifications = false
     @State private var showNotificationsSettings = false
     @State private var showLocationSettings = false
+    @State private var showingParkSetUpAlert = false
+    @State private var showingSaveSuccessAlert = false
     @State var offset : CGFloat = UIScreen.main.bounds.height
     @AppStorage("OboardBeenViewed") var hasOnboarded = false
+    init() {
+        let navigationBarAppearance = UINavigationBarAppearance()
+        if #available(iOS 15.0, *) {
+            navigationBarAppearance.backgroundColor = UIColor(Color("white1"))
+            navigationBarAppearance.shadowColor = .clear
+            UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+            UITabBar.appearance().backgroundColor = UIColor(Color("white1"))
+        } else {
+            navigationBarAppearance.configureWithTransparentBackground()
+            navigationBarAppearance.backgroundColor = UIColor(Color("white1"))
+            UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+            UITabBar.appearance().barTintColor = UIColor(Color("white1"))
+        }
+    }
     var body: some View {
         let drag = DragGesture()
             .onEnded {
@@ -31,17 +47,17 @@ struct ContentView: View {
             }
         NavigationView {
             ZStack {
-                TabView {
+                TabView(selection: $locationTransfer.rightTab) {
                     GetView()
                         .tabItem {
                             Image(systemName: "car.fill")
                             Text("Get Spot")
-                        }
+                        }.tag(false)
                     GiveView()
                         .tabItem {
                             Image(systemName: "p.square.fill")
                             Text("Give Spot")
-                        }
+                        }.tag(true)
                 }
                 GeometryReader { geometry in
                     if !showMenu {
@@ -60,7 +76,6 @@ struct ContentView: View {
                 }
                 if locationTransfer.showOnBoarding && locationTransfer.isPresented {
                     FirstLaunchView()
-                        .navigationBarHidden(true)
                 }
                 if !monitor.isConnected {
                     WifiView()
@@ -71,9 +86,13 @@ struct ContentView: View {
                         .edgesIgnoringSafeArea(.all)
                 }
                 if (!locationTransfer.showOnBoarding || !locationTransfer.isPresented) && !showMenu {
-                    VStack {
-                        HStack {
-                            Spacer()
+                    HStack {
+                        Text("")
+                            .alert(isPresented: $showingSaveSuccessAlert) {
+                                Alert(title: Text("Spot Saved"), dismissButton: .default(Text("Done")))
+                            }
+                        Spacer()
+                        VStack {
                             Button(action: {
                                 if LocationService.shared.locationAuthorized {
                                     LocationService.shared.manager?.startUpdatingLocation()
@@ -95,8 +114,38 @@ struct ContentView: View {
                                     UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                                 }))
                             })
+                            if (locationTransfer.givingPin == nil && !gGRequestConfirm.showBuyerRatingView && !gGRequestConfirm.showGiveRequestView) && locationTransfer.rightTab == true {
+                                Text("P")
+                                    .font(.title2)
+                                    .padding(.vertical, 10)
+                                    .padding(.horizontal)
+                                    .foregroundColor(Color("orange1"))
+                                    .background(Color("white1"))
+                                    .cornerRadius(50)
+                                    .shadow(radius: 5)
+                                    .onTapGesture() {
+                                        Analytics.logEvent("save_spot", parameters: nil)
+                                        if userInfo.isUserAuthenticated == .signedIn {
+                                            if locationTransfer.locations.count > 0 {
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                                                    locationTransfer.locations.removeFirst()
+                                                }
+                                            }
+                                            locationTransfer.parkPress = true
+                                            userInfo.SaveLocation(SLongitude: Float(locationTransfer.centerCoordinate.longitude), SLatitude: Float(locationTransfer.centerCoordinate.latitude))
+                                            locationTransfer.addRefencePin()
+                                            showingSaveSuccessAlert = true
+                                        } else {
+                                            showingParkSetUpAlert = true
+                                        }
+                                    }.onLongPressGesture(minimumDuration: 0.1) {
+                                        locationTransfer.locations.removeAll()
+                                    }.alert(isPresented: $showingParkSetUpAlert) {
+                                        Alert(title: Text("Get Set Up"), message: Text("In order to save the location of your current parking spot you must have an account. Go to Sign up or Login under the meanu."), dismissButton: .default(Text("Okay")))
+                                    }
+                            }
+                            Spacer()
                         }
-                        Spacer()
                     }
                 }
                 VStack {
@@ -107,94 +156,95 @@ struct ContentView: View {
                             .transition(AnyTransition.move(edge: .bottom))
                             .gesture(DragGesture()
                                         .onChanged({ (value) in
-                                            if value.translation.height > 0 {
-                                                offset = value.location.y
-                                            }
-                                        })
+                                if value.translation.height > 0 {
+                                    offset = value.location.y
+                                }
+                            })
                                         .onEnded({ (value) in
-                                            if offset > 100 {
-                                                offset = UIScreen.main.bounds.height
-                                            } else {
-                                                offset = 0
-                                            }
-                                        })
+                                if offset > 100 {
+                                    offset = UIScreen.main.bounds.height
+                                } else {
+                                    offset = 0
+                                }
+                            })
                             )
                     }
                 }.animation(.default)
-                .background((offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
-                                .onTapGesture {
-                                    offset = UIScreen.main.bounds.height
-                                }).edgesIgnoringSafeArea(.bottom)
-                .background((showMenu ? Color(UIColor.label).opacity(0.001) : Color.clear)
-                                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                                .offset(x: -UIScreen.main.bounds.width/2)
-                                .onTapGesture {
-                                    withAnimation {
-                                        showMenu = false
-                                    }
-                                })
-                .alert(isPresented: $showNotificationsSettings, content: {
-                    Alert(title: Text("Enable Notifications"), message: Text("To adjust your notifications you must enable them in your settings app."), primaryButton: Alert.Button.default(Text("cancel")), secondaryButton: Alert.Button.default(Text("Okay"), action: {
-                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                    }))
-                })
-
+                    .background((offset <= 100 ? Color(UIColor.label).opacity(0.3) : Color.clear).edgesIgnoringSafeArea(.all)
+                                    .onTapGesture {
+                        offset = UIScreen.main.bounds.height
+                    }).edgesIgnoringSafeArea(.bottom)
+                    .background((showMenu ? Color(UIColor.label).opacity(0.001) : Color.clear)
+                                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                                    .offset(x: -UIScreen.main.bounds.width/2)
+                                    .onTapGesture {
+                        withAnimation {
+                            showMenu = false
+                        }
+                    })
+                    .alert(isPresented: $showNotificationsSettings, content: {
+                        Alert(title: Text("Enable Notifications"), message: Text("To adjust your notifications you must enable them in your settings app."), primaryButton: Alert.Button.default(Text("cancel")), secondaryButton: Alert.Button.default(Text("Okay"), action: {
+                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                        }))
+                    })
             }.navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Image("Logo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 200)
-                }
-            }.navigationBarItems(leading:
-                                    Button(action: {
-                                        if Auth.auth().currentUser?.uid != nil {
-                                            NotificationsService.shared.getNotificationStatus {
-                                                if NotificationsService.shared.notificationStatusAuthorized {
-                                                    if offset == UIScreen.main.bounds.height {
-                                                        showNotifications = true
-                                                    } else {
-                                                        showNotifications = false
-                                                    }
-                                                    if showNotifications {
-                                                        offset = 0
-                                                    } else {
-                                                        offset = UIScreen.main.bounds.height
-                                                    }
-                                                } else {
-                                                    showNotificationsSettings.toggle()
-                                                }
-                                            }
-                                        } else {
-                                            showSetUpNotifications.toggle()
-                                        }
-                                    }) {
-                                        Image(systemName: "bell")
-                                            .imageScale(.large)
-                                            .frame(width: 50, height: 50, alignment: .leading)
-                                    }, trailing:
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        if !locationTransfer.showOnBoarding || !locationTransfer.isPresented {
+                            Image("Logo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 200)
+                        }
+                    }
+                }.navigationBarItems(leading:
                                         Button(action: {
-                                            withAnimation {
-                                                showMenu.toggle()
-                                            }
-                                        }) {
-                                            Image(systemName: showMenu ? "xmark" : "line.horizontal.3")
-                                                .imageScale(.large)
-                                                .frame(width: 50, height: 50, alignment: .trailing)
-                                        })
-        }.accentColor(Color("orange1"))
-        .alert(isPresented: $showSetUpNotifications, content: {
-            Alert(title: Text("Get Set Up"), message: Text("To adjust your notifications you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
-        })
-        .onAppear() {
-            locationTransfer.checkLastCompatibleVersion()
-            if !hasOnboarded {
-                locationTransfer.showOnBoarding.toggle()
-                hasOnboarded = true
+                    if Auth.auth().currentUser?.uid != nil {
+                        NotificationsService.shared.getNotificationStatus {
+                            if NotificationsService.shared.notificationStatusAuthorized {
+                                if offset == UIScreen.main.bounds.height {
+                                    showNotifications = true
+                                } else {
+                                    showNotifications = false
+                                }
+                                if showNotifications {
+                                    offset = 0
+                                } else {
+                                    offset = UIScreen.main.bounds.height
+                                }
+                            } else {
+                                showNotificationsSettings.toggle()
+                            }
+                        }
+                    } else {
+                        showSetUpNotifications.toggle()
+                    }
+                }) {
+                    Image(systemName: "bell")
+                        .imageScale(.large)
+                        .frame(width: 50, height: 50, alignment: .leading)
+                }, trailing:
+                                        Button(action: {
+                    withAnimation {
+                        showMenu.toggle()
+                    }
+                }) {
+                    Image(systemName: showMenu ? "xmark" : "line.horizontal.3")
+                        .imageScale(.large)
+                        .frame(width: 50, height: 50, alignment: .trailing)
+                })
+        }.accentColor(locationTransfer.showOnBoarding && locationTransfer.isPresented ? Color("white1") : Color("orange1"))
+            .alert(isPresented: $showSetUpNotifications, content: {
+                Alert(title: Text("Get Set Up"), message: Text("To adjust your notifications you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
+            })
+            .onAppear() {
+                locationTransfer.checkLastCompatibleVersion()
+                if !hasOnboarded {
+                    locationTransfer.showOnBoarding.toggle()
+                    hasOnboarded = true
+                }
+                userInfo.configureFirebaseStateDidChange()
             }
-            userInfo.configureFirebaseStateDidChange()
-        }
     }
 }
 struct ContentView_Previews: PreviewProvider {

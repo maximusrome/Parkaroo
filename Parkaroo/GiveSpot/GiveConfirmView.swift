@@ -40,6 +40,8 @@ struct GiveConfirmView: View {
                         locationTransfer.minute = ""
                         locationTransfer.givingPin = nil
                         gGRequestConfirm.showGiveConfirmView = false
+                        locationTransfer.parkPress = true
+                        locationTransfer.readSaveLocation()
                     }
                 })
             Spacer()
@@ -70,10 +72,10 @@ struct GiveConfirmView: View {
                             .foregroundColor(Color("orange1"))
                     }
                 }.padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 25.0)
-                        .stroke(Color.gray, lineWidth: 2)
-                )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 25.0)
+                            .stroke(Color.gray, lineWidth: 2)
+                    )
                 Spacer()
                 HStack {
                     Button(action: {
@@ -87,6 +89,8 @@ struct GiveConfirmView: View {
                             locationTransfer.deletePin()
                             locationTransfer.minute = ""
                             gGRequestConfirm.showGiveConfirmView = false
+                            locationTransfer.parkPress = true
+                            locationTransfer.readSaveLocation()
                             Analytics.logEvent("seller_canceled", parameters: nil)
                             if let buyer = locationTransfer.buyer {
                                 NotificationsService.shared.sendN(uid: buyer.uid, message: "The seller has canceled their spot")
@@ -107,15 +111,17 @@ struct GiveConfirmView: View {
                         .font(.footnote)
                         .multilineTextAlignment(.center)
                 }.padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 25.0)
-                        .stroke(Color.gray, lineWidth: 2)
-                )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 25.0)
+                            .stroke(Color.gray, lineWidth: 2)
+                    )
                 Spacer()
                 Button(action: {
                     locationTransfer.deletePin()
                     locationTransfer.minute = ""
                     gGRequestConfirm.showGiveConfirmView = false
+                    locationTransfer.parkPress = true
+                    locationTransfer.readSaveLocation()
                 }) {
                     Text("cancel")
                         .padding(10)
@@ -125,22 +131,22 @@ struct GiveConfirmView: View {
                 }
             }
         }.frame(width: 320, height: 400)
-        .background(Color("white1"))
-        .foregroundColor(Color("black1"))
-        .cornerRadius(30)
-        .shadow(radius: 5)
-        .padding(.bottom)
-        .padding(.horizontal, 50)
-        .onChange(of: locationTransfer.givingPin?.ratingSubmitted ?? false, perform: { _ in
-            if gGRequestConfirm.showGiveConfirmView && (locationTransfer.givingPin?.ratingSubmitted ?? false) {
-                gGRequestConfirm.showGiveConfirmView = false
-                gGRequestConfirm.showBuyerRatingView = true
-                locationTransfer.givingPin = nil
-                locationTransfer.locations.removeAll()
-                addCredit()
-                Analytics.logEvent("seller_complete_transfer", parameters: nil)
-            }
-        })
+            .background(Color("white1"))
+            .foregroundColor(Color("black1"))
+            .cornerRadius(30)
+            .shadow(radius: 5)
+            .padding(.bottom)
+            .padding(.horizontal, 50)
+            .onChange(of: locationTransfer.givingPin?.ratingSubmitted ?? false, perform: { _ in
+                if gGRequestConfirm.showGiveConfirmView && (locationTransfer.givingPin?.ratingSubmitted ?? false) {
+                    gGRequestConfirm.showGiveConfirmView = false
+                    gGRequestConfirm.showBuyerRatingView = true
+                    locationTransfer.givingPin = nil
+                    locationTransfer.locations.removeAll()
+                    addCredit()
+                    Analytics.logEvent("seller_complete_transfer", parameters: nil)
+                }
+            })
     }
     private func separateHoursAndMinutes() {
         mins = depart % 60

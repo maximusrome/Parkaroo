@@ -58,7 +58,7 @@ struct GiveRequestView: View {
         return minuteTest.evaluate(with: mins)
     }
     let streetOptions: [String] = [
-        "N/A", "Meter Side", "Friday Side", "Thursday Side"
+        "Edit", "N/A", "Meter Side", "Friday Side", "Thursday Side"
     ]
     var body: some View {
         VStack {
@@ -87,25 +87,27 @@ struct GiveRequestView: View {
                 Text("min")
             }.padding(.top, 25)
             Spacer()
-            Picker(selection: $locationTransfer.giveStreetInfoSelection,
-                   label:
-                    HStack {
-                        Text("Street Info:")
-                            .bold()
-                        Text("\(locationTransfer.giveStreetInfoSelection)")
-                            .bold()
-                            .foregroundColor(Color("orange1"))
-                            .multilineTextAlignment(.center)
-                    }, content: {
-                        ForEach(streetOptions, id: \.self) { option in
-                            Text(option)
-                                .tag(option)
-                        }
-                    })
-                .pickerStyle(MenuPickerStyle())
-                .onTapGesture {
-                    UIApplication.shared.endEditing()
-                }
+            HStack {
+                Text("Street Info:")
+                    .bold()
+                Picker(selection: $locationTransfer.giveStreetInfoSelection,
+                       label:
+                        HStack {
+                    Text("\(locationTransfer.giveStreetInfoSelection)")
+                        .bold()
+                        .foregroundColor(Color("orange1"))
+                        .multilineTextAlignment(.center)
+                }, content: {
+                    ForEach(streetOptions, id: \.self) { option in
+                        Text(option)
+                            .tag(option)
+                    }
+                })
+                    .pickerStyle(MenuPickerStyle())
+                    .onTapGesture {
+                        UIApplication.shared.endEditing()
+                    }
+            }
             Spacer()
             HStack {
                 Text("Your Rating: \(userInfo.user.numberOfRatings > 0 ? String(format: "%.2f", userInfo.user.rating) : "N/A")")
@@ -125,6 +127,8 @@ struct GiveRequestView: View {
                     hours = ""
                     locationTransfer.locations.removeAll()
                     firstMakeAvailableClicked = true
+                    locationTransfer.parkPress = true
+                    locationTransfer.readSaveLocation()
                 }){
                     Text("close")
                         .padding(10)
@@ -168,12 +172,12 @@ struct GiveRequestView: View {
                 }
             }.padding(.bottom, 25)
         }.frame(width: 320, height: 280)
-        .background(Color("white1"))
-        .foregroundColor(Color("black1"))
-        .cornerRadius(30)
-        .shadow(radius: 5)
-        .padding(.bottom)
-        .padding(.horizontal, 50)
+            .background(Color("white1"))
+            .foregroundColor(Color("black1"))
+            .cornerRadius(30)
+            .shadow(radius: 5)
+            .padding(.bottom)
+            .padding(.horizontal, 50)
     }
     private func addMinutesAndHours() {
         var totalMinutes: Int

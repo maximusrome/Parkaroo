@@ -16,7 +16,7 @@ struct GiveView: View {
     var body: some View {
         ZStack {
             MapGiveView(annotations: locationTransfer.locations)
-                .edgesIgnoringSafeArea(.all)
+                .edgesIgnoringSafeArea(.horizontal)
                 .disabled(gGRequestConfirm.showGiveRequestView)
             if locationTransfer.givingPin == nil && !gGRequestConfirm.showBuyerRatingView && !gGRequestConfirm.showGiveRequestView {
                 Image(systemName: "mappin.and.ellipse")
@@ -28,6 +28,12 @@ struct GiveView: View {
                 VStack {
                     Spacer()
                     Button(action: {
+                        if locationTransfer.locations.count > 0 {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                                locationTransfer.locations.removeFirst()
+                            }
+                        }
+                        locationTransfer.parkPress = false
                         gGRequestConfirm.showGiveRequestView = false
                         locationTransfer.minute = ""
                         locationTransfer.giveStreetInfoSelection = "Edit"
@@ -51,9 +57,9 @@ struct GiveView: View {
                             .padding(.horizontal, 50)
                     }
                 }.disabled(userInfo.isUserAuthenticated == .signedIn && gGRequestConfirm.showGiveRequestView)
-                .alert(isPresented: $showingMakeAvaliableSetUpAlert) {
-                    Alert(title: Text("Get Set Up"), message: Text("To give a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
-                }
+                    .alert(isPresented: $showingMakeAvaliableSetUpAlert) {
+                        Alert(title: Text("Get Set Up"), message: Text("To give a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
+                    }
             }
             VStack {
                 Spacer()
@@ -74,6 +80,11 @@ struct GiveView: View {
                     .animation(.default)
             }
         }.onAppear() {
+            if userInfo.isUserAuthenticated == .signedIn && locationTransfer.givingPin == nil && !gGRequestConfirm.showBuyerRatingView && !gGRequestConfirm.showGiveRequestView && locationTransfer.firstTime == true {
+                locationTransfer.parkPress = true
+                locationTransfer.readSaveLocation()
+                locationTransfer.firstTime = false
+            }
             guard let uid = Auth.auth().currentUser?.uid else { return }
             FBFirestore.retrieveFBUser(uid: uid) { (result) in
                 switch result {

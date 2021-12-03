@@ -50,7 +50,7 @@ struct FAQSView: View {
                 }
             }
         }.padding(.horizontal)
-        .navigationBarTitle("Frequently Asked Questions", displayMode: .inline)
+            .navigationBarTitle("Frequently Asked Questions", displayMode: .inline)
     }
 }
 struct FAQSView_Previews: PreviewProvider {

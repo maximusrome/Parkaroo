@@ -29,9 +29,9 @@ struct WifiView: View {
                 Image(systemName: "wifi.slash")
                 Text("Not Connected")
             }.padding()
-            .background(Color("orange1"))
-            .cornerRadius(50)
-            .padding(.top)
+                .background(Color("orange1"))
+                .cornerRadius(50)
+                .padding(.top)
             Spacer()
         }
     }

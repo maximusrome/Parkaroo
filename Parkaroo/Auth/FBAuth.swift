@@ -30,6 +30,8 @@ struct FBAuth {
             data[C_BADGECOUNT] = 0
             data[C_BASICNOTIFICATIONS] = true
             data[C_CREDITS] = 2
+            data[C_SAVELONGITUDE] = 0
+            data[C_SAVELATITUDE] = 0
             FBFirestore.mergeFBUser(data, uid: authResult!.user.uid) { (result) in
                 completionHandler(result)
             }

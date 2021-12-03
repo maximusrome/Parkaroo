@@ -29,14 +29,14 @@ struct FirstLaunchView: View {
                     DragGesture().onChanged { value in
                         SlideGesture = value.translation
                     }
-                    .onEnded { value in
-                        if SlideGesture.width < -5 {
-                            SlideOne = true
-                            Dots = true
-                            SlideOnePrevious = false
-                        }
-                        SlideGesture = .zero
-                    })
+                        .onEnded { value in
+                            if SlideGesture.width < -5 {
+                                SlideOne = true
+                                Dots = true
+                                SlideOnePrevious = false
+                            }
+                            SlideGesture = .zero
+                        })
             ZStack {
                 VStack {
                     Spacer()
@@ -46,8 +46,8 @@ struct FirstLaunchView: View {
                         Image(systemName: "circle")
                         Image(systemName: "circle")
                     }.padding(30)
-                    .font(.system(size: 12))
-                    .foregroundColor(Color("orange1"))
+                        .font(.system(size: 12))
+                        .foregroundColor(Color("orange1"))
                 }
             }.offset(x: SlideOne ? 2000 : 0)
             Board2View()
@@ -60,19 +60,19 @@ struct FirstLaunchView: View {
                     DragGesture().onChanged { value in
                         SlideGesture = value.translation
                     }
-                    .onEnded { value in
-                        if SlideGesture.width < -5 {
-                            SlideOne = true
-                            SlideTwo = true
-                            Dots = false
-                        }
-                        if SlideGesture.width > 5 {
-                            SlideOnePrevious = true
-                            SlideOne = false
-                            Dots = false
-                        }
-                        SlideGesture = .zero
-                    })
+                        .onEnded { value in
+                            if SlideGesture.width < -5 {
+                                SlideOne = true
+                                SlideTwo = true
+                                Dots = false
+                            }
+                            if SlideGesture.width > 5 {
+                                SlideOnePrevious = true
+                                SlideOne = false
+                                Dots = false
+                            }
+                            SlideGesture = .zero
+                        })
             ZStack {
                 VStack {
                     Spacer()
@@ -82,8 +82,8 @@ struct FirstLaunchView: View {
                         Image(systemName: "circle")
                         Image(systemName: "circle")
                     }.padding(30)
-                    .font(.system(size: 12))
-                    .foregroundColor(Color("orange1"))
+                        .font(.system(size: 12))
+                        .foregroundColor(Color("orange1"))
                 }
             }.offset(x: Dots ? 0 : 2000)
             Board3View()
@@ -95,20 +95,20 @@ struct FirstLaunchView: View {
                     DragGesture().onChanged { value in
                         SlideGesture = value.translation
                     }
-                    .onEnded { value in
-                        if SlideGesture.width < -5 {
-                            SlideOne = true
-                            SlideTwo = true
-                            SlideThree = true
-                            Dots = false
-                        }
-                        if SlideGesture.width > 5 {
-                            SlideTwo = false
-                            SlideTwoPrevious = true
-                            Dots = true
-                        }
-                        SlideGesture = .zero
-                    })
+                        .onEnded { value in
+                            if SlideGesture.width < -5 {
+                                SlideOne = true
+                                SlideTwo = true
+                                SlideThree = true
+                                Dots = false
+                            }
+                            if SlideGesture.width > 5 {
+                                SlideTwo = false
+                                SlideTwoPrevious = true
+                                Dots = true
+                            }
+                            SlideGesture = .zero
+                        })
             ZStack {
                 VStack {
                     Spacer()
@@ -118,8 +118,8 @@ struct FirstLaunchView: View {
                         Image(systemName: "circle.fill")
                         Image(systemName: "circle")
                     }.padding(30)
-                    .font(.system(size: 12))
-                    .foregroundColor(Color("orange1"))
+                        .font(.system(size: 12))
+                        .foregroundColor(Color("orange1"))
                 }
             }.offset(x: SlideTwo ? 0 : 2000)
             Board4View()
@@ -130,14 +130,14 @@ struct FirstLaunchView: View {
                     DragGesture().onChanged { value in
                         SlideGesture = value.translation
                     }
-                    .onEnded { value in
-                        if SlideGesture.width > 5 {
-                            SlideThree = false
-                            SlideThreePrevious = true
-                            Dots = true
-                        }
-                        SlideGesture = .zero
-                    })
+                        .onEnded { value in
+                            if SlideGesture.width > 5 {
+                                SlideThree = false
+                                SlideThreePrevious = true
+                                Dots = true
+                            }
+                            SlideGesture = .zero
+                        })
         }.onAppear() {
             try! AVAudioSession.sharedInstance().setCategory(.playback)
         }

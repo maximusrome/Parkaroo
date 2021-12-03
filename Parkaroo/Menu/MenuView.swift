@@ -78,11 +78,11 @@ struct MenuView: View {
                 Spacer()
             }
         }.font(.headline)
-        .padding(.leading, 30)
-        .foregroundColor(Color("black1"))
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color("white1"))
-        .edgesIgnoringSafeArea(.all)
+            .padding(.leading, 30)
+            .foregroundColor(Color("black1"))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color("white1"))
+            .edgesIgnoringSafeArea(.all)
     }
     func contactUs() {
         print("pressed contact us")

@@ -18,7 +18,16 @@ struct GoodStuffView: View {
     @State private var logOutClicked = false
     var body: some View {
         List {
-            Section {
+            if #available(iOS 15.0, *) {
+                Section {
+                    NavigationLink(destination: AccountView()) {
+                        GoodStuffCell(title: "Account", imgName: "person")
+                    }
+                    NavigationLink(destination: CharityView()) {
+                        GoodStuffCell(title: "Charity", imgName: "heart")
+                    }
+                }
+            } else {
                 NavigationLink(destination: AccountView()) {
                     GoodStuffCell(title: "Account", imgName: "person")
                 }
@@ -77,7 +86,7 @@ struct GoodStuffView: View {
                 }
             }
         }.listStyle(GroupedListStyle())
-        .navigationBarTitle("Good Stuff", displayMode: .inline)
+            .navigationBarTitle("Good Stuff", displayMode: .inline)
     }
     func reportProblem() {
         print("pressed report problem")

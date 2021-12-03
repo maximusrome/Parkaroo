@@ -25,13 +25,13 @@ struct TutorialView: View {
                         Text("Watch Video Tutorial")
                         Spacer()
                     }.padding(10)
-                    .background(Color("orange1"))
-                    .foregroundColor(Color("black1"))
-                    .cornerRadius(50)
-                    .padding(.top, 40)
-                    .fullScreenCover(isPresented: $showingVideoSheetTutorial) {
-                        VideoTutorialView()
-                    }
+                        .background(Color("orange1"))
+                        .foregroundColor(Color("black1"))
+                        .cornerRadius(50)
+                        .padding(.top, 40)
+                        .fullScreenCover(isPresented: $showingVideoSheetTutorial) {
+                            VideoTutorialView()
+                        }
                 }
                 Group {
                     Text("Get Set Up")
@@ -47,7 +47,7 @@ struct TutorialView: View {
                         .padding(.vertical)
                     Text("Step 1: Go to the Get Spot tab and select a pin at your desired parking location.\n")
                     Text("Step 2: If the departure time, street information, and seller rating are to your liking, click Reserve.\n")
-                    Text("Step 3: To reserve a spot you will need one credit. In return, you will be the only one to receive the vehicle information and the vehicle location will now only be visible to you.\n")
+                    Text("Step 3: To reserve a spot you will need one credit. In return, you will be the only one to receive the vehicle information, and the vehicle location will now only be visible to you.\n")
                     Text("Step 4: Once you are in the spot, click Complete Transfer. Finally, rate the seller.")
                 }
                 Group {
@@ -61,13 +61,18 @@ struct TutorialView: View {
                         .bold()
                         .font(.title)
                         .padding(.vertical)
-                    Text("Step 1: Go to the Give Spot tab and move the pin over your car's location and click Give Spot.\n")
+                    Text("Step 1: Go to the Give Spot tab, move the center pin over your car's location and click Give Spot.\n")
                     Text("Step 2: Once you enter your departure time and street information, click Make Available.\n")
-                    Text("Step 3: After the buyer clicks Complete Transfer, rate the buyer and you will receive a credit.")
-                    Spacer()
+                    Text("Step 3: After the buyer clicks Complete Transfer, rate the buyer, and you will receive a credit.")
                 }
+                Text("How To Save A Spot")
+                    .bold()
+                    .font(.title)
+                    .padding(.vertical)
+                Text("Go to the Give Spot tab, move the center pin over your car's parked location, and click the P button.\n")
+                Spacer()
             }.padding(.horizontal)
-            .navigationBarTitle("Tutorial", displayMode: .inline)
+                .navigationBarTitle("Tutorial", displayMode: .inline)
         }
     }
     private func vid() {

@@ -30,6 +30,10 @@ class LocationTransfer: ObservableObject {
     @Published var showOnBoarding = false
     @Published var forceUpdate = false
     @Published var lastCompatibleVersion = 1.0
+    @Published var sCoordinate = CLLocationCoordinate2D()
+    @Published var parkPress = true
+    @Published var rightTab = false
+    @Published var firstTime = true
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     var publisher: AnyPublisher<Void, Never>! = nil
@@ -90,6 +94,27 @@ class LocationTransfer: ObservableObject {
             }
         }
     }
+    func readSaveLocation() {
+        let db = Firestore.firestore()
+        let userID = Auth.auth().currentUser?.uid ?? ""
+        db.collection("users").document(userID).getDocument { (document, error) in
+            if error != nil {
+                print("There was an error")
+            } else {
+                if document != nil && document!.exists {
+                    let documentData = document!.data()
+                    let latitude = documentData![C_SAVELATITUDE] as? Double ?? 0.0
+                    let longitude = documentData![C_SAVELONGITUDE] as? Double ?? 0.0
+                    self.sCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                    let annotation = MKPointAnnotation()
+                    annotation.coordinate = self.sCoordinate
+                    self.locations.append(annotation)
+                } else {
+                    print("save location doc doesn't exist or equals nil")
+                }
+            }
+        }
+    }
     func readSeller() {
         guard let uid = gettingPin?.seller else {return}
         FBFirestore.retrieveFBUser(uid: uid) { [weak self] result in
@@ -111,11 +136,11 @@ class LocationTransfer: ObservableObject {
         }
     }
     func deleteSellerPin() {
-             let db = Firestore.firestore()
-             db.collection("pins").document(seller?.uid ?? "").delete()
-             gettingPin = nil
-             locations.removeAll()
-         }
+        let db = Firestore.firestore()
+        db.collection("pins").document(seller?.uid ?? "").delete()
+        gettingPin = nil
+        locations.removeAll()
+    }
     func readStreetInfo(id: String) {
         let db = Firestore.firestore()
         db.collection(C_PINS).document(id).getDocument { (document, error) in

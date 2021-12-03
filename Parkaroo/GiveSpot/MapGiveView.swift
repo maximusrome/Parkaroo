@@ -54,9 +54,16 @@ struct MapGiveView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             if !(annotation is MKUserLocation) {
                 let view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
-                view.glyphImage = UIImage(named: "launch1")
-                view.glyphTintColor = UIColor(named: "gray2")
-                view.markerTintColor = UIColor(named: "orange1")
+                if parent.locationTransfer.parkPress == true {
+                    view.glyphImage = UIImage(systemName: "car.fill")
+                    view.glyphTintColor = UIColor(named: "gray2")
+                    view.markerTintColor = UIColor(named: "orange1")
+                }
+                if parent.locationTransfer.parkPress == false {
+                    view.glyphImage = UIImage(named: "launch1")
+                    view.glyphTintColor = UIColor(named: "gray2")
+                    view.markerTintColor = UIColor(named: "orange1")
+                }
                 return view
             }
             else {return nil}

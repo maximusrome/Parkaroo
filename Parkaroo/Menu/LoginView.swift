@@ -88,6 +88,7 @@ struct LoginView: View {
                         case .success( _):
                             presentationMode.wrappedValue.dismiss()
                             Analytics.logEvent("successful_login", parameters: nil)
+                            locationTransfer.firstTime = true
                             if locationTransfer.showOnBoarding && locationTransfer.isPresented {
                                 presentationMode.wrappedValue.dismiss()
                                 locationTransfer.isPresented = false
@@ -113,12 +114,13 @@ struct LoginView: View {
                         Spacer()
                     }
                 }.disabled(loginClicked)
-                .alert(isPresented: $showLoginAlert) {
-                    Alert(title: Text("Error"), message: Text(authError?.localizedDescription ?? "Unknown error"), dismissButton: .default(Text("Okay")))
-                }
+                    .alert(isPresented: $showLoginAlert) {
+                        Alert(title: Text("Error"), message: Text(authError?.localizedDescription ?? "Unknown error"), dismissButton: .default(Text("Okay")))
+                    }
             }
-        }.padding()
-        .navigationBarTitle("Login", displayMode: .inline)
+        }.accentColor(Color("orange1"))
+            .padding()
+            .navigationBarTitle("Login", displayMode: .inline)
     }
 }
 struct loginView_Previews: PreviewProvider {

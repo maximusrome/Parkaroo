@@ -15,7 +15,7 @@ struct GetView: View {
     var body: some View {
         ZStack {
             MapGetView(annotations1: locationTransfer.locations1)
-                .edgesIgnoringSafeArea(.all)
+                .edgesIgnoringSafeArea(.horizontal)
             VStack {
                 Spacer()
                 GetRequestView()

@@ -28,8 +28,6 @@ struct Board3View: View {
                     .edgesIgnoringSafeArea(.all)
                     .padding(.bottom, 100)
             }
-        }.onAppear() {
-            player.play()
         }
     }
 }

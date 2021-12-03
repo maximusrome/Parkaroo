@@ -16,7 +16,7 @@ class UserInfo: ObservableObject, Equatable {
         case undefined, signedOut, signedIn
     }
     @Published var isUserAuthenticated: FBAuthState = .undefined
-    @Published var user: FBUser = .init(uid: "", vehicle: "", email: "", rating: 0, numberOfRatings: 0, credits: 2, badgeCount: 0, basicNotifications: true)
+    @Published var user: FBUser = .init(uid: "", vehicle: "", email: "", rating: 0, numberOfRatings: 0, credits: 2, badgeCount: 0, basicNotifications: true, saveLongitude: 0, saveLatitude: 0)
     var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     func configureFirebaseStateDidChange() {
         authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener({ (_, user) in
@@ -72,6 +72,28 @@ class UserInfo: ObservableObject, Equatable {
                 self.user.credits = credits
             case .failure(_):
                 print("Error updating credits")
+            }
+        }
+    }
+    func SaveLocation(SLongitude: Float, SLatitude: Float) {
+        var saveLongitude = user.saveLongitude
+        var saveLatitude = user.saveLatitude
+        saveLongitude = SLongitude
+        saveLatitude = SLatitude
+        FBFirestore.mergeFBUser([C_SAVELONGITUDE:saveLongitude], uid: user.uid) { result in
+            switch result {
+            case .success(_):
+                self.user.saveLongitude = saveLongitude
+            case .failure(_):
+                print("Error updating save longitude")
+            }
+        }
+        FBFirestore.mergeFBUser([C_SAVELATITUDE:saveLatitude], uid: user.uid) { result in
+            switch result {
+            case .success(_):
+                self.user.saveLongitude = saveLatitude
+            case .failure(_):
+                print("Error updating save latitude")
             }
         }
     }

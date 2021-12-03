@@ -97,12 +97,12 @@ struct Messages: View {
                         .imageScale(.large)
                         .foregroundColor(messageField == "" ? Color.gray : Color("orange1"))
                 }.disabled(messageField == "")
-                .alert(isPresented: $showingInappropriateAlert) {
-                    Alert(title: Text("Inappropriate"), dismissButton: .default(Text("Okay")))
-                }
+                    .alert(isPresented: $showingInappropriateAlert) {
+                        Alert(title: Text("Inappropriate"), dismissButton: .default(Text("Okay")))
+                    }
             }.padding(.horizontal)
-            .padding(.vertical, 5)
-            .navigationBarTitle("Messages")
+                .padding(.vertical, 5)
+                .navigationBarTitle("Messages")
         }.onReceive(locationTransfer.updatePublisher, perform: { _ in
             if locationTransfer.showSellerCanceledView {
                 presentationMode.wrappedValue.dismiss()

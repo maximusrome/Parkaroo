@@ -84,11 +84,11 @@ struct GetConfirmView: View {
                     }))
                 }
             }.padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 25.0)
-                    .stroke(Color.gray, lineWidth: 2)
-            )
-            .padding(.horizontal)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25.0)
+                        .stroke(Color.gray, lineWidth: 2)
+                )
+                .padding(.horizontal)
             Spacer()
             HStack {
                 Button(action: {
@@ -123,12 +123,12 @@ struct GetConfirmView: View {
                 }
             }.padding(.bottom, 25)
         }.frame(width: 320, height: 400)
-        .background(Color("white1"))
-        .foregroundColor(Color("black1"))
-        .cornerRadius(30)
-        .shadow(radius: 5)
-        .padding(.bottom)
-        .padding(.horizontal, 50)
+            .background(Color("white1"))
+            .foregroundColor(Color("black1"))
+            .cornerRadius(30)
+            .shadow(radius: 5)
+            .padding(.bottom)
+            .padding(.horizontal, 50)
     }
     private func separateHoursAndMinutes() {
         mins = depart % 60

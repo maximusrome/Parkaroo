@@ -26,12 +26,12 @@ struct ForceUpdateView: View {
                         .foregroundColor(Color("orange1"))
                 }
             }.padding()
-            .foregroundColor(Color("white2"))
-            .background(Color("gray1"))
-            .cornerRadius(15)
-            .padding(.horizontal, 50)
+                .foregroundColor(Color("white2"))
+                .background(Color("gray1"))
+                .cornerRadius(15)
+                .padding(.horizontal, 50)
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color("white1"))
+            .background(Color("white1"))
         
     }
 }

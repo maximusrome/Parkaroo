@@ -21,10 +21,10 @@ class MessagesViewModel: ObservableObject {
     func sendMessage(messageDate: String, messageContent: String, docId: String, receiver: String) {
         if userID != nil {
             db.collection("chatrooms").document(docId).collection("messages").addDocument(data: [
-                                                                                            "messageDate": messageDate,
-                                                                                            "sentAt": Date(),
-                                                                                            "content": messageContent,
-                                                                                            "sender": userID!.uid])
+                "messageDate": messageDate,
+                "sentAt": Date(),
+                "content": messageContent,
+                "sender": userID!.uid])
             NotificationsService.shared.sendN(uid: receiver, message: "New Message\n" + messageContent)
         }
     }

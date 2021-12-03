@@ -11,10 +11,11 @@ import Firebase
 struct AccountView: View {
     @EnvironmentObject var userInfo: UserInfo
     @State var user: UserViewModel = UserViewModel()
-    @State var showingSetUpAlert = false
-    @State var showingSavedAlert = false
+    @State private var showingSetUpAlert = false
+    @State private var showingSavedAlert = false
     @State private var showError = false
     @State private var errorString = ""
+    @State private var test: String = ""
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     var body: some View {
         ScrollView {
@@ -36,7 +37,7 @@ struct AccountView: View {
                             Alert(title: Text("Get Set Up"), message: Text("To save your vehicle you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                         }
                     HStack {
-                        TextField("e.g. Gray Toyota Camry", text: $userInfo.user.vehicle)
+                        TextField(Auth.auth().currentUser?.uid != nil ? userInfo.user.vehicle : "e.g. Gray Toyota Camry", text: $test)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.words)
                             .font(.body)
@@ -68,13 +69,14 @@ struct AccountView: View {
                     .bold()
                 Spacer()
             }.font(.title)
-            .padding()
-            .navigationBarTitle("Account", displayMode: .inline)
+                .padding()
+                .navigationBarTitle("Account", displayMode: .inline)
         }
     }
     private func saveVehicle() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser?.uid ?? ""
+        userInfo.user.vehicle = test
         db.collection("users").document(userID).updateData(["vehicle": userInfo.user.vehicle])
         showingSavedAlert.toggle()
         Analytics.logEvent("update_vehicle", parameters: nil)

@@ -17,8 +17,10 @@ struct FBUser: Equatable {
     var credits: Int = 2
     var badgeCount: Int = 0
     var basicNotifications = true
+    var saveLongitude: Float = 0
+    var saveLatitude: Float = 0
     // Lifecycle
-    init(uid: String, vehicle: String, email: String, rating: Float, numberOfRatings: Int, credits: Int, badgeCount: Int, basicNotifications: Bool) {
+    init(uid: String, vehicle: String, email: String, rating: Float, numberOfRatings: Int, credits: Int, badgeCount: Int, basicNotifications: Bool, saveLongitude: Float, saveLatitude: Float) {
         self.uid = uid
         self.vehicle = vehicle
         self.email = email
@@ -27,6 +29,8 @@ struct FBUser: Equatable {
         self.credits = credits
         self.badgeCount = badgeCount
         self.basicNotifications = basicNotifications
+        self.saveLongitude = saveLongitude
+        self.saveLatitude = saveLatitude
     }
 }
 // MARK: - Convenience functions
@@ -40,6 +44,8 @@ extension FBUser {
         let credits = documentData[C_CREDITS] as? Int ?? 2
         let badgeCount = documentData[C_BADGECOUNT] as? Int ?? 0
         let basicNotifications = documentData[C_BASICNOTIFICATIONS] as? Bool ?? true
+        let saveLongitude = documentData[C_SAVELONGITUDE] as? Float ?? 0
+        let saveLatitude = documentData[C_SAVELATITUDE] as? Float ?? 0
         self.init(uid: uid,
                   vehicle: vehicle,
                   email: email,
@@ -47,7 +53,9 @@ extension FBUser {
                   numberOfRatings: numberOfRatings,
                   credits: credits,
                   badgeCount: badgeCount,
-                  basicNotifications: basicNotifications
+                  basicNotifications: basicNotifications,
+                  saveLongitude: saveLongitude,
+                  saveLatitude: saveLatitude
         )
     }
     static func dataDict(uid: String, vehicle: String, email: String) -> [String: Any] {

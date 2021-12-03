@@ -116,9 +116,9 @@ struct SignUpView: View {
                         Spacer()
                     }
                 }.disabled(signUpClicked)
-                .alert(isPresented: $showError) {
-                    Alert(title: Text("Error"), message: Text(errorString), dismissButton: .default(Text("Okay")))
-                }
+                    .alert(isPresented: $showError) {
+                        Alert(title: Text("Error"), message: Text(errorString), dismissButton: .default(Text("Okay")))
+                    }
                 if locationTransfer.showOnBoarding && locationTransfer.isPresented {
                     HStack {
                         Spacer()
@@ -127,6 +127,7 @@ struct SignUpView: View {
                             showingLoginView = true
                         }) {
                             Text("Login")
+                                .foregroundColor(Color("orange1"))
                         }.sheet(isPresented: $showingLoginView) {
                             LoginView()
                         }
@@ -134,8 +135,9 @@ struct SignUpView: View {
                     }.padding()
                 }
             }
-        }.padding()
-        .navigationBarTitle("Sign Up", displayMode: .inline)
+        }.accentColor(Color("orange1"))
+            .padding()
+            .navigationBarTitle(locationTransfer.showOnBoarding && locationTransfer.isPresented ? "" : "Sign Up", displayMode: .inline)
     }
 }
 struct SignUpView_Previews: PreviewProvider {

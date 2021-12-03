@@ -83,12 +83,12 @@ struct GetRequestView: View {
                 }
             }.padding(.bottom, 25)
         }.frame(width: 320, height: 280)
-        .background(Color("white1"))
-        .foregroundColor(Color("black1"))
-        .cornerRadius(30)
-        .shadow(radius: 5)
-        .padding(.bottom)
-        .padding(.horizontal, 50)
+            .background(Color("white1"))
+            .foregroundColor(Color("black1"))
+            .cornerRadius(30)
+            .shadow(radius: 5)
+            .padding(.bottom)
+            .padding(.horizontal, 50)
     }
     private func separateHoursAndMinutes() {
         mins = depart % 60

@@ -45,17 +45,17 @@ struct RateSellerView: View {
                     .padding(.bottom, 25)
             }.disabled(rating <= 0)
         }.frame(width: 320, height: 200)
-        .background(Color("white1"))
-        .foregroundColor(Color("black1"))
-        .cornerRadius(30)
-        .shadow(radius: 5)
-        .padding(.bottom)
-        .padding(.horizontal, 50)
-        .alert(isPresented: $showAlertMessage, content: {
-            Alert(title: Text("Rating Submitted"), message: Text("Thanks for using Parkaroo."), dismissButton: .default(Text("Done"), action: {
-                AppReviewRequest.requestreviewIfNeeded()
-            }))
-        })
+            .background(Color("white1"))
+            .foregroundColor(Color("black1"))
+            .cornerRadius(30)
+            .shadow(radius: 5)
+            .padding(.bottom)
+            .padding(.horizontal, 50)
+            .alert(isPresented: $showAlertMessage, content: {
+                Alert(title: Text("Rating Submitted"), message: Text("Thanks for using Parkaroo."), dismissButton: .default(Text("Done"), action: {
+                    AppReviewRequest.requestreviewIfNeeded()
+                }))
+            })
     }
     private func updateRating() {
         guard let overallRating = locationTransfer.seller?.rating else {return}
