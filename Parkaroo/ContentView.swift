@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var showingParkSetUpAlert = false
     @State private var showingSaveSuccessAlert = false
     @State var offset : CGFloat = UIScreen.main.bounds.height
-    @AppStorage("OboardBeenViewed") var hasOnboarded = false
+    @AppStorage("OnboardBeenViewed") var hasOnboarded = false
     init() {
         let navigationBarAppearance = UINavigationBarAppearance()
         if #available(iOS 15.0, *) {
@@ -85,11 +85,21 @@ struct ContentView: View {
                         .navigationBarHidden(true)
                         .edgesIgnoringSafeArea(.all)
                 }
-                if (!locationTransfer.showOnBoarding || !locationTransfer.isPresented) && !showMenu {
+                if (!locationTransfer.showOnBoarding || !locationTransfer.isPresented) && !showMenu && !locationTransfer.forceUpdate {
                     HStack {
                         Text("")
                             .alert(isPresented: $showingSaveSuccessAlert) {
-                                Alert(title: Text("Spot Saved"), dismissButton: .default(Text("Done")))
+                                Alert(title: Text("Save Car Location"), primaryButton: Alert.Button.default(Text("cancel")), secondaryButton: Alert.Button.default(Text("Save"), action: {
+                                    Analytics.logEvent("save_spot", parameters: nil)
+                                    if locationTransfer.locations.count > 0 {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                                            locationTransfer.locations.removeFirst()
+                                        }
+                                    }
+                                    locationTransfer.parkPress = true
+                                    userInfo.SaveLocation(SLongitude: Float(locationTransfer.centerCoordinate.longitude), SLatitude: Float(locationTransfer.centerCoordinate.latitude))
+                                    locationTransfer.addReferencePin()
+                                }))
                             }
                         Spacer()
                         VStack {
@@ -101,48 +111,41 @@ struct ContentView: View {
                                     showLocationSettings.toggle()
                                 }
                             }) {
-                                Image(systemName: "location")
-                                    .imageScale(.large)
-                                    .padding(10)
-                                    .foregroundColor(Color("orange1"))
-                                    .background(Color("white1"))
-                                    .cornerRadius(50)
-                                    .shadow(radius: 5)
-                                    .padding(10)
-                            }.alert(isPresented: $showLocationSettings, content: {
-                                Alert(title: Text("Enable Current Location"), message: Text("To see your current location you must enable location services in your settings app."), primaryButton: Alert.Button.default(Text("cancel")), secondaryButton: Alert.Button.default(Text("Okay"), action: {
-                                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                                }))
-                            })
+                                ZStack {
+                                    Circle()
+                                        .frame(width: 50, height: 50)
+                                        .foregroundColor(Color("white1"))
+                                        .shadow(radius: 5)
+                                    Image(systemName: "location")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(Color("orange1"))
+                                }.padding(10)
+                                    .alert(isPresented: $showLocationSettings, content: {
+                                        Alert(title: Text("Enable Current Location"), message: Text("To see your current location you must enable location services in your settings app."), primaryButton: Alert.Button.default(Text("cancel")), secondaryButton: Alert.Button.default(Text("Okay"), action: {
+                                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                        }))
+                                    })
+                            }
                             if (locationTransfer.givingPin == nil && !gGRequestConfirm.showBuyerRatingView && !gGRequestConfirm.showGiveRequestView) && locationTransfer.rightTab == true {
-                                Text("P")
-                                    .font(.title2)
-                                    .padding(.vertical, 10)
-                                    .padding(.horizontal)
-                                    .foregroundColor(Color("orange1"))
-                                    .background(Color("white1"))
-                                    .cornerRadius(50)
-                                    .shadow(radius: 5)
-                                    .onTapGesture() {
-                                        Analytics.logEvent("save_spot", parameters: nil)
-                                        if userInfo.isUserAuthenticated == .signedIn {
-                                            if locationTransfer.locations.count > 0 {
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                                                    locationTransfer.locations.removeFirst()
-                                                }
-                                            }
-                                            locationTransfer.parkPress = true
-                                            userInfo.SaveLocation(SLongitude: Float(locationTransfer.centerCoordinate.longitude), SLatitude: Float(locationTransfer.centerCoordinate.latitude))
-                                            locationTransfer.addRefencePin()
-                                            showingSaveSuccessAlert = true
-                                        } else {
-                                            showingParkSetUpAlert = true
-                                        }
-                                    }.onLongPressGesture(minimumDuration: 0.1) {
-                                        locationTransfer.locations.removeAll()
-                                    }.alert(isPresented: $showingParkSetUpAlert) {
-                                        Alert(title: Text("Get Set Up"), message: Text("In order to save the location of your current parking spot you must have an account. Go to Sign up or Login under the meanu."), dismissButton: .default(Text("Okay")))
+                                Button(action: {
+                                    if userInfo.isUserAuthenticated == .signedIn {
+                                        showingSaveSuccessAlert = true
+                                    } else {
+                                        showingParkSetUpAlert = true
                                     }
+                                }) {
+                                    ZStack {
+                                        Circle()
+                                            .frame(width: 50, height: 50)
+                                            .foregroundColor(Color("white1"))
+                                            .shadow(radius: 5)
+                                        Text("P")
+                                            .font(.system(size: 20))
+                                            .foregroundColor(Color("orange1"))
+                                    }.alert(isPresented: $showingParkSetUpAlert) {
+                                        Alert(title: Text("Get Set Up"), message: Text("In order to save the location of your current parking spot you must have an account. Go to Sign up or Login under the menu."), dismissButton: .default(Text("Okay")))
+                                    }
+                                }
                             }
                             Spacer()
                         }
@@ -221,7 +224,7 @@ struct ContentView: View {
                     }
                 }) {
                     Image(systemName: "bell")
-                        .imageScale(.large)
+                        .font(.system(size: 20))
                         .frame(width: 50, height: 50, alignment: .leading)
                 }, trailing:
                                         Button(action: {
@@ -230,7 +233,7 @@ struct ContentView: View {
                     }
                 }) {
                     Image(systemName: showMenu ? "xmark" : "line.horizontal.3")
-                        .imageScale(.large)
+                        .font(.system(size: 20))
                         .frame(width: 50, height: 50, alignment: .trailing)
                 })
         }.accentColor(locationTransfer.showOnBoarding && locationTransfer.isPresented ? Color("white1") : Color("orange1"))

@@ -34,6 +34,7 @@ class LocationTransfer: ObservableObject {
     @Published var parkPress = true
     @Published var rightTab = false
     @Published var firstTime = true
+    @Published var canceledSubmit = false
     var givingPinListener: ListenerRegistration?
     var gettingPinListener: ListenerRegistration?
     var publisher: AnyPublisher<Void, Never>! = nil
@@ -262,7 +263,7 @@ class LocationTransfer: ObservableObject {
         buyer = nil
         completion()
     }
-    func addRefencePin() {
+    func addReferencePin() {
         let annotation = MKPointAnnotation()
         annotation.coordinate = centerCoordinate
         locations.append(annotation)
@@ -278,7 +279,7 @@ class LocationTransfer: ObservableObject {
                     self.lastCompatibleVersion = documentData?["last_compatible_version"] as! Double
                     if self.lastCompatibleVersion <= Double(self.appVersion) ?? 5.0 {
                         self.forceUpdate = false
-                        print("dont show force update")
+                        print("don't show force update")
                     } else if self.lastCompatibleVersion > Double(self.appVersion) ?? 5.0 {
                         self.forceUpdate = true
                         print("show force update")

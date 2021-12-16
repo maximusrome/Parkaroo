@@ -12,7 +12,7 @@ struct GiveView: View {
     @EnvironmentObject var userInfo: UserInfo
     @EnvironmentObject var locationTransfer: LocationTransfer
     @EnvironmentObject var gGRequestConfirm: GGRequestConfirm
-    @State private var showingMakeAvaliableSetUpAlert = false
+    @State private var showingMakeAvailableSetUpAlert = false
     var body: some View {
         ZStack {
             MapGiveView(annotations: locationTransfer.locations)
@@ -20,7 +20,7 @@ struct GiveView: View {
                 .disabled(gGRequestConfirm.showGiveRequestView)
             if locationTransfer.givingPin == nil && !gGRequestConfirm.showBuyerRatingView && !gGRequestConfirm.showGiveRequestView {
                 Image(systemName: "mappin.and.ellipse")
-                    .font(.title)
+                    .font(.system(size: 30))
                     .frame(width: 32.0, height: 32.0)
                     .foregroundColor(Color("orange1"))
                     .padding()
@@ -40,14 +40,14 @@ struct GiveView: View {
                         Analytics.logEvent("give_spot", parameters: nil)
                         if userInfo.isUserAuthenticated == .signedIn {
                             gGRequestConfirm.showGiveRequestView = true
-                            locationTransfer.addRefencePin()
+                            locationTransfer.addReferencePin()
                         } else {
-                            showingMakeAvaliableSetUpAlert = true
+                            showingMakeAvailableSetUpAlert = true
                         }
                     }) {
                         Text("Give Spot")
                             .bold()
-                            .font(.title)
+                            .font(.system(size: 30))
                             .frame(width: 300, height: 50)
                             .background(Color("white1"))
                             .foregroundColor(Color("orange1"))
@@ -57,7 +57,7 @@ struct GiveView: View {
                             .padding(.horizontal, 50)
                     }
                 }.disabled(userInfo.isUserAuthenticated == .signedIn && gGRequestConfirm.showGiveRequestView)
-                    .alert(isPresented: $showingMakeAvaliableSetUpAlert) {
+                    .alert(isPresented: $showingMakeAvailableSetUpAlert) {
                         Alert(title: Text("Get Set Up"), message: Text("To give a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                     }
             }

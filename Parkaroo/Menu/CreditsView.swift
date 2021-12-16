@@ -81,10 +81,15 @@ struct CreditsView: View {
             }
             .font(.title)
             .foregroundColor(Color("black1"))
+            .opacity(viewModel.paymentSheet == nil && Auth.auth().currentUser?.uid != nil ? 0.5 : 1.0)
             .navigationBarTitle("Credits", displayMode: .inline)
             .alert(isPresented: $showSignInAlert, content: {
                 Alert(title: Text("Get Set Up"), message: Text("To buy a credit you must have an account. Go to Sign Up or Login under the menu."), dismissButton: Alert.Button.default(Text("Okay")))
             })
+            if viewModel.paymentSheet == nil && Auth.auth().currentUser?.uid != nil {
+                ProgressView()
+                    .scaleEffect(1.5)
+            }
         }
     }
 }

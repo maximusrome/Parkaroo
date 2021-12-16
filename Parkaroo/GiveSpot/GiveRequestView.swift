@@ -113,7 +113,7 @@ struct GiveRequestView: View {
                 Text("Your Rating: \(userInfo.user.numberOfRatings > 0 ? String(format: "%.2f", userInfo.user.rating) : "N/A")")
                     .bold()
                 Text("\(userInfo.user.numberOfRatings > 0 ? String(userInfo.user.numberOfRatings) : "0") ratings")
-                    .font(.footnote)
+                    .font(.system(size: 13))
             }.alert(isPresented: $showingShortTimeAlert) {
                 return Alert(title: Text("Friendly Reminder"), message: Text("We recommend leaving a bit more time so your neighbors can get to your spot."), dismissButton: .default(Text("Okay")))
             }
@@ -171,7 +171,8 @@ struct GiveRequestView: View {
                     return Alert(title: Text("Add Departure Time"), dismissButton: .default(Text("Okay")))
                 }
             }.padding(.bottom, 25)
-        }.frame(width: 320, height: 280)
+        }.font(.system(size: 17))
+            .frame(width: 320, height: 280)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
             .cornerRadius(30)

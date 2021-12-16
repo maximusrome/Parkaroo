@@ -22,7 +22,7 @@ struct RatingView: View {
             }
             ForEach(1..<maximumRating + 1) { number in
                 image(for: number)
-                    .font(.title)
+                    .font(.system(size: 34))
                     .foregroundColor(number > rating ? offColor : onColor)
                     .onTapGesture {
                         rating = number

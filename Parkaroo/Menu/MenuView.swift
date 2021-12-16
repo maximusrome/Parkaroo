@@ -22,6 +22,7 @@ struct MenuView: View {
                     Image(systemName: "dollarsign.circle")
                         .imageScale(.large)
                     Text("Credits")
+                        .bold()
                 }
             }
             Spacer()
@@ -32,6 +33,7 @@ struct MenuView: View {
                     Image(systemName: "envelope")
                         .imageScale(.large)
                     Text("Contact Us")
+                        .bold()
                 }.sheet(isPresented: $showContactUs) {
                     MailView(result: $result, newSubject: "Contact Us", newMsgBody: "")
                 }
@@ -43,6 +45,7 @@ struct MenuView: View {
                 Image(systemName: "person.2")
                     .imageScale(.large)
                 Text("Invite Friends")
+                    .bold()
             }
             Spacer()
             NavigationLink(destination: GoodStuffView()) {
@@ -50,6 +53,7 @@ struct MenuView: View {
                     Image(systemName: "gift")
                         .imageScale(.large)
                     Text("Good Stuff")
+                        .bold()
                 }
             }
             Group {
@@ -60,6 +64,7 @@ struct MenuView: View {
                             Image(systemName: "square.and.pencil")
                                 .imageScale(.large)
                             Text("Sign Up")
+                                .bold()
                         }
                     }
                     Spacer()
@@ -68,6 +73,7 @@ struct MenuView: View {
                             Image(systemName: "arrow.right.circle")
                                 .imageScale(.large)
                             Text("Login")
+                                .bold()
                         }
                     }
                 }
@@ -77,7 +83,7 @@ struct MenuView: View {
                 Spacer()
                 Spacer()
             }
-        }.font(.headline)
+        }.font(.system(size: 17))
             .padding(.leading, 30)
             .foregroundColor(Color("black1"))
             .frame(maxWidth: .infinity, alignment: .leading)

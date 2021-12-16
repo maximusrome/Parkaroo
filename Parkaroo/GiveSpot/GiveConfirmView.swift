@@ -26,7 +26,7 @@ struct GiveConfirmView: View {
         VStack {
             Text("Spot \(locationTransfer.givingPin?.status.capitalized ?? "")")
                 .bold()
-                .font(.title)
+                .font(.system(size: 34))
                 .padding(.top, 25)
             Spacer()
             Text("Departing in: \(hours > 0 ? String(hours) + " hr" : "") \(mins > 0 ? String(mins) + " min" : hours > 0 ? "" : "0 min")")
@@ -64,7 +64,7 @@ struct GiveConfirmView: View {
                     HStack {
                         Text("Rating: \(locationTransfer.buyer?.numberOfRatings ?? 0 > 0 ? (String(format: "%.2f", locationTransfer.buyer?.rating ?? 0)) : "N/A")")
                         Text("\(locationTransfer.buyer?.numberOfRatings ?? 0) ratings")
-                            .font(.footnote)
+                            .font(.system(size: 13))
                     }.padding(.bottom)
                     NavigationLink(destination: Messages(chatroom: Chatroom(id: viewModel.docID, sellerID: locationTransfer.givingPin?.seller ?? ""))) {
                         Text("Message Driver")
@@ -108,7 +108,7 @@ struct GiveConfirmView: View {
                     Text("Awaiting Buyer")
                         .padding(.bottom)
                     Text("You will soon earn a credit")
-                        .font(.footnote)
+                        .font(.system(size: 13))
                         .multilineTextAlignment(.center)
                 }.padding()
                     .overlay(
@@ -130,7 +130,8 @@ struct GiveConfirmView: View {
                         .padding(.bottom, 25)
                 }
             }
-        }.frame(width: 320, height: 400)
+        }.font(.system(size: 17))
+            .frame(width: 320, height: 400)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
             .cornerRadius(30)

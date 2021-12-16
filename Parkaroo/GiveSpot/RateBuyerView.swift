@@ -17,7 +17,7 @@ struct RateBuyerView: View {
         VStack {
             Text("Rate Buyer")
                 .bold()
-                .font(.title)
+                .font(.system(size: 34))
                 .padding(.top, 25)
             Spacer()
             RatingView(rating: $rating)
@@ -26,7 +26,7 @@ struct RateBuyerView: View {
                 gGRequestConfirm.showBuyerRatingView = false
                 updateRating()
                 cleanUp()
-                Analytics.logEvent("seller_rating_submited", parameters: nil)
+                Analytics.logEvent("seller_rating_submitted", parameters: nil)
             }) {
                 Text("Submit")
                     .bold()
@@ -35,7 +35,8 @@ struct RateBuyerView: View {
                     .cornerRadius(50)
                     .padding(.bottom, 25)
             }.disabled(rating <= 0)
-        }.frame(width: 320, height: 200)
+        }.font(.system(size: 17))
+            .frame(width: 320, height: 200)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
             .cornerRadius(30)

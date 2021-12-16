@@ -34,7 +34,7 @@ struct FAQSView: View {
                     Text("What if the seller leaves the spot before I get there and the spot is gone?")
                         .bold()
                         .font(.title3)
-                    Text("You will be able to rate the seller. In this instance, we recommend giving the seller a low rating, so others in the future will know that he/she is less reliable than other sellers. In additon, you can always contact us to refund your credit.\n")
+                    Text("You will be able to rate the seller. In this instance, we recommend giving the seller a low rating, so others in the future will know that he/she is less reliable than other sellers. In addition, you can always contact us to refund your credit.\n")
                     Text("How much time should I leave for a person to reserve my spot?")
                         .bold()
                         .font(.title3)
@@ -46,7 +46,7 @@ struct FAQSView: View {
                     Text("How can I stay up to date on Parkaroo News?")
                         .bold()
                         .font(.title3)
-                    Text("We have a parkaroo instagram, @parkaroonyc, a facebook page, as well as a website where you can subscribe to our email list.\n")
+                    Text("We have a Parkaroo instagram, @parkaroonyc, a facebook page, as well as a website where you can subscribe to our email list.\n")
                 }
             }
         }.padding(.horizontal)

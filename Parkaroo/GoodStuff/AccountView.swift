@@ -15,7 +15,7 @@ struct AccountView: View {
     @State private var showingSavedAlert = false
     @State private var showError = false
     @State private var errorString = ""
-    @State private var test: String = ""
+    @State private var testVehicle = ""
     let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
     var body: some View {
         ScrollView {
@@ -37,7 +37,7 @@ struct AccountView: View {
                             Alert(title: Text("Get Set Up"), message: Text("To save your vehicle you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                         }
                     HStack {
-                        TextField(Auth.auth().currentUser?.uid != nil ? userInfo.user.vehicle : "e.g. Gray Toyota Camry", text: $test)
+                        TextField(Auth.auth().currentUser?.uid != nil ? userInfo.user.vehicle : "e.g. Gray Toyota Camry", text: $testVehicle)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.words)
                             .font(.body)
@@ -47,7 +47,7 @@ struct AccountView: View {
                                     saveVehicle()
                                 } else {
                                     if !isVehicleValid1() {
-                                        errorString = "Please enter a valid vehicle under 35 characters."
+                                        errorString = "Please enter a valid vehicle between 7 and 35 characters."
                                     } else if containsProfanity1() {
                                         errorString = "Please enter a valid vehicle without any inappropriate language."
                                     }
@@ -76,7 +76,7 @@ struct AccountView: View {
     private func saveVehicle() {
         let db = Firestore.firestore()
         let userID = Auth.auth().currentUser?.uid ?? ""
-        userInfo.user.vehicle = test
+        userInfo.user.vehicle = testVehicle
         db.collection("users").document(userID).updateData(["vehicle": userInfo.user.vehicle])
         showingSavedAlert.toggle()
         Analytics.logEvent("update_vehicle", parameters: nil)
@@ -84,10 +84,10 @@ struct AccountView: View {
     private func isVehicleValid1() -> Bool {
         let vehicleTest = NSPredicate(format: "SELF MATCHES %@",
                                       "^([a-zA-Z0-9 /-]{7,35})$")
-        return vehicleTest.evaluate(with: userInfo.user.vehicle)
+        return vehicleTest.evaluate(with: testVehicle)
     }
     private func containsProfanity1() -> Bool {
-        return profanity.contains(where: userInfo.user.vehicle.contains)
+        return profanity.contains(where: testVehicle.contains)
     }
     var isVehicleComplete1: Bool {
         if  !isVehicleValid1() || containsProfanity1() {

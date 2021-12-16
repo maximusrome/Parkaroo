@@ -21,7 +21,7 @@ struct RateSellerView: View {
         VStack {
             Text("Rate Seller")
                 .bold()
-                .font(.title)
+                .font(.system(size: 34))
                 .padding(.top, 25)
             Spacer()
             RatingView(rating: $rating)
@@ -32,9 +32,12 @@ struct RateSellerView: View {
                 updateRating()
                 locationTransfer.updateGettingPin(data: [C_RATINGSUBMITTED:true])
                 cleanUp()
-                Analytics.logEvent("buyer_rating_submited", parameters: nil)
-                if let seller = locationTransfer.seller {
-                    NotificationsService.shared.sendN(uid: seller.uid, message: "The buyer completed the transfer. Rate the buyer to earn your credit.")
+                Analytics.logEvent("buyer_rating_submitted", parameters: nil)
+                if !locationTransfer.canceledSubmit {
+                    if let seller = locationTransfer.seller {
+                        NotificationsService.shared.sendN(uid: seller.uid, message: "The buyer completed the transfer. Rate the buyer to earn your credit.")
+                    }
+                    locationTransfer.canceledSubmit = false
                 }
             }) {
                 Text("Submit")
@@ -44,7 +47,8 @@ struct RateSellerView: View {
                     .cornerRadius(50)
                     .padding(.bottom, 25)
             }.disabled(rating <= 0)
-        }.frame(width: 320, height: 200)
+        }.font(.system(size: 17))
+            .frame(width: 320, height: 200)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
             .cornerRadius(30)
@@ -53,7 +57,7 @@ struct RateSellerView: View {
             .padding(.horizontal, 50)
             .alert(isPresented: $showAlertMessage, content: {
                 Alert(title: Text("Rating Submitted"), message: Text("Thanks for using Parkaroo."), dismissButton: .default(Text("Done"), action: {
-                    AppReviewRequest.requestreviewIfNeeded()
+                    AppReviewRequest.requestReviewIfNeeded()
                 }))
             })
     }

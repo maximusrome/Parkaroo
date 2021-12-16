@@ -55,7 +55,7 @@ struct GetRequestView: View {
                         .bold()
                 }
                 Text("\(locationTransfer.seller?.numberOfRatings ?? 0) ratings")
-                    .font(.footnote)
+                    .font(.system(size: 13))
                     .alert(isPresented: $showingNotEnoughCreditsAlert) {
                         Alert(title: Text("Not Enough Credits"), message: Text("You don't have enough credits. Give up your spot to earn a credit or purchase a credit in the Credits page under the menu."), dismissButton: .default(Text("Okay")))
                     }
@@ -82,7 +82,8 @@ struct GetRequestView: View {
                     Alert(title: Text("Get Set Up"), message: Text("To reserve a spot you must have an account. Go to Sign Up or Login under the menu."), dismissButton: .default(Text("Okay")))
                 }
             }.padding(.bottom, 25)
-        }.frame(width: 320, height: 280)
+        }.font(.system(size: 17))
+            .frame(width: 320, height: 280)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
             .cornerRadius(30)

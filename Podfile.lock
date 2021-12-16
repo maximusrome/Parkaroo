@@ -384,7 +384,7 @@ PODS:
     - BoringSSL-GRPC (= 0.0.7)
     - gRPC-Core/Interface (= 1.28.2)
   - gRPC-Core/Interface (1.28.2)
-  - GTMSessionFetcher/Core (1.6.1)
+  - GTMSessionFetcher/Core (1.7.0)
   - leveldb-library (1.22.1)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
@@ -392,13 +392,17 @@ PODS:
   - nanopb/decode (1.30906.0)
   - nanopb/encode (1.30906.0)
   - PromisesObjC (1.2.12)
-  - Protobuf (3.17.0)
-  - Stripe (21.8.0):
-    - Stripe/Stripe3DS2 (= 21.8.0)
-    - StripeCore (= 21.8.0)
-  - Stripe/Stripe3DS2 (21.8.0):
-    - StripeCore (= 21.8.0)
-  - StripeCore (21.8.0)
+  - Protobuf (3.19.1)
+  - Stripe (21.9.1):
+    - Stripe/Stripe3DS2 (= 21.9.1)
+    - StripeCore (= 21.9.1)
+    - StripeUICore (= 21.9.1)
+  - Stripe/Stripe3DS2 (21.9.1):
+    - StripeCore (= 21.9.1)
+    - StripeUICore (= 21.9.1)
+  - StripeCore (21.9.1)
+  - StripeUICore (21.9.1):
+    - StripeCore (= 21.9.1)
 
 DEPENDENCIES:
   - Firebase/Analytics
@@ -443,6 +447,7 @@ SPEC REPOS:
     - Protobuf
     - Stripe
     - StripeCore
+    - StripeUICore
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
@@ -468,14 +473,15 @@ SPEC CHECKSUMS:
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
   "gRPC-C++": 13d8ccef97d5c3c441b7e3c529ef28ebee86fad2
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
-  GTMSessionFetcher: 36689134877faeb055b27dfa4ccc9ceaa42e029e
+  GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
-  Stripe: 3d73c446e2493ba92b061c1802b1c98077f5866b
-  StripeCore: 91768f1a34839f97016194c3440d48186335fe45
+  Protobuf: 3724efa50cb2846d7ccebc8691c574e85fd74471
+  Stripe: 22c1b8da5ee20a1aaf40fd198160efa72e71644a
+  StripeCore: 91ea038ac0abbb72f11014044dfd1e5d39089714
+  StripeUICore: 7edf64b24c9c178bfd97e988f2cffdbb7a7628b0
 
 PODFILE CHECKSUM: 75db554bed7f1c3e87168e8837cadca6ad8b9bce
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

@@ -14,7 +14,7 @@ struct SellerCanceledView: View {
         VStack {
             Text("Seller Canceled")
                 .bold()
-                .font(.title)
+                .font(.system(size: 34))
                 .padding(.top, 25)
             Spacer()
             Text("Your credit has been refunded")
@@ -32,6 +32,7 @@ struct SellerCanceledView: View {
                     locationTransfer.gettingPin = nil
                     locationTransfer.showSellerCanceledView = false
                     gGRequestConfirm.showSellerRatingView = true
+                    locationTransfer.canceledSubmit = true
                 }) {
                     Text("Rate Seller")
                         .bold()
@@ -40,7 +41,8 @@ struct SellerCanceledView: View {
                         .cornerRadius(50)
                 }
             }.padding(.bottom, 25)
-        }.frame(width: 320, height: 200)
+        }.font(.system(size: 17))
+            .frame(width: 320, height: 200)
             .background(Color("white1"))
             .foregroundColor(Color("black1"))
             .cornerRadius(30)

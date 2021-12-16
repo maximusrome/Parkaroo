@@ -37,7 +37,7 @@ final class CreditsViewModel: ObservableObject {
                     let resultData = try JSONSerialization.data(withJSONObject: resultDict, options: .prettyPrinted)
                     let response = try JSONDecoder().decode(StripePaymentSheetPreparationResponse.self, from: resultData)
                     guard let customerId = response.customer,
-                          let cusomerEphemeralKeySecret = response.ephemeralKey,
+                          let customerEphemeralKeySecret = response.ephemeralKey,
                           let paymentIntentClientSecret = response.paymentIntent
                     else { return }
                     // Create a PaymentSheet instance
@@ -45,7 +45,7 @@ final class CreditsViewModel: ObservableObject {
                     configuration.applePay = .init(merchantId: "merchant.org.parkaroo.maxrome", merchantCountryCode: "US")
                     configuration.merchantDisplayName = "Parkaroo, LLC"
                     configuration.primaryButtonColor = UIColor(Color("orange1"))
-                    configuration.customer = .init(id: customerId, ephemeralKeySecret: cusomerEphemeralKeySecret)
+                    configuration.customer = .init(id: customerId, ephemeralKeySecret: customerEphemeralKeySecret)
                     paymentSheet = PaymentSheet(paymentIntentClientSecret: paymentIntentClientSecret, configuration: configuration)
                 } catch {
                     print(error)

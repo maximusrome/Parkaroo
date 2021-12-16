@@ -15,7 +15,7 @@ struct SignUpView: View {
     @State var user: UserViewModel = UserViewModel()
     @State private var showError = false
     @State private var errorString = ""
-    @State private var visable = false
+    @State private var visible = false
     @State private var signUpClicked = false
     @State private var showingLoginView = false
     var body: some View {
@@ -40,7 +40,7 @@ struct SignUpView: View {
                     .bold()
                     .font(.title)
                 ZStack {
-                    if visable {
+                    if visible {
                         TextField("e.g. Parkaroo21", text: $user.password)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.none)
@@ -52,9 +52,9 @@ struct SignUpView: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            visable.toggle()
+                            visible.toggle()
                         }) {
-                            Image(systemName: visable ? "eye.fill" : "eye.slash.fill")
+                            Image(systemName: visible ? "eye.fill" : "eye.slash.fill")
                                 .foregroundColor(Color(.gray))
                                 .font(.title2)
                                 .padding(.trailing, 10)
@@ -84,7 +84,7 @@ struct SignUpView: View {
                     } else {
                         Analytics.logEvent("unsuccessful_sign_up", parameters: nil)
                         if !user.isVehicleValid() {
-                            errorString = "Please enter a valid vehicle under 35 characters."
+                            errorString = "Please enter a valid vehicle between 7 and 35 characters."
                         } else if user.containsProfanity() {
                             errorString = "Please enter a valid vehicle without any inappropriate language."
                         } else if !user.isEmailValid() {

@@ -52,7 +52,7 @@ struct FBAuth {
                 case 17008:
                     authError = .invalidEmail
                 case 17011:
-                    authError = .accoundDoesNotExist
+                    authError = .accountDoesNotExist
                 default:
                     authError = .unknownError
                 }

@@ -17,7 +17,7 @@ struct LoginView: View {
     @State private var authError: EmailAuthError?
     @State private var showPasswordResetAlert = false
     @State private var errString: String?
-    @State private var visable1 = false
+    @State private var visible1 = false
     @State private var loginClicked = false
     var body: some View {
         ScrollView {
@@ -34,7 +34,7 @@ struct LoginView: View {
                     .bold()
                     .font(.title)
                 ZStack {
-                    if visable1 {
+                    if visible1 {
                         TextField("e.g. Parkaroo21", text: $user.password)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.none)
@@ -46,9 +46,9 @@ struct LoginView: View {
                     HStack {
                         Spacer()
                         Button(action: {
-                            visable1.toggle()
+                            visible1.toggle()
                         }) {
-                            Image(systemName: visable1 ? "eye.fill" : "eye.slash.fill")
+                            Image(systemName: visible1 ? "eye.fill" : "eye.slash.fill")
                                 .foregroundColor(Color(.gray))
                                 .font(.title2)
                                 .padding(.trailing, 5)
